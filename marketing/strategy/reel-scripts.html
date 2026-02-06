@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Reel Scripts | Quiz Funnel Marketing</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e0e0e0;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        header .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #b0b0b0;
+            margin-bottom: 20px;
+        }
+
+        .meta-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        .meta-item strong {
+            color: #e0e0e0;
+        }
+
+        .section-nav {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .section-nav a {
+            background: rgba(102, 126, 234, 0.2);
+            color: #667eea;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .section-nav a:hover {
+            background: rgba(102, 126, 234, 0.4);
+            transform: translateY(-2px);
+        }
+
+        section {
+            margin-bottom: 50px;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            color: #667eea;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .script-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .script-card:hover {
+            border-color: rgba(102, 126, 234, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .script-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .script-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .script-title {
+            flex: 1;
+            margin-left: 15px;
+        }
+
+        .script-title h3 {
+            color: #e0e0e0;
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+
+        .script-duration {
+            background: rgba(102, 126, 234, 0.15);
+            color: #8b9dc3;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .script-section {
+            margin-bottom: 20px;
+        }
+
+        .script-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .section-label .label-text {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 4px 10px;
+            border-radius: 5px;
+        }
+
+        .hook-label .label-text {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .body-label .label-text {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+        }
+
+        .cta-label .label-text {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+
+        .section-time {
+            font-size: 0.75rem;
+            color: #666;
+        }
+
+        .script-text {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px 20px;
+            border-radius: 10px;
+            color: #d0d0d0;
+            font-size: 1rem;
+            line-height: 1.7;
+            border-left: 3px solid rgba(102, 126, 234, 0.5);
+        }
+
+        .copy-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(102, 126, 234, 0.2);
+            color: #667eea;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            margin-top: 15px;
+        }
+
+        .copy-btn:hover {
+            background: rgba(102, 126, 234, 0.4);
+        }
+
+        .copy-btn.copied {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+            border-color: rgba(34, 197, 94, 0.3);
+        }
+
+        .tips-section {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 50px;
+        }
+
+        .tips-section h2 {
+            margin-bottom: 20px;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .tip-card {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 3px solid #667eea;
+        }
+
+        .tip-card h4 {
+            color: #8b9dc3;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .tip-card ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .tip-card li {
+            color: #b0b0b0;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            padding-left: 15px;
+            position: relative;
+        }
+
+        .tip-card li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 5px;
+            height: 5px;
+            background: #667eea;
+            border-radius: 50%;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #667eea;
+            text-decoration: none;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .back-link:hover {
+            color: #8b9dc3;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .script-card {
+                padding: 20px;
+            }
+
+            .script-header {
+                flex-direction: column;
+            }
+
+            .script-title {
+                margin-left: 0;
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">Back to Strategy Hub</a>
+
+        <header>
+            <span class="badge">Content Ready</span>
+            <h1>Instagram Reel Scripts</h1>
+            <p class="subtitle">20 scripts for 25-second Reels about quiz funnels, lead magnets, and automation</p>
+            <div class="meta-info">
+                <div class="meta-item"><strong>20</strong> Scripts</div>
+                <div class="meta-item"><strong>25s</strong> Each</div>
+                <div class="meta-item"><strong>3</strong> Topics</div>
+            </div>
+        </header>
+
+        <nav class="section-nav">
+            <a href="#custom-quizzes">Custom Quizzes (7)</a>
+            <a href="#quiz-types">Quiz Types (7)</a>
+            <a href="#automation">Automation (6)</a>
+            <a href="#tips">Production Tips</a>
+        </nav>
+
+        <!-- SECTION 1: Custom Quiz Funnels -->
+        <section id="custom-quizzes">
+            <h2>Section 1: Custom Quiz Funnels</h2>
+
+            <!-- Script 1 -->
+            <div class="script-card">
+                <div class="script-header">
+                    <div style="display: flex; align-items: center;">
+                        <div class="script-number">1</div>
+                        <div class="script-title">
+                            <h3>The Problem with PDFs</h3>
+                        </div>
+                    </div>
+                    <span class="script-duration">25 seconds</span>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label hook-label">
+                        <span class="label-text">HOOK</span>
+                        <span class="section-time">0-3s</span>
+                    </div>
+                    <div class="script-text">"Stop making PDF lead magnets. Here's why they don't work anymore."</div>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label body-label">
+                        <span class="label-text">BODY</span>
+                        <span class="section-time">3-20s</span>
+                    </div>
+                    <div class="script-text">"Everyone's giving away the same tired ebooks and checklists. Your audience downloads them, never opens them, and forgets you exist.<br><br>But a quiz? That's different. It's interactive. It's personalized. And it gives you data about exactly what your leads actually need.<br><br>The best part? You can segment them automatically and send them only what matters to them."</div>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label cta-label">
+                        <span class="label-text">CTA</span>
+                        <span class="section-time">20-25s</span>
+                    </div>
+                    <div class="script-text">"Comment 'QUIZ' and I'll show you how to build one for your business."</div>
+                </div>
+
+                <button class="copy-btn" onclick="copyScript(this, 1)">Copy Full Script</button>
+            </div>
+
+            <!-- Script 2 -->
+            <div class="script-card">
+                <div class="script-header">
+                    <div style="display: flex; align-items: center;">
+                        <div class="script-number">2</div>
+                        <div class="script-title">
+                            <h3>Why Quizzes Convert 2-3x Better</h3>
+                        </div>
+                    </div>
+                    <span class="script-duration">25 seconds</span>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label hook-label">
+                        <span class="label-text">HOOK</span>
+                        <span class="section-time">0-3s</span>
+                    </div>
+                    <div class="script-text">"Quiz funnels convert 2 to 3 times better than regular opt-ins. Here's the psychology."</div>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label body-label">
+                        <span class="label-text">BODY</span>
+                        <span class="section-time">3-20s</span>
+                    </div>
+                    <div class="script-text">"When someone takes a quiz, they're investing time. They're answering questions about themselves. They're curious about their result.<br><br>By the time they hit that email field, they WANT to give it to you. They need to see their personalized result.<br><br>It's not about tricking people. It's about giving them something genuinely valuable in exchange."</div>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label cta-label">
+                        <span class="label-text">CTA</span>
+                        <span class="section-time">20-25s</span>
+                    </div>
+                    <div class="script-text">"Save this if you're tired of 2% conversion rates on your opt-ins."</div>
+                </div>
+
+                <button class="copy-btn" onclick="copyScript(this, 2)">Copy Full Script</button>
+            </div>
+
+            <!-- Script 3 -->
+            <div class="script-card">
+                <div class="script-header">
+                    <div style="display: flex; align-items: center;">
+                        <div class="script-number">3</div>
+                        <div class="script-title">
+                            <h3>The Segmentation Secret</h3>
+                        </div>
+                    </div>
+                    <span class="script-duration">25 seconds</span>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label hook-label">
+                        <span class="label-text">HOOK</span>
+                        <span class="section-time">0-3s</span>
+                    </div>
+                    <div class="script-text">"The real power of quiz funnels isn't the leads. It's this."</div>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label body-label">
+                        <span class="label-text">BODY</span>
+                        <span class="section-time">3-20s</span>
+                    </div>
+                    <div class="script-text">"Every answer someone gives you is data. What's their biggest challenge? What's their budget? What's their timeline?<br><br>Now instead of blasting everyone with the same emails, you send targeted sequences based on what they actually told you.<br><br>Someone who said their problem is 'no time' gets different emails than someone who said 'no budget.' Same product, different angle."</div>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label cta-label">
+                        <span class="label-text">CTA</span>
+                        <span class="section-time">20-25s</span>
+                    </div>
+                    <div class="script-text">"This is how you turn cold leads into buyers. Follow for more."</div>
+                </div>
+
+                <button class="copy-btn" onclick="copyScript(this, 3)">Copy Full Script</button>
+            </div>
+
+            <!-- Script 4 -->
+            <div class="script-card">
+                <div class="script-header">
+                    <div style="display: flex; align-items: center;">
+                        <div class="script-number">4</div>
+                        <div class="script-title">
+                            <h3>Quiz Results That Sell</h3>
+                        </div>
+                    </div>
+                    <span class="script-duration">25 seconds</span>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label hook-label">
+                        <span class="label-text">HOOK</span>
+                        <span class="section-time">0-3s</span>
+                    </div>
+                    <div class="script-text">"Your quiz result page is secretly a sales page. Here's how to use it."</div>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label body-label">
+                        <span class="label-text">BODY</span>
+                        <span class="section-time">3-20s</span>
+                    </div>
+                    <div class="script-text">"Most people put a generic 'thanks for taking the quiz' page. Massive mistake.<br><br>That result page has their full attention. They just invested 2 minutes answering questions. They're primed.<br><br>Show them their result, make them feel seen, then naturally bridge to your offer as the solution. Not salesy - helpful.<br><br>'You're a Type B? Here's exactly what you need to focus on... and here's how I can help.'"</div>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label cta-label">
+                        <span class="label-text">CTA</span>
+                        <span class="section-time">20-25s</span>
+                    </div>
+                    <div class="script-text">"Comment 'RESULTS' if you want the template for high-converting result pages."</div>
+                </div>
+
+                <button class="copy-btn" onclick="copyScript(this, 4)">Copy Full Script</button>
+            </div>
+
+            <!-- Script 5 -->
+            <div class="script-card">
+                <div class="script-header">
+                    <div style="display: flex; align-items: center;">
+                        <div class="script-number">5</div>
+                        <div class="script-title">
+                            <h3>The 5-Question Rule</h3>
+                        </div>
+                    </div>
+                    <span class="script-duration">25 seconds</span>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label hook-label">
+                        <span class="label-text">HOOK</span>
+                        <span class="section-time">0-3s</span>
+                    </div>
+                    <div class="script-text">"Your quiz should never be more than 5 questions. Here's why."</div>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label body-label">
+                        <span class="label-text">BODY</span>
+                        <span class="section-time">3-20s</span>
+                    </div>
+                    <div class="script-text">"Every question you add, you lose people. After 5 questions, completion rates drop off a cliff.<br><br>But here's the real secret: you don't need more. With the right 5 questions, you can segment your entire audience.<br><br>Question 1: Who are they? Question 2: What's their goal? Question 3: What's blocking them? Question 4: What have they tried? Question 5: What's their timeline?<br><br>That's it. That's everything you need."</div>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label cta-label">
+                        <span class="label-text">CTA</span>
+                        <span class="section-time">20-25s</span>
+                    </div>
+                    <div class="script-text">"Screenshot this. Use these 5 questions as your starting point."</div>
+                </div>
+
+                <button class="copy-btn" onclick="copyScript(this, 5)">Copy Full Script</button>
+            </div>
+
+            <!-- Script 6 -->
+            <div class="script-card">
+                <div class="script-header">
+                    <div style="display: flex; align-items: center;">
+                        <div class="script-number">6</div>
+                        <div class="script-title">
+                            <h3>Why Your Competitors Don't Have Quizzes</h3>
+                        </div>
+                    </div>
+                    <span class="script-duration">25 seconds</span>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label hook-label">
+                        <span class="label-text">HOOK</span>
+                        <span class="section-time">0-3s</span>
+                    </div>
+                    <div class="script-text">"Your competitors aren't using quiz funnels. That's your advantage."</div>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label body-label">
+                        <span class="label-text">BODY</span>
+                        <span class="section-time">3-20s</span>
+                    </div>
+                    <div class="script-text">"Building a quiz funnel is harder than slapping together a PDF. Most people won't do it.<br><br>You need to write good questions. Design a real results page. Set up email sequences for each segment.<br><br>That's exactly why it works. The barrier to entry keeps it effective.<br><br>While everyone else is fighting over the same ebook downloads, you're building an actual relationship from day one."</div>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label cta-label">
+                        <span class="label-text">CTA</span>
+                        <span class="section-time">20-25s</span>
+                    </div>
+                    <div class="script-text">"Want to stand out? Start here. Follow for the full breakdown."</div>
+                </div>
+
+                <button class="copy-btn" onclick="copyScript(this, 6)">Copy Full Script</button>
+            </div>
+
+            <!-- Script 7 -->
+            <div class="script-card">
+                <div class="script-header">
+                    <div style="display: flex; align-items: center;">
+                        <div class="script-number">7</div>
+                        <div class="script-title">
+                            <h3>The Warm Lead Machine</h3>
+                        </div>
+                    </div>
+                    <span class="script-duration">25 seconds</span>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label hook-label">
+                        <span class="label-text">HOOK</span>
+                        <span class="section-time">0-3s</span>
+                    </div>
+                    <div class="script-text">"Cold leads are worthless. Here's how to make every lead warm."</div>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label body-label">
+                        <span class="label-text">BODY</span>
+                        <span class="section-time">3-20s</span>
+                    </div>
+                    <div class="script-text">"When someone downloads your PDF, all you know is their email. That's a cold lead.<br><br>When someone takes your quiz, you know their problem, their goal, their objections, and their buying timeline. That's a warm lead.<br><br>You can literally have a sales conversation where you already know everything about them before they even book a call.<br><br>'Hey Sarah, I saw you said your biggest challenge is X and you've tried Y...' Game changer."</div>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label cta-label">
+                        <span class="label-text">CTA</span>
+                        <span class="section-time">20-25s</span>
+                    </div>
+                    <div class="script-text">"This is the difference between chasing leads and closing them."</div>
+                </div>
+
+                <button class="copy-btn" onclick="copyScript(this, 7)">Copy Full Script</button>
+            </div>
+        </section>
+
+        <!-- SECTION 2: Types of Quiz Lead Magnets -->
+        <section id="quiz-types">
+            <h2>Section 2: Types of Quiz Lead Magnets</h2>
+
+            <!-- Script 8 -->
+            <div class="script-card">
+                <div class="script-header">
+                    <div style="display: flex; align-items: center;">
+                        <div class="script-number">8</div>
+                        <div class="script-title">
+                            <h3>The Assessment Quiz</h3>
+                        </div>
+                    </div>
+                    <span class="script-duration">25 seconds</span>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label hook-label">
+                        <span class="label-text">HOOK</span>
+                        <span class="section-time">0-3s</span>
+                    </div>
+                    <div class="script-text">"Assessment quizzes are the highest-converting lead magnet type. Let me explain."</div>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label body-label">
+                        <span class="label-text">BODY</span>
+                        <span class="section-time">3-20s</span>
+                    </div>
+                    <div class="script-text">"An assessment tells someone where they stand. 'What's your marketing score?' 'How healthy is your business?'<br><br>People NEED to know. It's like getting a grade. They can't resist.<br><br>The key is making the assessment feel legitimate. Use a scoring system. Give them a real number. Then show them the gap between where they are and where they want to be.<br><br>That gap is your offer."</div>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label cta-label">
+                        <span class="label-text">CTA</span>
+                        <span class="section-time">20-25s</span>
+                    </div>
+                    <div class="script-text">"Save this if you sell any kind of service or coaching."</div>
+                </div>
+
+                <button class="copy-btn" onclick="copyScript(this, 8)">Copy Full Script</button>
+            </div>
+
+            <!-- Script 9 -->
+            <div class="script-card">
+                <div class="script-header">
+                    <div style="display: flex; align-items: center;">
+                        <div class="script-number">9</div>
+                        <div class="script-title">
+                            <h3>The Personality Quiz</h3>
+                        </div>
+                    </div>
+                    <span class="script-duration">25 seconds</span>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label hook-label">
+                        <span class="label-text">HOOK</span>
+                        <span class="section-time">0-3s</span>
+                    </div>
+                    <div class="script-text">"'What type of entrepreneur are you?' These quizzes are everywhere because they work."</div>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label body-label">
+                        <span class="label-text">BODY</span>
+                        <span class="section-time">3-20s</span>
+                    </div>
+                    <div class="script-text">"People love being categorized. It makes them feel understood.<br><br>Personality quizzes work because the result feels personal. 'You're a Visionary Creator' feels way better than 'here's a PDF.'<br><br>The secret is making each personality type feel positive, but also giving each one a clear next step that leads to your offer.<br><br>Every type has a strength and a weakness. Your offer solves the weakness."</div>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label cta-label">
+                        <span class="label-text">CTA</span>
+                        <span class="section-time">20-25s</span>
+                    </div>
+                    <div class="script-text">"Comment 'TYPES' if you want help creating personality categories for your niche."</div>
+                </div>
+
+                <button class="copy-btn" onclick="copyScript(this, 9)">Copy Full Script</button>
+            </div>
+
+            <!-- Script 10 -->
+            <div class="script-card">
+                <div class="script-header">
+                    <div style="display: flex; align-items: center;">
+                        <div class="script-number">10</div>
+                        <div class="script-title">
+                            <h3>The Product Finder Quiz</h3>
+                        </div>
+                    </div>
+                    <span class="script-duration">25 seconds</span>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label hook-label">
+                        <span class="label-text">HOOK</span>
+                        <span class="section-time">0-3s</span>
+                    </div>
+                    <div class="script-text">"If you sell more than one thing, you need a product finder quiz."</div>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label body-label">
+                        <span class="label-text">BODY</span>
+                        <span class="section-time">3-20s</span>
+                    </div>
+                    <div class="script-text">"'Which program is right for you?' 'What package fits your needs?'<br><br>Instead of overwhelming people with options, you guide them to the right choice.<br><br>They answer a few questions about their situation, and you recommend the perfect fit. They feel taken care of. You make more sales.<br><br>It's like having a salesperson working 24/7, qualifying leads and matching them to offers."</div>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label cta-label">
+                        <span class="label-text">CTA</span>
+                        <span class="section-time">20-25s</span>
+                    </div>
+                    <div class="script-text">"This works for courses, services, products - anything with multiple offers."</div>
+                </div>
+
+                <button class="copy-btn" onclick="copyScript(this, 10)">Copy Full Script</button>
+            </div>
+
+            <!-- Script 11 -->
+            <div class="script-card">
+                <div class="script-header">
+                    <div style="display: flex; align-items: center;">
+                        <div class="script-number">11</div>
+                        <div class="script-title">
+                            <h3>The Readiness Quiz</h3>
+                        </div>
+                    </div>
+                    <span class="script-duration">25 seconds</span>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label hook-label">
+                        <span class="label-text">HOOK</span>
+                        <span class="section-time">0-3s</span>
+                    </div>
+                    <div class="script-text">"'Are you ready to scale your business?' Readiness quizzes pre-qualify leads automatically."</div>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label body-label">
+                        <span class="label-text">BODY</span>
+                        <span class="section-time">3-20s</span>
+                    </div>
+                    <div class="script-text">"Not everyone who finds you is ready to buy. Some people need nurturing first.<br><br>A readiness quiz sorts them for you. Score high? Book a call. Score low? Here's some free content to get you ready.<br><br>This saves you hours of sales calls with people who weren't ready anyway.<br><br>And the people who ARE ready? They've already proven it by passing the quiz."</div>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label cta-label">
+                        <span class="label-text">CTA</span>
+                        <span class="section-time">20-25s</span>
+                    </div>
+                    <div class="script-text">"Stop wasting time on unqualified leads. Follow for the full system."</div>
+                </div>
+
+                <button class="copy-btn" onclick="copyScript(this, 11)">Copy Full Script</button>
+            </div>
+
+            <!-- Script 12 -->
+            <div class="script-card">
+                <div class="script-header">
+                    <div style="display: flex; align-items: center;">
+                        <div class="script-number">12</div>
+                        <div class="script-title">
+                            <h3>The Problem Diagnosis Quiz</h3>
+                        </div>
+                    </div>
+                    <span class="script-duration">25 seconds</span>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label hook-label">
+                        <span class="label-text">HOOK</span>
+                        <span class="section-time">0-3s</span>
+                    </div>
+                    <div class="script-text">"'What's actually holding your business back?' This quiz type prints money."</div>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label body-label">
+                        <span class="label-text">BODY</span>
+                        <span class="section-time">3-20s</span>
+                    </div>
+                    <div class="script-text">"Most people know they have a problem. They don't know what's causing it.<br><br>A diagnosis quiz helps them figure it out. And here's the magic: whatever cause they get, YOU have the solution.<br><br>'Your problem is lack of systems' - here's my systems course. 'Your problem is mindset' - here's my coaching. 'Your problem is strategy' - here's my consulting.<br><br>Same quiz, different paths, all roads lead to you."</div>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label cta-label">
+                        <span class="label-text">CTA</span>
+                        <span class="section-time">20-25s</span>
+                    </div>
+                    <div class="script-text">"This is consultative selling automated. Comment 'DIAGNOSE' for examples."</div>
+                </div>
+
+                <button class="copy-btn" onclick="copyScript(this, 12)">Copy Full Script</button>
+            </div>
+
+            <!-- Script 13 -->
+            <div class="script-card">
+                <div class="script-header">
+                    <div style="display: flex; align-items: center;">
+                        <div class="script-number">13</div>
+                        <div class="script-title">
+                            <h3>The Knowledge Test Quiz</h3>
+                        </div>
+                    </div>
+                    <span class="script-duration">25 seconds</span>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label hook-label">
+                        <span class="label-text">HOOK</span>
+                        <span class="section-time">0-3s</span>
+                    </div>
+                    <div class="script-text">"Knowledge test quizzes make people feel smart AND show them what they're missing."</div>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label body-label">
+                        <span class="label-text">BODY</span>
+                        <span class="section-time">3-20s</span>
+                    </div>
+                    <div class="script-text">"'How much do you really know about marketing?' People can't resist testing themselves.<br><br>Here's the psychology: if they score high, they feel validated and trust your expertise for recognizing it. If they score low, they realize they need help - your help.<br><br>Either way, you win. And now you know exactly what topics to educate them on based on what they got wrong."</div>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label cta-label">
+                        <span class="label-text">CTA</span>
+                        <span class="section-time">20-25s</span>
+                    </div>
+                    <div class="script-text">"Perfect for coaches, consultants, and educators. Save this."</div>
+                </div>
+
+                <button class="copy-btn" onclick="copyScript(this, 13)">Copy Full Script</button>
+            </div>
+
+            <!-- Script 14 -->
+            <div class="script-card">
+                <div class="script-header">
+                    <div style="display: flex; align-items: center;">
+                        <div class="script-number">14</div>
+                        <div class="script-title">
+                            <h3>The Calculator Quiz</h3>
+                        </div>
+                    </div>
+                    <span class="script-duration">25 seconds</span>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label hook-label">
+                        <span class="label-text">HOOK</span>
+                        <span class="section-time">0-3s</span>
+                    </div>
+                    <div class="script-text">"Calculator quizzes get the highest share rates. Here's why."</div>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label body-label">
+                        <span class="label-text">BODY</span>
+                        <span class="section-time">3-20s</span>
+                    </div>
+                    <div class="script-text">"'How much money are you leaving on the table?' 'What's your potential ROI?'<br><br>When someone sees a specific number tied to their situation, they screenshot it. They share it. They remember it.<br><br>The key is making it genuinely useful. Real inputs, real calculations, real insights.<br><br>Then at the end: 'Want help capturing that $47,000 you're missing? Let's talk.'"</div>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label cta-label">
+                        <span class="label-text">CTA</span>
+                        <span class="section-time">20-25s</span>
+                    </div>
+                    <div class="script-text">"If you can quantify your value, build a calculator quiz. Trust me."</div>
+                </div>
+
+                <button class="copy-btn" onclick="copyScript(this, 14)">Copy Full Script</button>
+            </div>
+        </section>
+
+        <!-- SECTION 3: Automation in Business -->
+        <section id="automation">
+            <h2>Section 3: Automation in Business</h2>
+
+            <!-- Script 15 -->
+            <div class="script-card">
+                <div class="script-header">
+                    <div style="display: flex; align-items: center;">
+                        <div class="script-number">15</div>
+                        <div class="script-title">
+                            <h3>The Manual Work Trap</h3>
+                        </div>
+                    </div>
+                    <span class="script-duration">25 seconds</span>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label hook-label">
+                        <span class="label-text">HOOK</span>
+                        <span class="section-time">0-3s</span>
+                    </div>
+                    <div class="script-text">"If you're still doing this manually, you're leaving money on the table."</div>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label body-label">
+                        <span class="label-text">BODY</span>
+                        <span class="section-time">3-20s</span>
+                    </div>
+                    <div class="script-text">"Every hour you spend on repetitive tasks is an hour you're not spending on growth.<br><br>Sending welcome emails manually. Following up with leads one by one. Posting the same content across platforms.<br><br>This stuff should run without you. Set it up once, let it work forever.<br><br>The businesses that scale are the ones that automate first and hire second."</div>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label cta-label">
+                        <span class="label-text">CTA</span>
+                        <span class="section-time">20-25s</span>
+                    </div>
+                    <div class="script-text">"What are you still doing manually? Tell me in the comments."</div>
+                </div>
+
+                <button class="copy-btn" onclick="copyScript(this, 15)">Copy Full Script</button>
+            </div>
+
+            <!-- Script 16 -->
+            <div class="script-card">
+                <div class="script-header">
+                    <div style="display: flex; align-items: center;">
+                        <div class="script-number">16</div>
+                        <div class="script-title">
+                            <h3>The Email Automation Mistake</h3>
+                        </div>
+                    </div>
+                    <span class="script-duration">25 seconds</span>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label hook-label">
+                        <span class="label-text">HOOK</span>
+                        <span class="section-time">0-3s</span>
+                    </div>
+                    <div class="script-text">"Most people set up email automation wrong. Here's the fix."</div>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label body-label">
+                        <span class="label-text">BODY</span>
+                        <span class="section-time">3-20s</span>
+                    </div>
+                    <div class="script-text">"They build one generic sequence and blast everyone with the same emails.<br><br>That's not automation. That's spam at scale.<br><br>Real automation means different paths for different people. Someone who clicked your pricing page gets a different email than someone who just downloaded a freebie.<br><br>The goal isn't to send more emails. It's to send the RIGHT emails to the RIGHT people at the RIGHT time."</div>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label cta-label">
+                        <span class="label-text">CTA</span>
+                        <span class="section-time">20-25s</span>
+                    </div>
+                    <div class="script-text">"This is why quiz funnels matter. They give you the data to personalize."</div>
+                </div>
+
+                <button class="copy-btn" onclick="copyScript(this, 16)">Copy Full Script</button>
+            </div>
+
+            <!-- Script 17 -->
+            <div class="script-card">
+                <div class="script-header">
+                    <div style="display: flex; align-items: center;">
+                        <div class="script-number">17</div>
+                        <div class="script-title">
+                            <h3>The 3 Automations Every Business Needs</h3>
+                        </div>
+                    </div>
+                    <span class="script-duration">25 seconds</span>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label hook-label">
+                        <span class="label-text">HOOK</span>
+                        <span class="section-time">0-3s</span>
+                    </div>
+                    <div class="script-text">"Every business needs these 3 automations running. No exceptions."</div>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label body-label">
+                        <span class="label-text">BODY</span>
+                        <span class="section-time">3-20s</span>
+                    </div>
+                    <div class="script-text">"Number 1: Lead capture automation. When someone opts in, they immediately get a welcome sequence. No delays, no manual work.<br><br>Number 2: Nurture automation. Regular value delivered automatically. Stay top of mind without lifting a finger.<br><br>Number 3: Sales follow-up automation. Lead goes cold? The system follows up. You don't have to remember.<br><br>These three automations alone can double your revenue."</div>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label cta-label">
+                        <span class="label-text">CTA</span>
+                        <span class="section-time">20-25s</span>
+                    </div>
+                    <div class="script-text">"Screenshot this. Build these three first. Everything else is extra."</div>
+                </div>
+
+                <button class="copy-btn" onclick="copyScript(this, 17)">Copy Full Script</button>
+            </div>
+
+            <!-- Script 18 -->
+            <div class="script-card">
+                <div class="script-header">
+                    <div style="display: flex; align-items: center;">
+                        <div class="script-number">18</div>
+                        <div class="script-title">
+                            <h3>Why You're Losing Leads</h3>
+                        </div>
+                    </div>
+                    <span class="script-duration">25 seconds</span>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label hook-label">
+                        <span class="label-text">HOOK</span>
+                        <span class="section-time">0-3s</span>
+                    </div>
+                    <div class="script-text">"You're losing 90% of your leads and you don't even know it."</div>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label body-label">
+                        <span class="label-text">BODY</span>
+                        <span class="section-time">3-20s</span>
+                    </div>
+                    <div class="script-text">"Someone downloads your freebie. You send them one email. They don't buy. You move on.<br><br>That's 90% of your leads gone forever.<br><br>But what if you had a system that followed up for 30 days? 60 days? 90 days? Different angles, different content, different offers.<br><br>Automation doesn't get tired. It doesn't forget. It just keeps working until they buy or unsubscribe."</div>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label cta-label">
+                        <span class="label-text">CTA</span>
+                        <span class="section-time">20-25s</span>
+                    </div>
+                    <div class="script-text">"The money is in the follow-up. Automate it or lose it."</div>
+                </div>
+
+                <button class="copy-btn" onclick="copyScript(this, 18)">Copy Full Script</button>
+            </div>
+
+            <!-- Script 19 -->
+            <div class="script-card">
+                <div class="script-header">
+                    <div style="display: flex; align-items: center;">
+                        <div class="script-number">19</div>
+                        <div class="script-title">
+                            <h3>The Automation ROI</h3>
+                        </div>
+                    </div>
+                    <span class="script-duration">25 seconds</span>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label hook-label">
+                        <span class="label-text">HOOK</span>
+                        <span class="section-time">0-3s</span>
+                    </div>
+                    <div class="script-text">"I spent 4 hours setting up automation. It's made me money every day since."</div>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label body-label">
+                        <span class="label-text">BODY</span>
+                        <span class="section-time">3-20s</span>
+                    </div>
+                    <div class="script-text">"That's the thing about automation - it's an investment, not an expense.<br><br>Four hours to build a welcome sequence? That sequence has sent 10,000 emails while I slept.<br><br>Two hours to build a quiz funnel? That funnel has generated 500 qualified leads on autopilot.<br><br>Every hour you put into automation pays you back hundreds of times over. There's no better ROI in business."</div>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label cta-label">
+                        <span class="label-text">CTA</span>
+                        <span class="section-time">20-25s</span>
+                    </div>
+                    <div class="script-text">"Stop trading time for money. Start building systems that scale."</div>
+                </div>
+
+                <button class="copy-btn" onclick="copyScript(this, 19)">Copy Full Script</button>
+            </div>
+
+            <!-- Script 20 -->
+            <div class="script-card">
+                <div class="script-header">
+                    <div style="display: flex; align-items: center;">
+                        <div class="script-number">20</div>
+                        <div class="script-title">
+                            <h3>Start Small, Scale Later</h3>
+                        </div>
+                    </div>
+                    <span class="script-duration">25 seconds</span>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label hook-label">
+                        <span class="label-text">HOOK</span>
+                        <span class="section-time">0-3s</span>
+                    </div>
+                    <div class="script-text">"You don't need complex automation. Start with this one thing."</div>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label body-label">
+                        <span class="label-text">BODY</span>
+                        <span class="section-time">3-20s</span>
+                    </div>
+                    <div class="script-text">"Everyone wants the fancy 50-step automation with AI and integrations. That's not where you start.<br><br>Start with ONE automated sequence. Welcome email. Deliver value. Make an offer. Done.<br><br>Get that working. See results. Then add complexity.<br><br>The businesses that win aren't the ones with the most automation. They're the ones that actually implemented something instead of planning forever."</div>
+                </div>
+
+                <div class="script-section">
+                    <div class="section-label cta-label">
+                        <span class="label-text">CTA</span>
+                        <span class="section-time">20-25s</span>
+                    </div>
+                    <div class="script-text">"One sequence. This week. No excuses. Tag someone who needs to hear this."</div>
+                </div>
+
+                <button class="copy-btn" onclick="copyScript(this, 20)">Copy Full Script</button>
+            </div>
+        </section>
+
+        <!-- Production Tips Section -->
+        <div class="tips-section" id="tips">
+            <h2>Production Tips</h2>
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <h4>Filming Best Practices</h4>
+                    <ul>
+                        <li>Film vertically (9:16 aspect ratio)</li>
+                        <li>Good lighting on your face</li>
+                        <li>Clean background or relevant setting</li>
+                        <li>Maintain eye contact with camera</li>
+                        <li>Energy in the first 3 seconds is crucial</li>
+                        <li>Use captions (most watch muted)</li>
+                    </ul>
+                </div>
+                <div class="tip-card">
+                    <h4>Posting Strategy</h4>
+                    <ul>
+                        <li>Post 1-2 per day during testing</li>
+                        <li>Best times: 7-9am, 12-2pm, 7-9pm</li>
+                        <li>Use 3-5 relevant hashtags</li>
+                        <li>Pin top performer to profile</li>
+                    </ul>
+                </div>
+                <div class="tip-card">
+                    <h4>CTA Variations</h4>
+                    <ul>
+                        <li>"Comment [KEYWORD]" - drives engagement</li>
+                        <li>"Save this" - signals value to algorithm</li>
+                        <li>"Follow for more" - grows audience</li>
+                        <li>"Link in bio" - drives traffic (use sparingly)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const scripts = {
+            1: `Stop making PDF lead magnets. Here's why they don't work anymore.
+
+Everyone's giving away the same tired ebooks and checklists. Your audience downloads them, never opens them, and forgets you exist.
+
+But a quiz? That's different. It's interactive. It's personalized. And it gives you data about exactly what your leads actually need.
+
+The best part? You can segment them automatically and send them only what matters to them.
+
+Comment 'QUIZ' and I'll show you how to build one for your business.`,
+
+            2: `Quiz funnels convert 2 to 3 times better than regular opt-ins. Here's the psychology.
+
+When someone takes a quiz, they're investing time. They're answering questions about themselves. They're curious about their result.
+
+By the time they hit that email field, they WANT to give it to you. They need to see their personalized result.
+
+It's not about tricking people. It's about giving them something genuinely valuable in exchange.
+
+Save this if you're tired of 2% conversion rates on your opt-ins.`,
+
+            3: `The real power of quiz funnels isn't the leads. It's this.
+
+Every answer someone gives you is data. What's their biggest challenge? What's their budget? What's their timeline?
+
+Now instead of blasting everyone with the same emails, you send targeted sequences based on what they actually told you.
+
+Someone who said their problem is 'no time' gets different emails than someone who said 'no budget.' Same product, different angle.
+
+This is how you turn cold leads into buyers. Follow for more.`,
+
+            4: `Your quiz result page is secretly a sales page. Here's how to use it.
+
+Most people put a generic 'thanks for taking the quiz' page. Massive mistake.
+
+That result page has their full attention. They just invested 2 minutes answering questions. They're primed.
+
+Show them their result, make them feel seen, then naturally bridge to your offer as the solution. Not salesy - helpful.
+
+'You're a Type B? Here's exactly what you need to focus on... and here's how I can help.'
+
+Comment 'RESULTS' if you want the template for high-converting result pages.`,
+
+            5: `Your quiz should never be more than 5 questions. Here's why.
+
+Every question you add, you lose people. After 5 questions, completion rates drop off a cliff.
+
+But here's the real secret: you don't need more. With the right 5 questions, you can segment your entire audience.
+
+Question 1: Who are they? Question 2: What's their goal? Question 3: What's blocking them? Question 4: What have they tried? Question 5: What's their timeline?
+
+That's it. That's everything you need.
+
+Screenshot this. Use these 5 questions as your starting point.`,
+
+            6: `Your competitors aren't using quiz funnels. That's your advantage.
+
+Building a quiz funnel is harder than slapping together a PDF. Most people won't do it.
+
+You need to write good questions. Design a real results page. Set up email sequences for each segment.
+
+That's exactly why it works. The barrier to entry keeps it effective.
+
+While everyone else is fighting over the same ebook downloads, you're building an actual relationship from day one.
+
+Want to stand out? Start here. Follow for the full breakdown.`,
+
+            7: `Cold leads are worthless. Here's how to make every lead warm.
+
+When someone downloads your PDF, all you know is their email. That's a cold lead.
+
+When someone takes your quiz, you know their problem, their goal, their objections, and their buying timeline. That's a warm lead.
+
+You can literally have a sales conversation where you already know everything about them before they even book a call.
+
+'Hey Sarah, I saw you said your biggest challenge is X and you've tried Y...' Game changer.
+
+This is the difference between chasing leads and closing them.`,
+
+            8: `Assessment quizzes are the highest-converting lead magnet type. Let me explain.
+
+An assessment tells someone where they stand. 'What's your marketing score?' 'How healthy is your business?'
+
+People NEED to know. It's like getting a grade. They can't resist.
+
+The key is making the assessment feel legitimate. Use a scoring system. Give them a real number. Then show them the gap between where they are and where they want to be.
+
+That gap is your offer.
+
+Save this if you sell any kind of service or coaching.`,
+
+            9: `'What type of entrepreneur are you?' These quizzes are everywhere because they work.
+
+People love being categorized. It makes them feel understood.
+
+Personality quizzes work because the result feels personal. 'You're a Visionary Creator' feels way better than 'here's a PDF.'
+
+The secret is making each personality type feel positive, but also giving each one a clear next step that leads to your offer.
+
+Every type has a strength and a weakness. Your offer solves the weakness.
+
+Comment 'TYPES' if you want help creating personality categories for your niche.`,
+
+            10: `If you sell more than one thing, you need a product finder quiz.
+
+'Which program is right for you?' 'What package fits your needs?'
+
+Instead of overwhelming people with options, you guide them to the right choice.
+
+They answer a few questions about their situation, and you recommend the perfect fit. They feel taken care of. You make more sales.
+
+It's like having a salesperson working 24/7, qualifying leads and matching them to offers.
+
+This works for courses, services, products - anything with multiple offers.`,
+
+            11: `'Are you ready to scale your business?' Readiness quizzes pre-qualify leads automatically.
+
+Not everyone who finds you is ready to buy. Some people need nurturing first.
+
+A readiness quiz sorts them for you. Score high? Book a call. Score low? Here's some free content to get you ready.
+
+This saves you hours of sales calls with people who weren't ready anyway.
+
+And the people who ARE ready? They've already proven it by passing the quiz.
+
+Stop wasting time on unqualified leads. Follow for the full system.`,
+
+            12: `'What's actually holding your business back?' This quiz type prints money.
+
+Most people know they have a problem. They don't know what's causing it.
+
+A diagnosis quiz helps them figure it out. And here's the magic: whatever cause they get, YOU have the solution.
+
+'Your problem is lack of systems' - here's my systems course. 'Your problem is mindset' - here's my coaching. 'Your problem is strategy' - here's my consulting.
+
+Same quiz, different paths, all roads lead to you.
+
+This is consultative selling automated. Comment 'DIAGNOSE' for examples.`,
+
+            13: `Knowledge test quizzes make people feel smart AND show them what they're missing.
+
+'How much do you really know about marketing?' People can't resist testing themselves.
+
+Here's the psychology: if they score high, they feel validated and trust your expertise for recognizing it. If they score low, they realize they need help - your help.
+
+Either way, you win. And now you know exactly what topics to educate them on based on what they got wrong.
+
+Perfect for coaches, consultants, and educators. Save this.`,
+
+            14: `Calculator quizzes get the highest share rates. Here's why.
+
+'How much money are you leaving on the table?' 'What's your potential ROI?'
+
+When someone sees a specific number tied to their situation, they screenshot it. They share it. They remember it.
+
+The key is making it genuinely useful. Real inputs, real calculations, real insights.
+
+Then at the end: 'Want help capturing that $47,000 you're missing? Let's talk.'
+
+If you can quantify your value, build a calculator quiz. Trust me.`,
+
+            15: `If you're still doing this manually, you're leaving money on the table.
+
+Every hour you spend on repetitive tasks is an hour you're not spending on growth.
+
+Sending welcome emails manually. Following up with leads one by one. Posting the same content across platforms.
+
+This stuff should run without you. Set it up once, let it work forever.
+
+The businesses that scale are the ones that automate first and hire second.
+
+What are you still doing manually? Tell me in the comments.`,
+
+            16: `Most people set up email automation wrong. Here's the fix.
+
+They build one generic sequence and blast everyone with the same emails.
+
+That's not automation. That's spam at scale.
+
+Real automation means different paths for different people. Someone who clicked your pricing page gets a different email than someone who just downloaded a freebie.
+
+The goal isn't to send more emails. It's to send the RIGHT emails to the RIGHT people at the RIGHT time.
+
+This is why quiz funnels matter. They give you the data to personalize.`,
+
+            17: `Every business needs these 3 automations running. No exceptions.
+
+Number 1: Lead capture automation. When someone opts in, they immediately get a welcome sequence. No delays, no manual work.
+
+Number 2: Nurture automation. Regular value delivered automatically. Stay top of mind without lifting a finger.
+
+Number 3: Sales follow-up automation. Lead goes cold? The system follows up. You don't have to remember.
+
+These three automations alone can double your revenue.
+
+Screenshot this. Build these three first. Everything else is extra.`,
+
+            18: `You're losing 90% of your leads and you don't even know it.
+
+Someone downloads your freebie. You send them one email. They don't buy. You move on.
+
+That's 90% of your leads gone forever.
+
+But what if you had a system that followed up for 30 days? 60 days? 90 days? Different angles, different content, different offers.
+
+Automation doesn't get tired. It doesn't forget. It just keeps working until they buy or unsubscribe.
+
+The money is in the follow-up. Automate it or lose it.`,
+
+            19: `I spent 4 hours setting up automation. It's made me money every day since.
+
+That's the thing about automation - it's an investment, not an expense.
+
+Four hours to build a welcome sequence? That sequence has sent 10,000 emails while I slept.
+
+Two hours to build a quiz funnel? That funnel has generated 500 qualified leads on autopilot.
+
+Every hour you put into automation pays you back hundreds of times over. There's no better ROI in business.
+
+Stop trading time for money. Start building systems that scale.`,
+
+            20: `You don't need complex automation. Start with this one thing.
+
+Everyone wants the fancy 50-step automation with AI and integrations. That's not where you start.
+
+Start with ONE automated sequence. Welcome email. Deliver value. Make an offer. Done.
+
+Get that working. See results. Then add complexity.
+
+The businesses that win aren't the ones with the most automation. They're the ones that actually implemented something instead of planning forever.
+
+One sequence. This week. No excuses. Tag someone who needs to hear this.`
+        };
+
+        function copyScript(button, scriptNum) {
+            const text = scripts[scriptNum];
+            navigator.clipboard.writeText(text).then(() => {
+                button.classList.add('copied');
+                button.textContent = 'Copied!';
+                setTimeout(() => {
+                    button.classList.remove('copied');
+                    button.textContent = 'Copy Full Script';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

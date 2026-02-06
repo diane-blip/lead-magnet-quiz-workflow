@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+remotion/node_modules/
+remotion/.next/
+
+# Build outputs
+output/*/
+dist/
+
+# Environment and secrets
+.env
+.env.local
+.claude/.mcp.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Working files
+*.swp
+*.swo
+*~

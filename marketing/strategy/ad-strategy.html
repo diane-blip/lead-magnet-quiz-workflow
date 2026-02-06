@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Ad Strategy - Quiz Funnel Service</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e0e0e0;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        header .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #b0b0b0;
+            margin-bottom: 20px;
+        }
+
+        .meta-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        .meta-item strong {
+            color: #e0e0e0;
+        }
+
+        section {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 25px;
+            color: #667eea;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin: 30px 0 15px 0;
+            color: #8b9dc3;
+        }
+
+        h4 {
+            font-size: 1.2rem;
+            margin: 20px 0 10px 0;
+            color: #a0aec0;
+        }
+
+        p {
+            margin-bottom: 15px;
+            color: #d0d0d0;
+        }
+
+        ul, ol {
+            margin: 15px 0 15px 30px;
+            color: #d0d0d0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th {
+            background: rgba(102, 126, 234, 0.2);
+            color: #e0e0e0;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid rgba(102, 126, 234, 0.3);
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: #d0d0d0;
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .concept-card {
+            background: rgba(102, 126, 234, 0.1);
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .concept-card.primary {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.15);
+        }
+
+        .concept-tag {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .copy-snippet {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #a0d4a0;
+            position: relative;
+            white-space: pre-wrap;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(102, 126, 234, 0.8);
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .copy-button:hover {
+            background: rgba(102, 126, 234, 1);
+            transform: translateY(-2px);
+        }
+
+        .highlight {
+            background: rgba(102, 126, 234, 0.2);
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #a0c4ff;
+            font-weight: 600;
+        }
+
+        .warning {
+            background: rgba(255, 193, 7, 0.1);
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .success {
+            background: rgba(76, 175, 80, 0.1);
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .info {
+            background: rgba(33, 150, 243, 0.1);
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .stat-box {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        blockquote {
+            border-left: 4px solid #667eea;
+            padding-left: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: #b0b0b0;
+        }
+
+        .toc {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+
+        .toc h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .toc a {
+            color: #8b9dc3;
+            text-decoration: none;
+            display: block;
+            padding: 8px 0;
+            transition: all 0.3s ease;
+        }
+
+        .toc a:hover {
+            color: #667eea;
+            padding-left: 10px;
+        }
+
+        .script-block {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .script-block h5 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .checklist {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .checklist li {
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .checklist li::before {
+            content: '[ ]';
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-family: monospace;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            header {
+                padding: 30px 15px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            section {
+                padding: 25px;
+            }
+
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
+            }
+
+            .meta-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="badge">INTERNAL USE ONLY</div>
+            <h1>Instagram Ad Strategy</h1>
+            <p class="subtitle">Complete playbook for selling quiz funnel services to coaches and course creators</p>
+            <div class="meta-info">
+                <div class="meta-item">
+                    <strong>Research Date:</strong> 2026-01-27
+                </div>
+                <div class="meta-item">
+                    <strong>Data Sources:</strong> Tavily + Industry Benchmarks
+                </div>
+                <div class="meta-item">
+                    <strong>Budget:</strong> $600-800 testing
+                </div>
+            </div>
+        </header>
+
+        <!-- Table of Contents -->
+        <div class="toc">
+            <h3>Table of Contents</h3>
+            <a href="#executive-summary">1. Executive Summary</a>
+            <a href="#target-audience">2. Target Audience Deep Dive</a>
+            <a href="#platform-strategy">3. Platform & Format Strategy</a>
+            <a href="#creative-concepts">4. Ad Creative Concepts</a>
+            <a href="#ad-copy">5. Ad Copy Templates</a>
+            <a href="#targeting">6. Targeting Strategy</a>
+            <a href="#budget">7. Budget & Testing Framework</a>
+            <a href="#benchmarks">8. Performance Benchmarks</a>
+            <a href="#execution">9. Week-by-Week Execution Plan</a>
+        </div>
+
+        <!-- Executive Summary -->
+        <section id="executive-summary">
+            <h2>Executive Summary</h2>
+
+            <div class="success">
+                <strong>Your Positioning:</strong> "I can make your existing ad spend work 3x harder."
+            </div>
+
+            <h3>The Opportunity</h3>
+            <p>Coaches and course creators spend $2,000-10,000/month on Instagram ads driving traffic to basic landing pages. Their conversion rates are typically 1-3%. Quiz funnels convert at 5-15%—a 3-5x improvement.</p>
+
+            <div class="grid-3">
+                <div class="stat-box">
+                    <div class="stat-number">50%+</div>
+                    <div class="stat-label">of IG ads now on Reels</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">$3-4</div>
+                    <div class="stat-label">Reels CPM (vs $6-8 Feed)</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">40-60%</div>
+                    <div class="stat-label">higher conversion with quizzes</div>
+                </div>
+            </div>
+
+            <h3>Key Strategy Points</h3>
+            <ul>
+                <li><strong>Format:</strong> Reels-first (50%+ of Instagram ads now run on Reels)</li>
+                <li><strong>Objective:</strong> Messages or Leads (not Traffic)</li>
+                <li><strong>Offer:</strong> Free funnel audit → Discovery call → $3-5k service</li>
+                <li><strong>Budget:</strong> $15-20/day testing, scale winners to $50+/day</li>
+            </ul>
+
+            <h3>Why This Works</h3>
+            <ol>
+                <li><strong>You're selling to people already spending money</strong> — they understand ROI</li>
+                <li><strong>Reels have lowest CPM</strong> (~$3-4 vs $6-8 for feed) — cheaper reach</li>
+                <li><strong>Quiz funnels are perfect for coaches</strong> — they already believe in segmentation</li>
+                <li><strong>Your 15-minute delivery is a pattern interrupt</strong> — agencies take 6 weeks</li>
+            </ol>
+        </section>
+
+        <!-- Target Audience -->
+        <section id="target-audience">
+            <h2>Target Audience Deep Dive</h2>
+
+            <h3>Primary Audience: Coaches Running Instagram Ads</h3>
+
+            <div class="grid-2">
+                <div>
+                    <h4>Demographics</h4>
+                    <ul>
+                        <li>Age: 28-55</li>
+                        <li>Gender: 60% female, 40% male</li>
+                        <li>Location: US, UK, Canada, Australia</li>
+                        <li>Income: $75k-250k</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Platforms They Use</h4>
+                    <ul>
+                        <li>Kajabi ($149-399/mo)</li>
+                        <li>Teachable ($36-199/mo)</li>
+                        <li>Thinkific ($36-149/mo)</li>
+                        <li>Meta Ads ($1k-10k/mo spend)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Pain Points (Use These in Ad Copy)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Pain Point</th>
+                        <th>Emotional Trigger</th>
+                        <th>Quiz Funnel Solution</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>"My cost per lead keeps going up"</td>
+                        <td>Frustration, anxiety</td>
+                        <td>Quiz funnels convert 40-60% higher</td>
+                    </tr>
+                    <tr>
+                        <td>"Leads sign up but never book calls"</td>
+                        <td>Wasted money</td>
+                        <td>Temperature scoring pre-qualifies leads</td>
+                    </tr>
+                    <tr>
+                        <td>"I spend hours manually tagging leads"</td>
+                        <td>Overwhelm, time drain</td>
+                        <td>Automatic segmentation by quiz answers</td>
+                    </tr>
+                    <tr>
+                        <td>"My landing page looks like everyone else's"</td>
+                        <td>Embarrassment</td>
+                        <td>Custom, interactive experience</td>
+                    </tr>
+                    <tr>
+                        <td>"I don't know which leads are ready to buy"</td>
+                        <td>Guessing, inefficiency</td>
+                        <td>Hot/warm/cold scoring tells you exactly</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Platform Strategy -->
+        <section id="platform-strategy">
+            <h2>Platform & Format Strategy</h2>
+
+            <div class="info">
+                <strong>Key Data Point:</strong> According to CNBC and Sensor Tower (January 2026), 50%+ of all Instagram ads now run on Reels, up from 35% in 2024. Reels CPM is $3-4 vs Feed CPM of $6-8.
+            </div>
+
+            <h3>Why Reels First</h3>
+            <ul>
+                <li>46% of time spent on Instagram is on Reels (up from 37% in 2024)</li>
+                <li>Vertical, full-screen = higher engagement</li>
+                <li>Algorithm pushes Reels content</li>
+                <li>55% of Reel views come from non-followers (discovery)</li>
+            </ul>
+
+            <h3>Format Priority</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Format</th>
+                        <th>Use For</th>
+                        <th>CPM</th>
+                        <th>CTR</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="background: rgba(102, 126, 234, 0.1);">
+                        <td><strong>Reels (Primary)</strong></td>
+                        <td>Cold traffic, awareness, education</td>
+                        <td>$3-4</td>
+                        <td>0.30-0.50%</td>
+                    </tr>
+                    <tr>
+                        <td>Stories (Secondary)</td>
+                        <td>Retargeting, urgency offers</td>
+                        <td>$5-6</td>
+                        <td>0.33-0.54%</td>
+                    </tr>
+                    <tr>
+                        <td>Feed (Tertiary)</td>
+                        <td>Carousel proof, testimonials</td>
+                        <td>$6-8</td>
+                        <td>0.78%</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Video Best Practices</h3>
+            <div class="grid-2">
+                <div>
+                    <h4>Do</h4>
+                    <ul>
+                        <li>Keep under 15 seconds</li>
+                        <li>Hook in first 2 seconds</li>
+                        <li>Use sound (higher completion)</li>
+                        <li>Raw/authentic style</li>
+                        <li>Vertical (9:16) only</li>
+                        <li>Add captions (most watch muted)</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Don't</h4>
+                    <ul>
+                        <li>Over-produce (feels like an ad)</li>
+                        <li>Start with logo</li>
+                        <li>Use stock footage</li>
+                        <li>Make horizontal videos</li>
+                        <li>Bake text into video</li>
+                        <li>Go over 60 seconds</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Creative Concepts -->
+        <section id="creative-concepts">
+            <h2>Ad Creative Concepts</h2>
+
+            <div class="concept-card primary">
+                <div class="concept-tag">CONCEPT 1</div>
+                <h3>The Funnel Roast (Screen Recording)</h3>
+                <p><strong>Format:</strong> 30-60 second Reel | <strong>Style:</strong> Screen recording with voiceover | <strong>Vibe:</strong> Educational, slightly provocative</p>
+
+                <h4>What You Do</h4>
+                <ol>
+                    <li>Screen record yourself going through a coach's funnel (after clicking their ad)</li>
+                    <li>Point out what's wrong (generic landing page, no personalization)</li>
+                    <li>Show how a quiz version would improve it</li>
+                    <li>CTA to free audit</li>
+                </ol>
+
+                <h4>Script</h4>
+                <div class="script-block">
+                    <h5>[Screen recording of generic funnel]</h5>
+                    <p>"I clicked on a coach's ad and their funnel made me cringe..."</p>
+                    <h5>[Point at generic landing page]</h5>
+                    <p>"See this? Basic opt-in page. No personalization. No segmentation."</p>
+                    <h5>[Show what they're missing]</h5>
+                    <p>"They're paying $5-10 per lead and have no idea which ones are actually ready to buy."</p>
+                    <h5>[Quick visual of quiz alternative]</h5>
+                    <p>"A quiz funnel would score these leads automatically and send personalized emails based on their answers."</p>
+                    <h5>[Face to camera]</h5>
+                    <p>"Want me to roast YOUR funnel? Free audit, link in bio."</p>
+                </div>
+
+                <p><strong>Why it works:</strong> Pattern interrupt, demonstrates expertise, creates "I wonder what my funnel looks like" curiosity.</p>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-tag">CONCEPT 2</div>
+                <h3>The Transformation (Before/After)</h3>
+                <p><strong>Format:</strong> Carousel or 30-second Reel | <strong>Style:</strong> Case study / results | <strong>Vibe:</strong> Proof-based, aspirational</p>
+
+                <h4>Script</h4>
+                <div class="script-block">
+                    <p>"This coach was paying $12 per lead."</p>
+                    <p>[Show before metrics]</p>
+                    <p>"Now they pay $4."</p>
+                    <p>[Show after metrics]</p>
+                    <p>"Same ad spend. Same audience. Different funnel."</p>
+                    <p>[Show quiz]</p>
+                    <p>"We replaced their landing page with a quiz that scores leads and sends personalized emails automatically."</p>
+                    <p>[Results]</p>
+                    <p>"Conversion rate went from 2% to 8%."</p>
+                    <p>[CTA]</p>
+                    <p>"Free audit — link in bio."</p>
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-tag">CONCEPT 3</div>
+                <h3>The Direct Pitch (Talking Head)</h3>
+                <p><strong>Format:</strong> 30-second Reel | <strong>Style:</strong> Face-to-camera, raw/unpolished | <strong>Vibe:</strong> Direct, confident, no-BS</p>
+
+                <h4>Script</h4>
+                <div class="copy-snippet">
+<button class="copy-button" onclick="copyToClipboard(this)">Copy</button>
+"If you're a coach running Instagram ads to a basic landing page, you're leaving money on the table."
+
+[Pause for emphasis]
+
+"Quiz funnels convert 40-60% higher than standard opt-ins."
+
+[Quick visual or hand gesture]
+
+"I build done-for-you quiz funnels. You get the quiz, the email sequences, and the analytics dashboard."
+
+[The offer]
+
+"I'll mock up what yours would look like. Free. No pitch unless you want one."
+
+[CTA]
+
+"DM me 'QUIZ' or link in bio."
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-tag">CONCEPT 4</div>
+                <h3>The Quiz Demo (Product Showcase)</h3>
+                <p><strong>Format:</strong> 45-60 second Reel | <strong>Style:</strong> Screen recording with personality | <strong>Vibe:</strong> Show, don't tell</p>
+
+                <h4>What You Show</h4>
+                <ol>
+                    <li>Walk through an actual quiz funnel you built</li>
+                    <li>Show the user experience (landing page → quiz → results)</li>
+                    <li>Show the backend (analytics, email automation)</li>
+                    <li>CTA to get one built</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Ad Copy -->
+        <section id="ad-copy">
+            <h2>Ad Copy Templates</h2>
+
+            <h3>Template 1: Problem-Agitate-Solve</h3>
+            <div class="copy-snippet">
+<button class="copy-button" onclick="copyToClipboard(this)">Copy</button>
+Your Instagram ads are working. You're getting leads.
+
+But how many of those leads actually book calls? 10%? 20%?
+
+The problem isn't your ads. It's what happens AFTER the click.
+
+A basic landing page treats everyone the same. A quiz funnel:
+→ Scores leads by buying temperature
+→ Sends personalized follow-up emails
+→ Shows you exactly who's ready to buy
+
+Quiz funnels convert 40-60% higher than standard opt-ins.
+
+I build done-for-you quiz funnels for coaches. Complete system: quiz, emails, analytics. Delivered in 7 days.
+
+Want to see what yours would look like? Free audit, no pitch.
+
+DM "QUIZ" or tap the link.
+            </div>
+            <p><strong>Headline:</strong> Quiz Funnels Convert 3x Higher</p>
+            <p><strong>Description:</strong> Free Audit — See Your Quiz Mockup</p>
+
+            <h3>Template 2: Curiosity Gap</h3>
+            <div class="copy-snippet">
+<button class="copy-button" onclick="copyToClipboard(this)">Copy</button>
+A coach in the fitness niche was spending $3k/month on ads.
+
+Cost per lead: $12
+Show rate: 18%
+Monthly clients from ads: 2
+
+We replaced their landing page with a quiz funnel.
+
+Same ads. Same budget. Same audience.
+
+Cost per lead: $4
+Show rate: 42%
+Monthly clients from ads: 7
+
+The only thing that changed was what happened after the click.
+
+Want to see how this would work for YOUR coaching business?
+
+Free funnel audit — I'll show you exactly what's broken and how to fix it.
+
+Link in bio.
+            </div>
+            <p><strong>Headline:</strong> Same Ads. 3x More Clients.</p>
+            <p><strong>Description:</strong> Free Quiz Funnel Audit for Coaches</p>
+
+            <h3>Template 3: Direct Offer</h3>
+            <div class="copy-snippet">
+<button class="copy-button" onclick="copyToClipboard(this)">Copy</button>
+I build quiz funnels for coaches and course creators.
+
+Here's what you get:
+✓ Custom landing page (matches your brand)
+✓ Personalized quiz (scores leads hot/warm/cold)
+✓ 14 email sequences (automated based on quiz results)
+✓ Analytics dashboard (track every metric)
+✓ Deployed and ready to run
+
+Timeline: 7 days. Not 6 weeks.
+
+No templates. No Interact. No piecing together 5 different tools.
+
+One complete system that turns your ad traffic into qualified calls.
+
+Currently taking 3 new clients this month.
+
+DM "QUIZ" for a free mockup of what yours would look like.
+            </div>
+
+            <h3>Template 4: Objection Handling (Retargeting)</h3>
+            <div class="copy-snippet">
+<button class="copy-button" onclick="copyToClipboard(this)">Copy</button>
+"I already use Interact for my quiz..."
+
+Here's what Interact doesn't give you:
+❌ Custom landing page
+❌ Email sequences
+❌ Email automation
+❌ Analytics dashboard
+❌ Deployment
+
+That's 80% of the work still on YOU.
+
+You're paying $27-125/month for 20% of the solution.
+
+Hidden cost to finish it:
+• Designer for landing page: $500-2,000
+• Copywriter for emails: $500-1,500
+• Developer for analytics: $1,000-3,000
+• Total: $2,500-7,800+ in extra costs
+
+Or: Get everything built in 7 days.
+
+One system. One price. Nothing hidden.
+
+Link in bio.
+            </div>
+
+            <h3>Hook Variations to Test</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Hooks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Problem-focused</td>
+                        <td>"Your leads aren't converting because..." / "I clicked on a coach's ad and their funnel made me cringe" / "Stop sending the same email to every lead"</td>
+                    </tr>
+                    <tr>
+                        <td>Curiosity</td>
+                        <td>"This is what quiz funnels actually look like..." / "Here's why your competitors are switching to quizzes" / "The funnel that converted 8% when landing pages convert 2%"</td>
+                    </tr>
+                    <tr>
+                        <td>Results</td>
+                        <td>"Same ads. 3x more clients." / "From $12/lead to $4/lead with one change" / "This coach went from 2 to 7 clients/month"</td>
+                    </tr>
+                    <tr>
+                        <td>Direct</td>
+                        <td>"If you're running ads to a basic landing page..." / "Quiz funnels convert 40-60% higher. Here's proof." / "I build quiz funnels for coaches. 7 days. Complete system."</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Targeting -->
+        <section id="targeting">
+            <h2>Targeting Strategy</h2>
+
+            <div class="info">
+                <strong>Primary Approach:</strong> Advantage+ Audience. Let Meta's algorithm find your customers. Over-targeting limits learning.
+            </div>
+
+            <h3>Interest Suggestions (Add 2-3 Max)</h3>
+            <div class="grid-3">
+                <div>
+                    <h4>Course Platforms</h4>
+                    <ul>
+                        <li>Kajabi</li>
+                        <li>Teachable</li>
+                        <li>Thinkific</li>
+                        <li>Podia</li>
+                        <li>Mighty Networks</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Business/Marketing</h4>
+                    <ul>
+                        <li>Online business</li>
+                        <li>Digital marketing</li>
+                        <li>Email marketing</li>
+                        <li>Sales funnel</li>
+                        <li>Lead generation</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Coaching Niches</h4>
+                    <ul>
+                        <li>Business coaching</li>
+                        <li>Life coaching</li>
+                        <li>Health coaching</li>
+                        <li>Fitness coaching</li>
+                        <li>Executive coaching</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Audiences to Test</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Audience</th>
+                        <th>Targeting</th>
+                        <th>Expected Size</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>A: Platform Users</strong></td>
+                        <td>Kajabi OR Teachable OR Thinkific, Age 28-55</td>
+                        <td>500K-2M</td>
+                    </tr>
+                    <tr>
+                        <td><strong>B: Marketing-Aware</strong></td>
+                        <td>Business coaching AND (Digital marketing OR Lead generation), Age 30-50</td>
+                        <td>200K-800K</td>
+                    </tr>
+                    <tr>
+                        <td><strong>C: Broad (Meta Optimized)</strong></td>
+                        <td>No detailed targeting, Advantage+ ON</td>
+                        <td>10M+</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Retargeting Audiences (Set Up Immediately)</h3>
+            <ul>
+                <li><strong>Warm Audience 1:</strong> Video viewers (25%, 50%, 75% watched)</li>
+                <li><strong>Warm Audience 2:</strong> Profile visitors (last 30 days)</li>
+                <li><strong>Warm Audience 3:</strong> Link clickers (last 30 days)</li>
+                <li><strong>Warm Audience 4:</strong> People who messaged (last 30 days)</li>
+            </ul>
+        </section>
+
+        <!-- Budget -->
+        <section id="budget">
+            <h2>Budget & Testing Framework</h2>
+
+            <h3>Budget Allocation ($600-800 Total)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Phase</th>
+                        <th>Duration</th>
+                        <th>Daily Budget</th>
+                        <th>Total Spend</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Creative Testing</td>
+                        <td>Week 1-2</td>
+                        <td>$15-20/day</td>
+                        <td>$210-280</td>
+                    </tr>
+                    <tr>
+                        <td>Audience Testing</td>
+                        <td>Week 3</td>
+                        <td>$20-25/day</td>
+                        <td>$140-175</td>
+                    </tr>
+                    <tr>
+                        <td>Scaling Winners</td>
+                        <td>Week 4</td>
+                        <td>$30-50/day</td>
+                        <td>$210-350</td>
+                    </tr>
+                    <tr style="background: rgba(102, 126, 234, 0.1);">
+                        <td><strong>Total</strong></td>
+                        <td>4 weeks</td>
+                        <td>-</td>
+                        <td><strong>$560-805</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Testing Rules</h3>
+            <div class="warning">
+                <strong>The 72-Hour Rule:</strong> Don't touch your ad for 72 hours. Facebook needs time to learn. Constant tweaking resets the algorithm.
+            </div>
+
+            <h4>Week 1-2: Creative Testing</h4>
+            <ul>
+                <li>1 Campaign, Messages objective</li>
+                <li>1 Ad Set, Audience A (Platform Users)</li>
+                <li>4 Ads (one for each creative concept)</li>
+                <li>Budget: $15-20/day split across ads</li>
+                <li>Kill any ad with CTR < 0.3% after 1,000 impressions</li>
+            </ul>
+
+            <h4>Week 3: Audience Testing</h4>
+            <ul>
+                <li>Take winning creative(s) from Week 1-2</li>
+                <li>Create 3 Ad Sets (Audiences A, B, C)</li>
+                <li>Same ads in each</li>
+                <li>Budget: $20-25/day split across ad sets</li>
+            </ul>
+
+            <h4>Week 4: Scale Winners</h4>
+            <ul>
+                <li>Best creative + best audience</li>
+                <li>Increase budget 20% every 2-3 days</li>
+                <li>Add retargeting campaign ($5-10/day)</li>
+                <li>Never more than 20% increase at once</li>
+            </ul>
+        </section>
+
+        <!-- Benchmarks -->
+        <section id="benchmarks">
+            <h2>Performance Benchmarks</h2>
+
+            <h3>B2B Services Instagram Benchmarks (2026)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Average</th>
+                        <th>Good</th>
+                        <th>Great</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Feed CTR</td>
+                        <td>0.78%</td>
+                        <td>1.0%+</td>
+                        <td>1.5%+</td>
+                    </tr>
+                    <tr>
+                        <td>Stories CTR</td>
+                        <td>0.41%</td>
+                        <td>0.6%+</td>
+                        <td>0.8%+</td>
+                    </tr>
+                    <tr>
+                        <td>Reels CTR</td>
+                        <td>0.30%</td>
+                        <td>0.5%+</td>
+                        <td>0.7%+</td>
+                    </tr>
+                    <tr>
+                        <td>CPC (Reels)</td>
+                        <td>$0.60</td>
+                        <td><$0.50</td>
+                        <td><$0.35</td>
+                    </tr>
+                    <tr>
+                        <td>CPM (Reels)</td>
+                        <td>$3-4</td>
+                        <td><$3</td>
+                        <td><$2</td>
+                    </tr>
+                    <tr>
+                        <td>Conversion Rate</td>
+                        <td>8.3%</td>
+                        <td>10%+</td>
+                        <td>15%+</td>
+                    </tr>
+                    <tr>
+                        <td>CPA (Lead)</td>
+                        <td>$16.95</td>
+                        <td><$15</td>
+                        <td><$10</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p><em>Source: AdBacklog, WebFX, Tinuiti Q3 2025 Benchmark Report</em></p>
+
+            <h3>Your Target ROI Math</h3>
+            <div class="success">
+                <p><strong>$20 CPL × 4 leads per call × 4 calls per sale = $320 CAC</strong></p>
+                <p><strong>$3,000 sale / $320 CAC = 9.4x return</strong></p>
+            </div>
+        </section>
+
+        <!-- Execution -->
+        <section id="execution">
+            <h2>Week-by-Week Execution Plan</h2>
+
+            <h3>Pre-Launch Checklist</h3>
+            <ul class="checklist">
+                <li>Set up Meta Business Manager</li>
+                <li>Install Facebook Pixel on landing page</li>
+                <li>Create custom audiences (video viewers, profile visitors)</li>
+                <li>Build landing page for free audit</li>
+                <li>Set up email sequence (5 emails)</li>
+                <li>Record 4 ad creatives (one per concept)</li>
+                <li>Write ad copy (4 variations)</li>
+            </ul>
+
+            <h3>Week 1: Launch & Learn</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Day</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Monday</td>
+                        <td>Launch Campaign 1 (Messages), 4 ads, $20/day</td>
+                    </tr>
+                    <tr>
+                        <td>Tue-Thu</td>
+                        <td>Monitor metrics (don't change anything), respond to messages within 15 min</td>
+                    </tr>
+                    <tr>
+                        <td>Friday</td>
+                        <td>Review data, kill ads with CTR < 0.3%, identify top performers</td>
+                    </tr>
+                    <tr>
+                        <td>Weekend</td>
+                        <td>Let ads run, prepare Week 2 variations</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Week 2: Creative Optimization</h3>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Monday</td>
+                        <td>Duplicate winners, test different hooks (same concept, different opening)</td>
+                    </tr>
+                    <tr>
+                        <td>Wednesday</td>
+                        <td>Mid-week check, kill underperformers, scale winners by 20%</td>
+                    </tr>
+                    <tr>
+                        <td>Friday</td>
+                        <td>Select top 2 creatives for audience testing</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Week 3: Audience Testing</h3>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Monday</td>
+                        <td>Create 3 ad sets (different audiences), same winning creatives</td>
+                    </tr>
+                    <tr>
+                        <td>Wednesday</td>
+                        <td>Compare audience performance (CPL, message quality)</td>
+                    </tr>
+                    <tr>
+                        <td>Friday</td>
+                        <td>Select winning audience, prepare for scale</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Week 4: Scale & Systematize</h3>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Monday</td>
+                        <td>Increase budget to $35-50/day on winners, launch retargeting ($10/day)</td>
+                    </tr>
+                    <tr>
+                        <td>Wednesday</td>
+                        <td>Review all-time performance, calculate CAC</td>
+                    </tr>
+                    <tr>
+                        <td>Friday</td>
+                        <td>If profitable: continue scaling. If not: diagnose and iterate.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Quick Reference: Troubleshooting</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Problem</th>
+                        <th>Diagnosis</th>
+                        <th>Fix</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>CTR below 0.3%</td>
+                        <td>Hook isn't working</td>
+                        <td>Test new opening, add movement/pattern interrupt</td>
+                    </tr>
+                    <tr>
+                        <td>Clicks but no messages</td>
+                        <td>Landing page friction</td>
+                        <td>Simplify form, clarify offer, try Messages objective</td>
+                    </tr>
+                    <tr>
+                        <td>Messages but no calls</td>
+                        <td>Response time too slow</td>
+                        <td>Set up auto-reply, improve email sequence</td>
+                    </tr>
+                    <tr>
+                        <td>Calls but no sales</td>
+                        <td>Wrong leads or sales process</td>
+                        <td>Adjust targeting, add qualifying questions</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <script>
+        function copyToClipboard(button) {
+            const snippet = button.parentElement;
+            const text = snippet.textContent.replace('Copy', '').trim();
+
+            navigator.clipboard.writeText(text).then(() => {
+                button.textContent = 'Copied!';
+                button.style.background = 'rgba(76, 175, 80, 0.8)';
+
+                setTimeout(() => {
+                    button.textContent = 'Copy';
+                    button.style.background = 'rgba(102, 126, 234, 0.8)';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

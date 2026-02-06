@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Funnel Service - Internal Marketing Strategy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e0e0e0;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        header .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #b0b0b0;
+            margin-bottom: 20px;
+        }
+
+        .meta-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        .meta-item strong {
+            color: #e0e0e0;
+        }
+
+        section {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 25px;
+            color: #667eea;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin: 30px 0 15px 0;
+            color: #8b9dc3;
+        }
+
+        h4 {
+            font-size: 1.2rem;
+            margin: 20px 0 10px 0;
+            color: #a0aec0;
+        }
+
+        p {
+            margin-bottom: 15px;
+            color: #d0d0d0;
+        }
+
+        ul, ol {
+            margin: 15px 0 15px 30px;
+            color: #d0d0d0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th {
+            background: rgba(102, 126, 234, 0.2);
+            color: #e0e0e0;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid rgba(102, 126, 234, 0.3);
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: #d0d0d0;
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .angle-card {
+            background: rgba(102, 126, 234, 0.1);
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .angle-card.primary {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.15);
+        }
+
+        .angle-tag {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .angle-tag.primary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .copy-snippet {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #a0d4a0;
+            position: relative;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(102, 126, 234, 0.8);
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .copy-button:hover {
+            background: rgba(102, 126, 234, 1);
+            transform: translateY(-2px);
+        }
+
+        .highlight {
+            background: rgba(102, 126, 234, 0.2);
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #a0c4ff;
+            font-weight: 600;
+        }
+
+        .warning {
+            background: rgba(255, 193, 7, 0.1);
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .success {
+            background: rgba(76, 175, 80, 0.1);
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .stat-box {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        blockquote {
+            border-left: 4px solid #667eea;
+            padding-left: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: #b0b0b0;
+        }
+
+        .toc {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+
+        .toc h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .toc a {
+            color: #8b9dc3;
+            text-decoration: none;
+            display: block;
+            padding: 8px 0;
+            transition: all 0.3s ease;
+        }
+
+        .toc a:hover {
+            color: #667eea;
+            padding-left: 10px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            header {
+                padding: 30px 15px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            section {
+                padding: 25px;
+            }
+
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .meta-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="badge">INTERNAL USE ONLY</div>
+            <h1>Quiz Funnel Service</h1>
+            <p class="subtitle">Marketing Strategy & Positioning Framework</p>
+            <div class="meta-info">
+                <div class="meta-item">
+                    <strong>Research Date:</strong> 2026-01-27
+                </div>
+                <div class="meta-item">
+                    <strong>Data Sources:</strong> Tavily (8 queries) + DataForSEO (9 keywords)
+                </div>
+                <div class="meta-item">
+                    <strong>Confidence:</strong> High (Real market data)
+                </div>
+            </div>
+        </header>
+
+        <!-- Table of Contents -->
+        <div class="toc">
+            <h3>Table of Contents</h3>
+            <a href="#executive-summary">1. Executive Summary</a>
+            <a href="#market-landscape">2. Market Landscape</a>
+            <a href="#pain-points">3. Pain Point Matrix</a>
+            <a href="#positioning-angles">4. Positioning Angles (All 5)</a>
+            <a href="#messaging">5. Messaging Framework</a>
+            <a href="#objections">6. Objection Handling</a>
+            <a href="#sales-enablement">7. Sales Enablement</a>
+            <a href="#pricing-positioning">8. Pricing Positioning</a>
+        </div>
+
+        <!-- Executive Summary -->
+        <section id="executive-summary">
+            <h2>Executive Summary</h2>
+
+            <div class="success">
+                <strong>Core Positioning:</strong> The only quiz funnel service that delivers a complete, production-ready system (landing page + quiz + email automation + analytics + deployment) in 7 days—not months, not puzzle pieces.
+            </div>
+
+            <h3>Market Opportunity</h3>
+            <p>The quiz funnel market is fragmented between <strong>DIY tools</strong> ($27-600/mo) and <strong>full-service agencies</strong> ($5K-15K). Both have critical gaps:</p>
+
+            <div class="grid-2">
+                <div class="stat-box">
+                    <div class="stat-number">20%</div>
+                    <div class="stat-label">What DIY tools actually deliver</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">3-6 weeks</div>
+                    <div class="stat-label">Agency timeline (vs. our 15 min)</div>
+                </div>
+            </div>
+
+            <h3>Key Strategic Insight</h3>
+            <blockquote>
+                Buyers searching "interactive quiz" (2,400/mo) outnumber those searching "quiz funnel" (260/mo) by 9:1. Most don't know they need a complete funnel—they think they need a quiz tool.
+            </blockquote>
+
+            <p><strong>Implication:</strong> Our marketing must educate before selling. Show them the gap between "quiz tool" and "complete system."</p>
+
+            <h3>Recommended Primary Angle</h3>
+            <p><span class="highlight">Angle #3: The Hidden Cost</span> — Position against DIY tools by exposing the hidden work required. Resonate with buyers comparing Interact/Outgrow who don't realize they're only getting 20% of the solution.</p>
+        </section>
+
+        <!-- Market Landscape -->
+        <section id="market-landscape">
+            <h2>Market Landscape</h2>
+
+            <h3>Competitor Analysis</h3>
+
+            <h4>DIY Quiz Builder Tools</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tool</th>
+                        <th>Pricing</th>
+                        <th>Strengths</th>
+                        <th>Weaknesses</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Interact</strong></td>
+                        <td>$27-125/mo<br>(500-96K leads/year)</td>
+                        <td>Popular, established, easy to use</td>
+                        <td>Expensive at scale, limited customization, no email automation, no analytics, no deployment</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Outgrow</strong></td>
+                        <td>$14-600/mo<br>(Tiered structure)</td>
+                        <td>More features than Interact, includes calculators</td>
+                        <td>Steep learning curve, large pricing gaps, expensive, no complete funnel</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Typeform</strong></td>
+                        <td>$25-70/mo</td>
+                        <td>Beautiful UI, easy to use, general purpose</td>
+                        <td>Just a form, no scoring, no segmentation, no automation</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ProProfs / LeadQuizzes</strong></td>
+                        <td>$19-149/mo</td>
+                        <td>Similar to Interact, cheaper tiers</td>
+                        <td>Template-based, no complete funnel</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Full-Service Agencies</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Aspect</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Pricing</strong></td>
+                        <td>$5,000-$15,000 (one-time)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Timeline</strong></td>
+                        <td>3-6 weeks (80+ hours of work)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Deliverables</strong></td>
+                        <td>Custom design, copy, development, sometimes email sequences</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Weaknesses</strong></td>
+                        <td>Expensive, slow, opaque process, revisions cost $1,200+, no email automation or analytics</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Feature Gap Analysis</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Interact</th>
+                        <th>Outgrow</th>
+                        <th>Typeform</th>
+                        <th>Agencies</th>
+                        <th style="background: rgba(102, 126, 234, 0.4);">Our Solution</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Quiz builder</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                    </tr>
+                    <tr>
+                        <td>Custom research</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                    </tr>
+                    <tr>
+                        <td>Brand-matched design</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                    </tr>
+                    <tr>
+                        <td>Landing page copy</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                    </tr>
+                    <tr>
+                        <td>Email sequences</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                        <td>Sometimes</td>
+                        <td>✅ (14 emails)</td>
+                    </tr>
+                    <tr>
+                        <td>Email automation</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                        <td>✅ (Supabase + cron)</td>
+                    </tr>
+                    <tr>
+                        <td>Analytics dashboard</td>
+                        <td>Basic</td>
+                        <td>Basic</td>
+                        <td>Basic</td>
+                        <td>❌</td>
+                        <td>✅ (Full dashboard)</td>
+                    </tr>
+                    <tr>
+                        <td>Deployment</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                        <td>✅</td>
+                        <td>✅ (Vercel-ready)</td>
+                    </tr>
+                    <tr>
+                        <td>Video assets</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                        <td>✅ (Remotion)</td>
+                    </tr>
+                    <tr style="background: rgba(102, 126, 234, 0.1);">
+                        <td><strong>Time to deploy</strong></td>
+                        <td>Hours</td>
+                        <td>Hours</td>
+                        <td>Hours</td>
+                        <td>3-6 weeks</td>
+                        <td><strong>7 days</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Search Volume & Demand</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Keyword</th>
+                        <th>Monthly Searches</th>
+                        <th>CPC</th>
+                        <th>Competition</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="background: rgba(102, 126, 234, 0.1);">
+                        <td><strong>interactive quiz</strong></td>
+                        <td>2,400</td>
+                        <td>$7.74</td>
+                        <td>Low</td>
+                    </tr>
+                    <tr>
+                        <td>quiz builder</td>
+                        <td>320</td>
+                        <td>$5.98</td>
+                        <td>Medium</td>
+                    </tr>
+                    <tr>
+                        <td>quiz funnel</td>
+                        <td>260</td>
+                        <td>$16.47</td>
+                        <td>Medium</td>
+                    </tr>
+                    <tr>
+                        <td>quiz marketing</td>
+                        <td>170</td>
+                        <td>$10.22</td>
+                        <td>Low</td>
+                    </tr>
+                    <tr>
+                        <td>lead generation quiz</td>
+                        <td>140</td>
+                        <td>$81.57</td>
+                        <td>Low</td>
+                    </tr>
+                    <tr>
+                        <td>Interact pricing</td>
+                        <td>50</td>
+                        <td>$29.40</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>Outgrow pricing</td>
+                        <td>40</td>
+                        <td>$4.89</td>
+                        <td>-</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="warning">
+                <strong>Key Insight:</strong> "Interactive quiz" has 9x more search volume than "quiz funnel." Target buyers who don't yet know they need a complete funnel system.
+            </div>
+        </section>
+
+        <!-- Pain Point Matrix -->
+        <section id="pain-points">
+            <h2>Pain Point Matrix</h2>
+
+            <h3>Pain Point #1: Generic Templates</h3>
+            <blockquote>"Interact templates look like everyone else's quiz"</blockquote>
+            <p><strong>Emotional Pain:</strong> Brand looks cheap/unprofessional</p>
+            <p><strong>Rational Pain:</strong> Lower conversion rates, no differentiation</p>
+            <p><strong>Urgency:</strong> Live with it or pay designer $500-2,000 for custom design</p>
+            <p><strong>Our Solution:</strong> Every quiz custom-researched and brand-matched in 7 days</p>
+
+            <h3>Pain Point #2: Incomplete Solution (The Hidden 80%)</h3>
+            <blockquote>"Got the quiz working but now I need a developer for the website, a copywriter for emails, and Zapier to connect everything"</blockquote>
+            <p><strong>Emotional Pain:</strong> Frustration, feeling deceived ("I thought this was the complete solution")</p>
+            <p><strong>Rational Pain:</strong> $2,500-7,800 additional costs + $130-500/mo ongoing</p>
+            <div class="copy-snippet">
+Hidden costs breakdown:
+- Designer for landing page: $500-2,000
+- Copywriter for email sequences: $500-1,500
+- Developer for analytics: $1,000-3,000
+- Email tool (Mailchimp, ConvertKit): $50-200/mo
+- Analytics tool: $50-200/mo
+- Zapier/integrations: $30-100/mo
+TOTAL: $2,500-7,800 + $130-500/mo
+            </div>
+            <p><strong>Urgency:</strong> Can't launch until these are built (weeks/months delay)</p>
+            <p><strong>Our Solution:</strong> Complete system in 7 days (no hidden costs)</p>
+
+            <h3>Pain Point #3: Expensive at Scale</h3>
+            <blockquote>"Interact is $125/mo for 96K leads, but I'm already at 50K and need to upgrade"</blockquote>
+            <p><strong>Emotional Pain:</strong> Feeling trapped, penalized for success</p>
+            <p><strong>Rational Pain:</strong> Usage-based pricing increases with growth</p>
+            <p><strong>Urgency:</strong> Hit limit, forced to upgrade or stop capturing leads</p>
+            <p><strong>Our Solution:</strong> One-time cost, unlimited leads</p>
+
+            <h3>Pain Point #4: No Automation</h3>
+            <blockquote>"I have to manually tag and segment leads after the quiz"</blockquote>
+            <p><strong>Emotional Pain:</strong> Overwhelm, time drain</p>
+            <p><strong>Rational Pain:</strong> Manual work doesn't scale, leads fall through cracks</p>
+            <p><strong>Urgency:</strong> Daily/weekly manual work or hire VA ($15-30/hr)</p>
+            <p><strong>Our Solution:</strong> Automatic email sequences based on quiz temperature</p>
+
+            <h3>Pain Point #5: Agency Risk</h3>
+            <blockquote>"Paid $8K upfront and after 3 weeks got a design I hated, revisions were $1,200 more"</blockquote>
+            <p><strong>Emotional Pain:</strong> Regret, betrayal, financial stress</p>
+            <p><strong>Rational Pain:</strong> $5K-15K sunk cost, no guarantee, 3-6 week delay</p>
+            <p><strong>Urgency:</strong> Need to launch, pressure to accept subpar work</p>
+            <p><strong>Our Solution:</strong> 15-minute delivery, regenerate if not happy (no revision fees)</p>
+        </section>
+
+        <!-- Positioning Angles -->
+        <section id="positioning-angles">
+            <h2>Positioning Angles (All 5)</h2>
+
+            <div class="angle-card primary">
+                <div class="angle-tag primary">PRIMARY ANGLE</div>
+                <h3>Angle #3: The Hidden Cost</h3>
+                <p><strong>One-Sentence Positioning:</strong> DIY tools are 20% of the solution; we're 100%</p>
+
+                <h4>Why It Works</h4>
+                <p>Exposes the hidden work and costs buyers don't anticipate when choosing Interact/Outgrow. Reframes "cheap tool" as expensive puzzle. Quantifiable ($2.5K-7.8K hidden costs) and easy to verify.</p>
+
+                <h4>Market Evidence</h4>
+                <ul>
+                    <li>Interact/Outgrow only provide quiz interface ($27-600/mo)</li>
+                    <li>Still need: designer, copywriter, developer, email tool, analytics, deployment</li>
+                    <li>Total hidden cost: $2,500-7,800 + $130-500/mo</li>
+                    <li>User complaints confirm: "Got the quiz but now I need..."</li>
+                </ul>
+
+                <h4>Headline Direction</h4>
+                <div class="copy-snippet">
+<button class="copy-button" onclick="copyToClipboard(this)">Copy</button>
+"Interact Gives You a Quiz. We Give You a System That Converts."
+                </div>
+
+                <h4>Supporting Copy (Use in Landing Pages)</h4>
+                <div class="copy-snippet">
+<button class="copy-button" onclick="copyToClipboard(this)">Copy</button>
+You're comparing quiz tools. Interact is $27/mo. Outgrow is $14/mo. Seems affordable.
+
+But here's what they don't tell you:
+- No landing page (hire a designer: $500-2,000)
+- No email sequences (hire a copywriter: $500-1,500)
+- No email automation (you'll need Zapier + email tool: $80-300/mo)
+- No analytics dashboard (hire a developer: $1,000-3,000)
+- No deployment (hire another developer: $500-1,000)
+
+Total hidden cost: $2,500-7,800 + $80-300/mo ongoing
+
+Or: Get everything in 7 days for [price].
+                </div>
+
+                <h4>When to Use</h4>
+                <p>✅ Buyers comparing DIY tools<br>
+                ✅ Price-sensitive but want complete solution<br>
+                ✅ First-time quiz funnel builders<br>
+                ✅ Anyone who visited Interact/Outgrow pricing pages</p>
+
+                <h4>Proof Points</h4>
+                <ul>
+                    <li>Visit Interact.com → See what's NOT included</li>
+                    <li>Designer portfolios: $500-2K for landing page</li>
+                    <li>Copywriter rates: $500-1.5K for email sequences</li>
+                    <li>Developer quotes: $1K-3K for custom quiz + analytics</li>
+                </ul>
+            </div>
+
+            <div class="angle-card">
+                <div class="angle-tag">SECONDARY ANGLE</div>
+                <h3>Angle #1: Time Collapse</h3>
+                <p><strong>One-Sentence Positioning:</strong> 80 hours → 7 days (agency timeline compression)</p>
+
+                <h4>Why It Works</h4>
+                <p>Time is the hidden cost. Agencies take 3-6 weeks ($5K-15K). We deliver in 7 days. Speed feels like magic.</p>
+
+                <h4>Headline Direction</h4>
+                <div class="copy-snippet">
+<button class="copy-button" onclick="copyToClipboard(this)">Copy</button>
+"Agency-Quality Quiz Funnels in 15 Minutes, Not 6 Weeks"
+                </div>
+
+                <h4>When to Use</h4>
+                <p>✅ Buyers who value speed<br>
+                ✅ Have tried agencies (slow/expensive)<br>
+                ✅ Need to launch fast (event, campaign deadline)<br>
+                ✅ Time-constrained entrepreneurs</p>
+            </div>
+
+            <div class="angle-card">
+                <div class="angle-tag">TERTIARY ANGLE</div>
+                <h3>Angle #2: Anti-Template</h3>
+                <p><strong>One-Sentence Positioning:</strong> Custom research vs. generic templates</p>
+
+                <h4>Why It Works</h4>
+                <p>Premium brands reject templates. Custom = professional. Interact/Outgrow templates are recognizable and signal "cheap."</p>
+
+                <h4>Headline Direction</h4>
+                <div class="copy-snippet">
+<button class="copy-button" onclick="copyToClipboard(this)">Copy</button>
+"Every Quiz Is Custom-Researched for Your Market. Not a Template."
+                </div>
+
+                <h4>When to Use</h4>
+                <p>✅ Premium brands<br>
+                ✅ B2B buyers<br>
+                ✅ Buyers who care about brand perception<br>
+                ✅ Have budget for custom work</p>
+            </div>
+
+            <div class="angle-card">
+                <div class="angle-tag">PROOF-FOCUSED</div>
+                <h3>Angle #4: Methodology Transfer</h3>
+                <p><strong>One-Sentence Positioning:</strong> Proven $400K+ system, now automated</p>
+
+                <h4>Why It Works</h4>
+                <p>Social proof + mechanism. "This already worked, now it's yours." Credibility through specific results.</p>
+
+                <h4>Headline Direction</h4>
+                <div class="copy-snippet">
+<button class="copy-button" onclick="copyToClipboard(this)">Copy</button>
+"The Quiz Funnel Behind $400K+ in 9 Months—Now Automated"
+                </div>
+
+                <h4>When to Use</h4>
+                <p>✅ Results-focused buyers<br>
+                ✅ Need credibility/proof<br>
+                ✅ Want proven systems (not experiments)<br>
+                ✅ Value methodology over tools</p>
+            </div>
+
+            <div class="angle-card">
+                <div class="angle-tag">BOOTSTRAPPER</div>
+                <h3>Angle #5: Specialist Replacement</h3>
+                <p><strong>One-Sentence Positioning:</strong> 5 specialists without hiring costs</p>
+
+                <h4>Why It Works</h4>
+                <p>Hiring is expensive and risky. Bundled expertise feels smart. Positions against hiring freelancers ($3K-8K total).</p>
+
+                <h4>Headline Direction</h4>
+                <div class="copy-snippet">
+<button class="copy-button" onclick="copyToClipboard(this)">Copy</button>
+"Research, Design, Copy, Dev, Analytics—in 15 Minutes"
+                </div>
+
+                <h4>When to Use</h4>
+                <p>✅ Bootstrapped startups<br>
+                ✅ Solopreneurs<br>
+                ✅ Buyers who considered hiring<br>
+                ✅ Budget-conscious but want quality</p>
+            </div>
+        </section>
+
+        <!-- Messaging Framework -->
+        <section id="messaging">
+            <h2>Messaging Framework</h2>
+
+            <h3>Core Value Proposition</h3>
+            <div class="copy-snippet">
+<button class="copy-button" onclick="copyToClipboard(this)">Copy</button>
+The only quiz funnel service that delivers a complete, production-ready system in 7 days—not months, not puzzle pieces.
+            </div>
+
+            <h3>Elevator Pitch (30 seconds)</h3>
+            <div class="copy-snippet">
+<button class="copy-button" onclick="copyToClipboard(this)">Copy</button>
+We build complete quiz funnels using AI agents: landing page, quiz app, 14 email sequences, analytics dashboard, and deployment. Everything custom-researched for your market. Delivered in 7 days.
+
+Tools like Interact only give you the quiz. Agencies charge $5K-15K and take 6 weeks. We give you everything for [price] in 7 days.
+            </div>
+
+            <h3>One-Line Positioning Statements</h3>
+            <div class="copy-snippet">
+<button class="copy-button" onclick="copyToClipboard(this)">Copy</button>
+For SaaS: "Turn website visitors into qualified leads with a custom quiz funnel—deployed in 7 days"
+
+For E-commerce: "Recommend products with a personalized quiz that captures emails and nurtures buyers automatically"
+
+For Coaches: "Score and segment leads with a quiz that sends the right emails to the right people—without manual work"
+
+For Agencies: "Deliver custom quiz funnels to clients in 7 days instead of 6 weeks"
+            </div>
+
+            <h3>Key Differentiators (Copy-Paste Ready)</h3>
+            <ul>
+                <li><strong>Complete system, not puzzle pieces</strong> — Landing page + quiz + email automation + analytics + deployment</li>
+                <li><strong>Custom, not templates</strong> — Every quiz is researched for your market and matched to your brand</li>
+                <li><strong>7 days, not 6 weeks</strong> — No timelines, no revisions, no project management</li>
+                <li><strong>Production-ready code</strong> — Deploy to Vercel immediately, no additional development needed</li>
+                <li><strong>Email automation included</strong> — 14 sequences triggered by quiz temperature (hot/warm/cold)</li>
+                <li><strong>Analytics dashboard</strong> — Track completion rates, segment distribution, UTM sources</li>
+                <li><strong>No ongoing fees</strong> — One-time cost, unlimited leads, you own the code</li>
+            </ul>
+        </section>
+
+        <!-- Objection Handling -->
+        <section id="objections">
+            <h2>Objection Handling</h2>
+
+            <h3>Objection: "Can I just use Typeform?"</h3>
+            <div class="copy-snippet">
+<button class="copy-button" onclick="copyToClipboard(this)">Copy</button>
+Response: "Typeform is a form builder. It doesn't score leads, segment by temperature, or send automated email sequences. You'd still need to build the landing page, write the emails, set up the automation, and create the analytics. We give you the complete system."
+            </div>
+
+            <h3>Objection: "Why not hire an agency?"</h3>
+            <div class="copy-snippet">
+<button class="copy-button" onclick="copyToClipboard(this)">Copy</button>
+Response: "Agencies charge $5K-15K and take 3-6 weeks. Even then, they don't include email automation or analytics. You'll pay $1,200+ for revisions. We deliver in 7 days with everything included, and if you need changes, regenerate in 7 days."
+            </div>
+
+            <h3>Objection: "Interact is only $27/mo"</h3>
+            <div class="copy-snippet">
+<button class="copy-button" onclick="copyToClipboard(this)">Copy</button>
+Response: "Interact gives you the quiz interface. You still need to:
+- Design the landing page ($500-2,000)
+- Write the quiz copy ($300-800)
+- Write 14 email sequences ($500-1,500)
+- Set up email automation ($80-300/mo)
+- Build an analytics dashboard ($1,000-3,000)
+- Deploy everything ($500-1,000)
+
+Total hidden cost: $2,880-8,600 + $80-300/mo. We include all of that."
+            </div>
+
+            <h3>Objection: "This sounds too automated/generic"</h3>
+            <div class="copy-snippet">
+<button class="copy-button" onclick="copyToClipboard(this)">Copy</button>
+Response: "Every quiz is custom-researched for your market. We analyze your website, competitors, products, and audience. The design matches your brand. The copy uses your voice. The questions target your specific customers. It's not a template—it's custom-built in 7 days using AI agents."
+            </div>
+
+            <h3>Objection: "Can I customize it after?"</h3>
+            <div class="copy-snippet">
+<button class="copy-button" onclick="copyToClipboard(this)">Copy</button>
+Response: "Yes. All code is yours, fully editable, and deployed to your Vercel account. Want to change copy? Edit the HTML. Want different questions? Regenerate in 7 days with new inputs. You own everything."
+            </div>
+
+            <h3>Objection: "What if I need changes/revisions?"</h3>
+            <div class="copy-snippet">
+<button class="copy-button" onclick="copyToClipboard(this)">Copy</button>
+Response: "Just regenerate. Unlike agencies that charge $1,200 for revisions and take another week, you can regenerate your entire quiz funnel in 7 days. Try different angles, different products, different copy—as many times as you want."
+            </div>
+
+            <h3>Objection: "Does it work for my industry?"</h3>
+            <div class="copy-snippet">
+<button class="copy-button" onclick="copyToClipboard(this)">Copy</button>
+Response: "We've built quiz funnels for: catering, plumbing, coaching, SaaS, e-commerce, consulting, agencies. The workflow researches your specific market and adapts. Show me your website and I'll walk you through how it would work for you."
+            </div>
+
+            <h3>Objection: "I need to think about it"</h3>
+            <div class="copy-snippet">
+<button class="copy-button" onclick="copyToClipboard(this)">Copy</button>
+Response: "Fair enough. What questions can I answer to help you decide? [pause] Most people are comparing us to Interact or considering an agency. Which route were you leaning toward?"
+
+[Uncover real objection, then address it]
+            </div>
+        </section>
+
+        <!-- Sales Enablement -->
+        <section id="sales-enablement">
+            <h2>Sales Enablement</h2>
+
+            <h3>Discovery Questions</h3>
+            <ol>
+                <li><strong>"What would you use this quiz for?"</strong> → Uncover use case (lead gen, product recommendation, segmentation)</li>
+                <li><strong>"Have you tried quiz tools like Interact or Outgrow?"</strong> → Identify pain points with DIY tools</li>
+                <li><strong>"What stopped you from hiring an agency?"</strong> → Surface price/time objection</li>
+                <li><strong>"How are you currently capturing and nurturing leads?"</strong> → Establish baseline (often manual or nonexistent)</li>
+                <li><strong>"How quickly do you need this launched?"</strong> → Speed advantage (can deploy today)</li>
+                <li><strong>"What's your monthly lead volume?"</strong> → Expose Interact's scaling costs</li>
+                <li><strong>"Who would manage this day-to-day?"</strong> → Emphasize automation (no manual work)</li>
+            </ol>
+
+            <h3>Demo Flow (15-20 minutes)</h3>
+            <ol>
+                <li><strong>Show live example</strong> — Madi's On A Roll quiz funnel
+                    <ul>
+                        <li>Landing page: [Show live URL]</li>
+                        <li>Quiz flow: Walk through 6 questions</li>
+                        <li>Results page: Demonstrate segmentation</li>
+                    </ul>
+                </li>
+                <li><strong>Admin dashboard</strong> — Show analytics
+                    <ul>
+                        <li>KPI cards (views, starts, completions)</li>
+                        <li>Temperature distribution</li>
+                        <li>UTM source tracking</li>
+                    </ul>
+                </li>
+                <li><strong>Email sequences in Supabase</strong> — Show automation
+                    <ul>
+                        <li>14 pre-written emails</li>
+                        <li>Automatic triggering by temperature</li>
+                        <li>Hourly cron job</li>
+                    </ul>
+                </li>
+                <li><strong>GitHub repos</strong> — Show code ownership
+                    <ul>
+                        <li>Private repo with full codebase</li>
+                        <li>Public client preview repo</li>
+                        <li>Vercel-ready deployment</li>
+                    </ul>
+                </li>
+                <li><strong>Video assets (if applicable)</strong> — Remotion components
+                    <ul>
+                        <li>Quiz intro teaser</li>
+                        <li>Result reveal videos</li>
+                        <li>Social ad template</li>
+                    </ul>
+                </li>
+                <li><strong>Explain generation process</strong> — 5-stage workflow
+                    <ul>
+                        <li>Stage 1: Research (5-7 min)</li>
+                        <li>Stage 2: Architecture + Design (3-4 min)</li>
+                        <li>Stage 3: Copy (4-5 min)</li>
+                        <li>Stage 4: Build (2-3 min)</li>
+                        <li>Stage 5: Publish (1-2 min)</li>
+                    </ul>
+                </li>
+                <li><strong>Compare to alternatives</strong>
+                    <table style="margin-top: 15px;">
+                        <tr>
+                            <th></th>
+                            <th>Interact</th>
+                            <th>Agency</th>
+                            <th>Us</th>
+                        </tr>
+                        <tr>
+                            <td>Cost</td>
+                            <td>$27-125/mo</td>
+                            <td>$5K-15K</td>
+                            <td>[Price]</td>
+                        </tr>
+                        <tr>
+                            <td>Hidden costs</td>
+                            <td>$2.5K-7.8K</td>
+                            <td>$1.2K+ revisions</td>
+                            <td>$0</td>
+                        </tr>
+                        <tr>
+                            <td>Timeline</td>
+                            <td>Hours + manual setup</td>
+                            <td>3-6 weeks</td>
+                            <td>7 days</td>
+                        </tr>
+                        <tr>
+                            <td>Email automation</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                            <td>✅</td>
+                        </tr>
+                        <tr>
+                            <td>Analytics</td>
+                            <td>Basic</td>
+                            <td>❌</td>
+                            <td>✅ Full dashboard</td>
+                        </tr>
+                    </table>
+                </li>
+                <li><strong>Close with pricing</strong> — [Present pricing option]</li>
+            </ol>
+
+            <h3>Close Strategies</h3>
+
+            <h4>Assumptive Close</h4>
+            <div class="copy-snippet">
+<button class="copy-button" onclick="copyToClipboard(this)">Copy</button>
+"So we can have your quiz funnel deployed by [today/tomorrow]. What's your website URL so I can get started?"
+            </div>
+
+            <h4>Alternative Close</h4>
+            <div class="copy-snippet">
+<button class="copy-button" onclick="copyToClipboard(this)">Copy</button>
+"Would you like to start with one quiz funnel, or do you have multiple products you'd like to create quizzes for?"
+            </div>
+
+            <h4>Urgency Close (if appropriate)</h4>
+            <div class="copy-snippet">
+<button class="copy-button" onclick="copyToClipboard(this)">Copy</button>
+"You mentioned needing to launch by [date]. If we start today, you'll have time to test before launch. Want to get started?"
+            </div>
+
+            <h4>Risk Reversal Close</h4>
+            <div class="copy-snippet">
+<button class="copy-button" onclick="copyToClipboard(this)">Copy</button>
+"Here's what I suggest: Let's generate your quiz funnel in the next 7 days. If you're not happy with it, we'll regenerate it with different inputs until it's right. Sound fair?"
+            </div>
+        </section>
+
+        <!-- Pricing Positioning -->
+        <section id="pricing-positioning">
+            <h2>Pricing Positioning</h2>
+
+            <h3>Market Benchmarks</h3>
+            <div class="grid-2">
+                <div>
+                    <h4>DIY Tools (Incomplete)</h4>
+                    <p><strong>Interact:</strong> $27-125/mo (500-96K leads/year)</p>
+                    <p><strong>Outgrow:</strong> $14-600/mo</p>
+                    <p><strong>Typeform:</strong> $25-70/mo</p>
+                    <p><strong>Hidden Costs:</strong> +$2,500-7,800 + $130-500/mo</p>
+                    <p><strong>True DIY Cost:</strong> $2,657-8,700 + $157-625/mo (Year 1)</p>
+                </div>
+                <div>
+                    <h4>Full-Service Agencies</h4>
+                    <p><strong>One-time:</strong> $5,000-$15,000</p>
+                    <p><strong>Timeline:</strong> 3-6 weeks</p>
+                    <p><strong>Revisions:</strong> $1,200+ extra</p>
+                    <p><strong>Deliverables:</strong> Design, copy, dev (no automation/analytics)</p>
+                </div>
+            </div>
+
+            <h3>Pricing Options to Test</h3>
+
+            <h4>Option 1: One-Time Purchase (Recommended)</h4>
+            <p><strong>Price:</strong> $2,497</p>
+            <p><strong>Positioning:</strong> Middle of agency range, 7-day delivery, complete system</p>
+            <p><strong>Value prop:</strong> "Get what an agency charges $5K-15K for, delivered in 7 days"</p>
+            <p><strong>Pros:</strong> Clear value comparison, no recurring objection, feels like a deal</p>
+
+            <h4>Option 2: Monthly SaaS</h4>
+            <p><strong>Price:</strong> $147-297/mo</p>
+            <p><strong>Positioning:</strong> Complete system vs. incomplete DIY tools</p>
+            <p><strong>Value prop:</strong> "Same price as Interact, but you get the complete system"</p>
+            <p><strong>Pros:</strong> Recurring revenue, lower barrier</p>
+            <p><strong>Cons:</strong> Competes with "cheap" tools, need to justify monthly fee</p>
+
+            <h4>Option 3: Per-Quiz</h4>
+            <p><strong>Price:</strong> $497-997 per quiz</p>
+            <p><strong>Positioning:</strong> Usage-based, scale at your own pace</p>
+            <p><strong>Value prop:</strong> "Only pay when you need a new quiz"</p>
+            <p><strong>Pros:</strong> Low initial commitment, upsell potential</p>
+
+            <h4>Option 4: Hybrid</h4>
+            <p><strong>Price:</strong> $497 one-time + $47/mo for updates</p>
+            <p><strong>Positioning:</strong> Low barrier + recurring value</p>
+            <p><strong>Value prop:</strong> "Get started for $497, keep it updated for $47/mo"</p>
+            <p><strong>Pros:</strong> Best of both worlds</p>
+
+            <h3>Recommended Pricing Strategy</h3>
+            <div class="success">
+                <strong>Start with Option 1: $2,497 one-time</strong>
+                <ul style="margin-top: 10px;">
+                    <li>Clear value comparison to agencies ($5K-15K)</li>
+                    <li>No recurring objection (vs. SaaS pricing)</li>
+                    <li>Feels like a deal ("agency quality, half the price")</li>
+                    <li>Simple positioning (complete system, 7-day delivery, one price)</li>
+                </ul>
+            </div>
+
+            <div class="warning" style="margin-top: 20px;">
+                <strong>Test other options if:</strong>
+                <ul style="margin-top: 10px;">
+                    <li>$2,497 is too high a barrier (try $1,497 entry point)</li>
+                    <li>Want recurring revenue (try $147-297/mo SaaS)</li>
+                    <li>Targeting agencies (try $997/quiz + white label)</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        function copyToClipboard(button) {
+            const snippet = button.parentElement;
+            const text = snippet.textContent.replace('Copy', '').trim();
+
+            navigator.clipboard.writeText(text).then(() => {
+                button.textContent = 'Copied!';
+                button.style.background = 'rgba(76, 175, 80, 0.8)';
+
+                setTimeout(() => {
+                    button.textContent = 'Copy';
+                    button.style.background = 'rgba(102, 126, 234, 0.8)';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

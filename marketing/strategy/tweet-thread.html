@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twitter Thread Content | Quiz Funnel Marketing Strategy</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ==================== VARIABLES ==================== */
+        :root {
+            /* Colors */
+            --color-primary: #0cc0df;
+            --color-primary-dark: #0a9bb5;
+            --color-primary-light: #3dd4f0;
+            --color-primary-rgb: 12, 192, 223;
+
+            /* Neutrals */
+            --color-bg-primary: #0a0a0f;
+            --color-bg-secondary: #0f0f16;
+            --color-bg-card: rgba(255, 255, 255, 0.03);
+            --color-bg-card-hover: rgba(255, 255, 255, 0.06);
+            --color-bg-tweet: rgba(255, 255, 255, 0.02);
+
+            --color-text-primary: #ffffff;
+            --color-text-secondary: rgba(255, 255, 255, 0.7);
+            --color-text-muted: rgba(255, 255, 255, 0.5);
+
+            --color-border: rgba(255, 255, 255, 0.08);
+            --color-border-hover: rgba(12, 192, 223, 0.4);
+
+            /* Typography */
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-display: 'Space Grotesk', var(--font-primary);
+
+            /* Spacing */
+            --space-xs: 8px;
+            --space-sm: 16px;
+            --space-md: 24px;
+            --space-lg: 32px;
+            --space-xl: 48px;
+            --space-2xl: 80px;
+            --space-3xl: 120px;
+            --space-section: 120px;
+
+            /* Layout */
+            --max-width: 1200px;
+            --max-width-narrow: 800px;
+
+            /* Borders */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+        }
+
+        /* ==================== RESET ==================== */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            font-size: 1.0625rem;
+            line-height: 1.7;
+            color: var(--color-text-secondary);
+            background-color: var(--color-bg-primary);
+            background:
+                radial-gradient(ellipse 80% 50% at 50% -20%,
+                                rgba(var(--color-primary-rgb), 0.15) 0%,
+                                transparent 50%),
+                radial-gradient(ellipse 60% 40% at 80% 100%,
+                                rgba(var(--color-primary-rgb), 0.08) 0%,
+                                transparent 50%),
+                radial-gradient(circle at 20% 50%,
+                                rgba(var(--color-primary-rgb), 0.05) 0%,
+                                transparent 25%),
+                var(--color-bg-primary);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ==================== TYPOGRAPHY ==================== */
+        h1, h2, h3, h4 {
+            font-family: var(--font-display);
+            color: var(--color-text-primary);
+            line-height: 1.2;
+            font-weight: 700;
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: var(--space-sm);
+        }
+
+        h2 {
+            font-size: clamp(1.75rem, 3vw, 2.5rem);
+            margin-bottom: var(--space-md);
+        }
+
+        h3 {
+            font-size: clamp(1.25rem, 2vw, 1.5rem);
+            margin-bottom: var(--space-sm);
+            color: var(--color-primary);
+        }
+
+        h4 {
+            font-size: 1.125rem;
+            margin-bottom: var(--space-sm);
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: var(--space-md);
+        }
+
+        ul, ol {
+            margin-bottom: var(--space-md);
+            padding-left: var(--space-lg);
+        }
+
+        li {
+            margin-bottom: var(--space-sm);
+        }
+
+        code {
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Courier New', monospace;
+            background: rgba(var(--color-primary-rgb), 0.1);
+            color: var(--color-primary-light);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        pre {
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: var(--space-md);
+            overflow-x: auto;
+            margin-bottom: var(--space-md);
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+        }
+
+        /* ==================== LAYOUT ==================== */
+        .container {
+            max-width: var(--max-width-narrow);
+            margin: 0 auto;
+            padding: var(--space-2xl) var(--space-md);
+        }
+
+        /* ==================== BACK LINK ==================== */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            color: var(--color-primary);
+            text-decoration: none;
+            margin-bottom: var(--space-xl);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius-md);
+            border: 1px solid transparent;
+        }
+
+        .back-link:hover {
+            background: var(--color-bg-card);
+            border-color: var(--color-border);
+            transform: translateX(-4px);
+        }
+
+        .back-link::before {
+            content: '←';
+            font-size: 1.25rem;
+        }
+
+        /* ==================== HEADER ==================== */
+        .header {
+            text-align: center;
+            margin-bottom: var(--space-3xl);
+            position: relative;
+            padding: var(--space-xl);
+            border-radius: var(--radius-xl);
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
+            mask-image: radial-gradient(ellipse 50% 50% at 50% 50%,
+                                       black 30%, transparent 70%);
+            border-radius: var(--radius-xl);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .header h1 {
+            background: linear-gradient(135deg,
+                var(--color-primary-light) 0%,
+                var(--color-primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header .subtitle {
+            font-size: 1.25rem;
+            color: var(--color-text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ==================== TABLE OF CONTENTS ==================== */
+        .toc {
+            background: var(--color-bg-card);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            margin-bottom: var(--space-3xl);
+        }
+
+        .toc h2 {
+            font-size: 1.5rem;
+            margin-bottom: var(--space-md);
+        }
+
+        .toc-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .toc-list li {
+            margin-bottom: var(--space-sm);
+        }
+
+        .toc-list a {
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius-sm);
+            transition: all 0.3s ease;
+        }
+
+        .toc-list a:hover {
+            background: var(--color-bg-card-hover);
+            color: var(--color-primary);
+            transform: translateX(4px);
+        }
+
+        .toc-list a::before {
+            content: '→';
+            color: var(--color-primary);
+        }
+
+        /* ==================== THREAD SECTION ==================== */
+        .thread-section {
+            margin-bottom: var(--space-3xl);
+        }
+
+        .thread-section:last-of-type {
+            margin-bottom: var(--space-2xl);
+        }
+
+        .section-header {
+            margin-bottom: var(--space-xl);
+        }
+
+        .section-header h2 {
+            color: var(--color-text-primary);
+        }
+
+        .section-description {
+            color: var(--color-text-secondary);
+            font-size: 1.125rem;
+            margin-bottom: 0;
+        }
+
+        /* ==================== TWEET CARDS ==================== */
+        .tweet-card {
+            background: var(--color-bg-tweet);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--color-border);
+            border-left: 3px solid var(--color-primary);
+            border-radius: var(--radius-md);
+            padding: var(--space-lg);
+            margin-bottom: var(--space-md);
+            transition: all 0.3s ease;
+        }
+
+        .tweet-card:hover {
+            background: var(--color-bg-card);
+            border-color: var(--color-border-hover);
+            transform: translateX(4px);
+        }
+
+        .tweet-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-md);
+        }
+
+        .tweet-number {
+            font-family: var(--font-display);
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            background: rgba(var(--color-primary-rgb), 0.1);
+            padding: 4px 12px;
+            border-radius: var(--radius-sm);
+        }
+
+        .tweet-type {
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
+            font-weight: 500;
+        }
+
+        .tweet-content {
+            color: var(--color-text-secondary);
+            line-height: 1.6;
+        }
+
+        .tweet-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .tweet-content ul {
+            margin-top: var(--space-sm);
+        }
+
+        .tweet-content li {
+            color: var(--color-text-secondary);
+        }
+
+        /* ==================== EXTRAS SECTION ==================== */
+        .extras-grid {
+            display: grid;
+            gap: var(--space-lg);
+            margin-bottom: var(--space-3xl);
+        }
+
+        .extras-card {
+            background: var(--color-bg-card);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            transition: all 0.3s ease;
+        }
+
+        .extras-card:hover {
+            background: var(--color-bg-card-hover);
+            border-color: var(--color-border-hover);
+        }
+
+        .extras-card h3 {
+            margin-bottom: var(--space-md);
+        }
+
+        .extras-card ul {
+            padding-left: var(--space-md);
+        }
+
+        .extras-card li {
+            margin-bottom: var(--space-xs);
+        }
+
+        .hashtags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-sm);
+            padding: 0;
+            list-style: none;
+        }
+
+        .hashtags li {
+            margin: 0;
+        }
+
+        .hashtag {
+            background: rgba(var(--color-primary-rgb), 0.1);
+            color: var(--color-primary);
+            padding: var(--space-xs) var(--space-md);
+            border-radius: var(--radius-sm);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        /* ==================== FOOTER ==================== */
+        .footer {
+            text-align: center;
+            padding: var(--space-xl) 0;
+            color: var(--color-text-muted);
+            font-size: 0.875rem;
+            margin-top: var(--space-3xl);
+            border-top: 1px solid var(--color-border);
+        }
+
+        .footer a {
+            color: var(--color-primary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: var(--color-primary-light);
+        }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 768px) {
+            .container {
+                padding: var(--space-xl) var(--space-md);
+            }
+
+            .header {
+                padding: var(--space-md);
+                margin-bottom: var(--space-2xl);
+            }
+
+            .tweet-card {
+                padding: var(--space-md);
+            }
+
+            .extras-card {
+                padding: var(--space-lg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">Back to Strategy Hub</a>
+
+        <div class="header">
+            <h1>Twitter Thread Content</h1>
+            <p class="subtitle">Pre-written threads for promoting /lead-magnet-quiz output and capabilities</p>
+        </div>
+
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ul class="toc-list">
+                <li><a href="#thread1">Thread 1: Complete Deliverables Overview</a></li>
+                <li><a href="#thread2">Thread 2: File-by-File Breakdown</a></li>
+                <li><a href="#thread3">Thread 3: Behind the Scenes (How It Works)</a></li>
+                <li><a href="#thread4">Thread 4: Use Cases & Examples</a></li>
+                <li><a href="#single-tweets">Single-Tweet Options</a></li>
+                <li><a href="#extras">Extras: Hashtags & Visual Ideas</a></li>
+            </ul>
+        </div>
+
+        <!-- THREAD 1 -->
+        <section id="thread1" class="thread-section">
+            <div class="section-header">
+                <h2>Thread 1: Complete Deliverables Overview</h2>
+                <p class="section-description">13-tweet thread covering all deliverables in the /lead-magnet-quiz output</p>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 1</span>
+                    <span class="tweet-type">Hook</span>
+                </div>
+                <div class="tweet-content">
+                    <p>Run one command, get a complete quiz funnel that:</p>
+                    <ul>
+                        <li>Captures leads</li>
+                        <li>Scores them automatically</li>
+                        <li>Nurtures via email sequences</li>
+                        <li>Tracks analytics</li>
+                        <li>Includes video assets</li>
+                    </ul>
+                    <p>Here's everything included in <code>/lead-magnet-quiz</code>:</p>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 2</span>
+                    <span class="tweet-type">Production-Ready Code</span>
+                </div>
+                <div class="tweet-content">
+                    <ul>
+                        <li>✅ Vercel-ready deployment folder</li>
+                        <li>✅ Landing page (fully designed HTML/CSS)</li>
+                        <li>✅ Quiz app (6-12 questions, scoring logic)</li>
+                        <li>✅ Thank you pages (3 variants: hot/warm/cold)</li>
+                        <li>✅ Admin analytics dashboard</li>
+                        <li>✅ 4 Vercel Edge Functions (API endpoints)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 3</span>
+                    <span class="tweet-type">Database & Backend</span>
+                </div>
+                <div class="tweet-content">
+                    <ul>
+                        <li>✅ Complete Supabase schema (6 tables)</li>
+                        <li>✅ Auto-setup script (one command: <code>npm run setup-db</code>)</li>
+                        <li>✅ Email queue system with hourly cron</li>
+                        <li>✅ Analytics event tracking (8 event types)</li>
+                        <li>✅ Multi-tenant support with table prefixes</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 4</span>
+                    <span class="tweet-type">Email Automation</span>
+                </div>
+                <div class="tweet-content">
+                    <p>✅ 14 pre-written emails across 5 sequences:</p>
+                    <ul>
+                        <li>Welcome (3 emails)</li>
+                        <li>Cold Nurture (4 emails)</li>
+                        <li>Warm Activation (3 emails)</li>
+                        <li>Hot Path (2 emails)</li>
+                        <li>Win-back (2 emails)</li>
+                    </ul>
+                    <p>All stored in database, triggered automatically by score</p>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 5</span>
+                    <span class="tweet-type">Design System</span>
+                </div>
+                <div class="tweet-content">
+                    <ul>
+                        <li>✅ Custom color palette (brand-matched)</li>
+                        <li>✅ Typography system with Google Fonts</li>
+                        <li>✅ 5 design modes (Soft, Sharp, Glass, Glossy, Minimal)</li>
+                        <li>✅ Responsive CSS (mobile-first)</li>
+                        <li>✅ Animations & micro-interactions</li>
+                        <li>✅ Component library</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 6</span>
+                    <span class="tweet-type">Video Assets</span>
+                </div>
+                <div class="tweet-content">
+                    <ul>
+                        <li>✅ Quiz intro teaser (TSX component)</li>
+                        <li>✅ 3 result reveal videos (hot/warm/cold)</li>
+                        <li>✅ Social ad template (Instagram/TikTok)</li>
+                        <li>✅ Ready to render: <code>npx remotion render</code></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 7</span>
+                    <span class="tweet-type">Analytics Dashboard</span>
+                </div>
+                <div class="tweet-content">
+                    <ul>
+                        <li>✅ Real-time KPI cards</li>
+                        <li>✅ Conversion funnel visualization</li>
+                        <li>✅ Temperature distribution (pie chart)</li>
+                        <li>✅ Daily activity timeline</li>
+                        <li>✅ Answer distribution analysis</li>
+                        <li>✅ UTM source tracking</li>
+                        <li>✅ Password-protected access</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 8</span>
+                    <span class="tweet-type">Strategy Documents</span>
+                </div>
+                <div class="tweet-content">
+                    <ul>
+                        <li>✅ Market research report (HTML + MD)</li>
+                        <li>✅ Product catalog (JSON + MD)</li>
+                        <li>✅ Quiz architecture (scoring model + routing)</li>
+                        <li>✅ Visual design specifications</li>
+                        <li>✅ Copy explainer (full breakdown of decisions)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 9</span>
+                    <span class="tweet-type">Client Deliverables</span>
+                </div>
+                <div class="tweet-content">
+                    <ul>
+                        <li>✅ Landing page copy (SEO-optimized)</li>
+                        <li>✅ Quiz copy (all questions + progress messages)</li>
+                        <li>✅ Email sequences (CSV + HTML preview)</li>
+                        <li>✅ Questions & answers (CSV export)</li>
+                        <li>✅ GitHub Pages preview site for client review</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 10</span>
+                    <span class="tweet-type">Developer Tools</span>
+                </div>
+                <div class="tweet-content">
+                    <ul>
+                        <li>✅ README with deployment steps</li>
+                        <li>✅ POST-COMPLETION-GUIDE with screenshots</li>
+                        <li>✅ builder-prompt.md (AI-ready rebuild instructions)</li>
+                        <li>✅ .env.example (all environment variables)</li>
+                        <li>✅ package.json with all dependencies</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 11</span>
+                    <span class="tweet-type">Deployment</span>
+                </div>
+                <div class="tweet-content">
+                    <p>One-command deployment:</p>
+                    <pre><code>cd deploy
+npm install
+npm run setup-db
+vercel --prod</code></pre>
+                    <p>Done. Your quiz funnel is live with:</p>
+                    <ul>
+                        <li>Database ✅</li>
+                        <li>Email automation ✅</li>
+                        <li>Analytics ✅</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 12</span>
+                    <span class="tweet-type">What Makes It Different</span>
+                </div>
+                <div class="tweet-content">
+                    <p>This isn't a template. Every quiz is:</p>
+                    <ul>
+                        <li>Custom-researched for your market</li>
+                        <li>Architected with 5-factor scoring</li>
+                        <li>Written in your brand voice</li>
+                        <li>Designed to match your visual identity</li>
+                        <li>Built with production-grade infrastructure</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 13</span>
+                    <span class="tweet-type">CTA</span>
+                </div>
+                <div class="tweet-content">
+                    <p>Total files generated: 50+<br>
+                    Lines of code: 5,000+<br>
+                    Hours saved: 80+</p>
+                    <p>All from one command:<br>
+                    <code>/lead-magnet-quiz "Business Name" --website "url"</code></p>
+                    <p>Built this with Claude Code multi-agent workflows. Thread on how it works ⬇️</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- THREAD 2 -->
+        <section id="thread2" class="thread-section">
+            <div class="section-header">
+                <h2>Thread 2: File-by-File Breakdown</h2>
+                <p class="section-description">12-tweet thread detailing the exact file structure and contents</p>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 1</span>
+                    <span class="tweet-type">Introduction</span>
+                </div>
+                <div class="tweet-content">
+                    <p>Let's break down EXACTLY what you get in the <code>/lead-magnet-quiz</code> output folder.</p>
+                    <p>3 main directories:<br>
+                    📁 deploy/ (production code)<br>
+                    📁 client/ (strategy docs)<br>
+                    📁 client-preview/ (GitHub Pages)</p>
+                    <p>Starting with deploy/ →</p>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 2</span>
+                    <span class="tweet-type">deploy/ Root</span>
+                </div>
+                <div class="tweet-content">
+                    <pre><code>deploy/
+├── index.html          # Landing page
+├── vercel.json         # Config + cron jobs
+├── package.json        # Dependencies
+└── .env.example        # Environment template</code></pre>
+                    <p>Landing page includes:</p>
+                    <ul>
+                        <li>Hero section</li>
+                        <li>Benefits</li>
+                        <li>Social proof</li>
+                        <li>Quiz CTA</li>
+                        <li>Mobile-responsive</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 3</span>
+                    <span class="tweet-type">deploy/api/</span>
+                </div>
+                <div class="tweet-content">
+                    <pre><code>api/
+├── quiz-submit.js      # POST - Saves quiz + scores lead
+├── email-sender.js     # CRON - Sends scheduled emails
+├── analytics-event.js  # POST - Tracks funnel events
+└── analytics-query.js  # GET - Dashboard data (auth)</code></pre>
+                    <p>All serverless, auto-scaling</p>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 4</span>
+                    <span class="tweet-type">deploy/quiz/</span>
+                </div>
+                <div class="tweet-content">
+                    <pre><code>quiz/
+├── index.html     # Quiz interface
+├── styles.css     # Design system
+├── quiz.js        # Logic + scoring engine
+└── thank-you.html # Results page</code></pre>
+                    <p>Quiz includes:</p>
+                    <ul>
+                        <li>Progress bar</li>
+                        <li>Question transitions</li>
+                        <li>Email capture</li>
+                        <li>Score calculation</li>
+                        <li>Result routing</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 5</span>
+                    <span class="tweet-type">deploy/admin/</span>
+                </div>
+                <div class="tweet-content">
+                    <pre><code>admin/
+├── index.html  # Dashboard
+├── admin.css   # Dashboard styles
+└── admin.js    # Chart.js integration</code></pre>
+                    <p>Dashboard shows:</p>
+                    <ul>
+                        <li>Funnel metrics</li>
+                        <li>Lead temperature breakdown</li>
+                        <li>Daily activity</li>
+                        <li>UTM sources</li>
+                        <li>Answer distribution</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 6</span>
+                    <span class="tweet-type">deploy/supabase/</span>
+                </div>
+                <div class="tweet-content">
+                    <pre><code>supabase/
+└── schema.sql  # Complete schema with:
+    ├── leads table
+    ├── quiz_responses table
+    ├── recommended_products table
+    ├── email_log table
+    ├── email_templates table
+    └── analytics_events table</code></pre>
+                    <p>Multi-tenant support with <code>{PREFIX}_</code> naming</p>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 7</span>
+                    <span class="tweet-type">deploy/videos/</span>
+                </div>
+                <div class="tweet-content">
+                    <pre><code>videos/
+├── README.md
+├── quiz-intro/QuizIntro.tsx
+├── result-reveal-hot/ResultRevealHot.tsx
+├── result-reveal-warm/ResultRevealWarm.tsx
+├── result-reveal-cold/ResultRevealCold.tsx
+└── social-ad/SocialAd.tsx</code></pre>
+                    <p>All TSX components, ready to render</p>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 8</span>
+                    <span class="tweet-type">deploy/images/</span>
+                </div>
+                <div class="tweet-content">
+                    <pre><code>images/
+├── logo.png
+└── [product-name].jpg (auto-fetched from website)</code></pre>
+                    <p>All images downloaded locally for fast loading</p>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 9</span>
+                    <span class="tweet-type">client/</span>
+                </div>
+                <div class="tweet-content">
+                    <pre><code>client/
+├── research.md/html           # Market analysis
+├── products.json/md           # Product catalog
+├── architecture.md            # Scoring model
+├── design.md                  # Visual specs
+├── quiz-copy.md               # All quiz text
+├── quiz-copy-explainer.html   # Copy breakdown
+├── landing-page-copy.md       # Landing copy
+├── email-sequences.csv/md/html # 14 emails
+└── questions-answers.csv/md   # Quiz Q&A</code></pre>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 10</span>
+                    <span class="tweet-type">client-preview/</span>
+                </div>
+                <div class="tweet-content">
+                    <pre><code>client-preview/
+├── index.html                 # Navigation hub
+├── research.html              # Research report
+├── email-sequences.html       # Email preview
+└── quiz-copy-explainer.html   # Copy decisions</code></pre>
+                    <p>Shareable preview URL for client review</p>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 11</span>
+                    <span class="tweet-type">Root Files</span>
+                </div>
+                <div class="tweet-content">
+                    <pre><code>madison-a-roll/
+├── README.md              # Project overview
+├── builder-prompt.md      # AI rebuild instructions
+└── POST-COMPLETION-GUIDE.md # Deployment walkthrough</code></pre>
+                    <p>Everything needed to deploy, maintain, or rebuild</p>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 12</span>
+                    <span class="tweet-type">Summary</span>
+                </div>
+                <div class="tweet-content">
+                    <p>Total output structure:</p>
+                    <ul>
+                        <li>50+ files</li>
+                        <li>3 main directories</li>
+                        <li>4 API endpoints</li>
+                        <li>6 database tables</li>
+                        <li>14 email templates</li>
+                        <li>5 video components</li>
+                        <li>10+ strategy documents</li>
+                    </ul>
+                    <p>All generated from one command.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- THREAD 3 -->
+        <section id="thread3" class="thread-section">
+            <div class="section-header">
+                <h2>Thread 3: Behind the Scenes (How It Works)</h2>
+                <p class="section-description">11-tweet thread explaining the multi-agent workflow architecture</p>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 1</span>
+                    <span class="tweet-type">Introduction</span>
+                </div>
+                <div class="tweet-content">
+                    <p>How does <code>/lead-magnet-quiz</code> generate all this?</p>
+                    <p>5-stage multi-agent workflow:</p>
+                    <ol>
+                        <li>Research Agent</li>
+                        <li>Architecture Agent</li>
+                        <li>Design Agent</li>
+                        <li>Copy Agent</li>
+                        <li>Build Agent</li>
+                    </ol>
+                    <p>Each agent has specific responsibilities →</p>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 2</span>
+                    <span class="tweet-type">Stage 1: Research Agent</span>
+                </div>
+                <div class="tweet-content">
+                    <p>Analyzes:</p>
+                    <ul>
+                        <li>Business model</li>
+                        <li>Product catalog</li>
+                        <li>Target customers</li>
+                        <li>Market positioning</li>
+                        <li>Competitor analysis</li>
+                        <li>SEO keywords</li>
+                    </ul>
+                    <p>Uses: Playwright MCP, Tavily, DataForSEO</p>
+                    <p>Output: research.json + products.json</p>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 3</span>
+                    <span class="tweet-type">Stage 2A: Architecture Agent</span>
+                </div>
+                <div class="tweet-content">
+                    <p>Designs:</p>
+                    <ul>
+                        <li>3-tier segmentation (Hot/Warm/Cold)</li>
+                        <li>5-factor scoring model</li>
+                        <li>Question bank (8-12 questions)</li>
+                        <li>Routing logic</li>
+                        <li>Temperature thresholds</li>
+                    </ul>
+                    <p>Output: architecture.json with scoring engine</p>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 4</span>
+                    <span class="tweet-type">Stage 2B: Design Agent</span>
+                </div>
+                <div class="tweet-content">
+                    <p>Creates:</p>
+                    <ul>
+                        <li>Color palette (brand-matched)</li>
+                        <li>Typography scale</li>
+                        <li>Component CSS</li>
+                        <li>Motion patterns</li>
+                        <li>Responsive breakpoints</li>
+                    </ul>
+                    <p>Auto-detects brand via Playwright<br>
+                    Fallback: WebFetch → Manual → Archetypes</p>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 5</span>
+                    <span class="tweet-type">Stage 3: Copy Agent</span>
+                </div>
+                <div class="tweet-content">
+                    <p>Writes:</p>
+                    <ul>
+                        <li>Landing page (headline, benefits, CTA)</li>
+                        <li>Quiz intro + questions</li>
+                        <li>Progress messages</li>
+                        <li>Result pages (3 variants)</li>
+                        <li>14 email sequences</li>
+                        <li>Email subject lines</li>
+                    </ul>
+                    <p>Matches brand voice from research</p>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 6</span>
+                    <span class="tweet-type">Stage 4: Build Agent</span>
+                </div>
+                <div class="tweet-content">
+                    <p>Generates:</p>
+                    <ul>
+                        <li>HTML/CSS/JS for all pages</li>
+                        <li>Vercel Edge Functions</li>
+                        <li>Database schema</li>
+                        <li>Setup scripts</li>
+                        <li>Remotion video components</li>
+                        <li>Environment config</li>
+                    </ul>
+                    <p>Production-ready, not prototypes</p>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 7</span>
+                    <span class="tweet-type">Stage 5: Publish Agent</span>
+                </div>
+                <div class="tweet-content">
+                    <p>Creates:</p>
+                    <ul>
+                        <li>Private GitHub repo (full codebase)</li>
+                        <li>Public GitHub Pages repo (client preview)</li>
+                        <li>Notion database entry (project tracking)</li>
+                    </ul>
+                    <p>Returns URLs for immediate access</p>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 8</span>
+                    <span class="tweet-type">Validation Gates</span>
+                </div>
+                <div class="tweet-content">
+                    <p>Each stage validates before proceeding:</p>
+                    <ul>
+                        <li>Research: 3 segments, 5+ angles, brand voice</li>
+                        <li>Architecture: WHO/WHAT/HOW dimensions, scoring</li>
+                        <li>Design: Color palette, typography, components</li>
+                        <li>Copy: Quiz, landing, results, 14 emails</li>
+                        <li>Build: All files generated, deployable</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 9</span>
+                    <span class="tweet-type">Fallback Strategy</span>
+                </div>
+                <div class="tweet-content">
+                    <p>If MCP tools fail:</p>
+                    <ul>
+                        <li>Playwright → WebFetch</li>
+                        <li>WebFetch → Manual overrides</li>
+                        <li>Manual → Archetype defaults</li>
+                    </ul>
+                    <p>Workflow always completes, even offline</p>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 10</span>
+                    <span class="tweet-type">Total Execution</span>
+                </div>
+                <div class="tweet-content">
+                    <p>Average run time: 15-20 minutes</p>
+                    <ul>
+                        <li>Stage 1: 5-7 min (research)</li>
+                        <li>Stage 2: 3-4 min (architecture + design)</li>
+                        <li>Stage 3: 4-5 min (copy)</li>
+                        <li>Stage 4: 2-3 min (build)</li>
+                        <li>Stage 5: 1-2 min (publish)</li>
+                    </ul>
+                    <p>Fully automated, zero manual intervention</p>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 11</span>
+                    <span class="tweet-type">CTA</span>
+                </div>
+                <div class="tweet-content">
+                    <p>This workflow is open-source and runs locally in Claude Code.</p>
+                    <p>No subscriptions, no credits, no API costs (except MCP tools).</p>
+                    <p>Want to build your own multi-agent workflows?</p>
+                    <p>Check out: github.com/[your-repo]</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- THREAD 4 -->
+        <section id="thread4" class="thread-section">
+            <div class="section-header">
+                <h2>Thread 4: Use Cases & Examples</h2>
+                <p class="section-description">10-tweet thread showing real examples across different industries</p>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 1</span>
+                    <span class="tweet-type">Introduction</span>
+                </div>
+                <div class="tweet-content">
+                    <p>Real examples of <code>/lead-magnet-quiz</code> in action:</p>
+                    <ol>
+                        <li>Madi's On A Roll (egg roll catering)</li>
+                        <li>Precision Plumbing (service business)</li>
+                        <li>William Burke (coaching)</li>
+                    </ol>
+                    <p>Different industries, same workflow →</p>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 2</span>
+                    <span class="tweet-type">Example 1: Madi's On A Roll</span>
+                </div>
+                <div class="tweet-content">
+                    <p>Business: Gourmet egg roll catering<br>
+                    Quiz: "Find Your Perfect Party Lineup"</p>
+                    <p>Questions:</p>
+                    <ul>
+                        <li>Event type (party, corporate, wedding)</li>
+                        <li>Crowd size</li>
+                        <li>Dietary restrictions</li>
+                        <li>Flavor preferences</li>
+                    </ul>
+                    <p>Result: Custom egg roll package recommendation</p>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 3</span>
+                    <span class="tweet-type">Madi's Scoring</span>
+                </div>
+                <div class="tweet-content">
+                    <p>Hot (80-100):</p>
+                    <ul>
+                        <li>Has event in next 30 days</li>
+                        <li>Knows MOAR brand</li>
+                        <li>Ready to order</li>
+                    </ul>
+                    <p>Cold (0-49):</p>
+                    <ul>
+                        <li>Researching options</li>
+                        <li>No specific event</li>
+                        <li>Learning about egg rolls</li>
+                    </ul>
+                    <p>Email sequences adapt to temperature</p>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 4</span>
+                    <span class="tweet-type">Example 2: Precision Plumbing</span>
+                </div>
+                <div class="tweet-content">
+                    <p>Business: Residential plumbing services<br>
+                    Quiz: "What's Your Plumbing Situation?"</p>
+                    <p>Questions:</p>
+                    <ul>
+                        <li>Issue type (emergency, repair, upgrade)</li>
+                        <li>Timeline urgency</li>
+                        <li>Property type</li>
+                        <li>Budget awareness</li>
+                    </ul>
+                    <p>Result: Service recommendation + pricing estimate</p>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 5</span>
+                    <span class="tweet-type">Plumbing Scoring</span>
+                </div>
+                <div class="tweet-content">
+                    <p>Hot (80-100):</p>
+                    <ul>
+                        <li>Emergency situation</li>
+                        <li>Needs service today</li>
+                        <li>Ready to book</li>
+                    </ul>
+                    <p>Warm (50-79):</p>
+                    <ul>
+                        <li>Scheduled maintenance</li>
+                        <li>Planning upgrade</li>
+                        <li>Comparing options</li>
+                    </ul>
+                    <p>Different CTAs per segment</p>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 6</span>
+                    <span class="tweet-type">Example 3: William Burke</span>
+                </div>
+                <div class="tweet-content">
+                    <p>Business: Executive coaching<br>
+                    Quiz: "What's Your Leadership Style?"</p>
+                    <p>Questions:</p>
+                    <ul>
+                        <li>Team size</li>
+                        <li>Biggest challenge</li>
+                        <li>Growth goals</li>
+                        <li>Decision-making approach</li>
+                    </ul>
+                    <p>Result: Personalized coaching pathway</p>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 7</span>
+                    <span class="tweet-type">Coaching Sequences</span>
+                </div>
+                <div class="tweet-content">
+                    <p>Cold → Education emails (leadership frameworks)<br>
+                    Warm → Social proof (case studies, testimonials)<br>
+                    Hot → Calendar booking (direct CTA)</p>
+                    <p>Each path optimized for conversion</p>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 8</span>
+                    <span class="tweet-type">Cross-Industry Patterns</span>
+                </div>
+                <div class="tweet-content">
+                    <p>All quizzes share:</p>
+                    <ul>
+                        <li>6-12 questions</li>
+                        <li>Email capture before results</li>
+                        <li>3-tier segmentation</li>
+                        <li>Automated email nurture</li>
+                        <li>Analytics tracking</li>
+                    </ul>
+                    <p>But copy/design is 100% custom</p>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 9</span>
+                    <span class="tweet-type">Customization Without Code</span>
+                </div>
+                <div class="tweet-content">
+                    <p>Each quiz adapts:</p>
+                    <ul>
+                        <li>Industry-specific questions</li>
+                        <li>Brand voice in copy</li>
+                        <li>Visual design from website</li>
+                        <li>Product catalog integration</li>
+                        <li>Relevant email content</li>
+                    </ul>
+                    <p>No templates, all custom-generated</p>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Tweet 10</span>
+                    <span class="tweet-type">CTA</span>
+                </div>
+                <div class="tweet-content">
+                    <p>Your business can have this too.</p>
+                    <p>One command:<br>
+                    <code>/lead-magnet-quiz "Your Business" --website "url"</code></p>
+                    <p>7 days later:<br>
+                    Complete quiz funnel, ready to deploy.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SINGLE TWEETS -->
+        <section id="single-tweets" class="thread-section">
+            <div class="section-header">
+                <h2>Single-Tweet Options</h2>
+                <p class="section-description">5 standalone tweets for different angles and audiences</p>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Option 1</span>
+                    <span class="tweet-type">Complete List</span>
+                </div>
+                <div class="tweet-content">
+                    <p>What you get from <code>/lead-magnet-quiz</code>:</p>
+                    <ul>
+                        <li>✅ Landing page + quiz app</li>
+                        <li>✅ 3 result pages (hot/warm/cold)</li>
+                        <li>✅ 14 email sequences (auto-triggered)</li>
+                        <li>✅ Analytics dashboard</li>
+                        <li>✅ 4 API endpoints</li>
+                        <li>✅ Complete database schema</li>
+                        <li>✅ 5 video components (Remotion)</li>
+                        <li>✅ Strategy docs + copy breakdowns</li>
+                        <li>✅ One-command deployment</li>
+                    </ul>
+                    <p>Run once, get 50+ production files.</p>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Option 2</span>
+                    <span class="tweet-type">Value Prop</span>
+                </div>
+                <div class="tweet-content">
+                    <p>Built a quiz funnel builder that generates:</p>
+                    <ul>
+                        <li>Production-ready code (not templates)</li>
+                        <li>Custom research for your market</li>
+                        <li>Brand-matched design system</li>
+                        <li>14 pre-written email sequences</li>
+                        <li>Analytics dashboard</li>
+                        <li>Video assets</li>
+                    </ul>
+                    <p>In 7 days. From one command.</p>
+                    <p>Built with Claude Code multi-agent workflows.</p>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Option 3</span>
+                    <span class="tweet-type">Developer-Focused</span>
+                </div>
+                <div class="tweet-content">
+                    <p>My quiz funnel builder generates:</p>
+                    <p><strong>Frontend:</strong></p>
+                    <ul>
+                        <li>Landing + quiz + results pages</li>
+                        <li>Responsive CSS with design modes</li>
+                        <li>Analytics event tracking</li>
+                    </ul>
+                    <p><strong>Backend:</strong></p>
+                    <ul>
+                        <li>4 Vercel Edge Functions</li>
+                        <li>6 Supabase tables</li>
+                        <li>Email queue system</li>
+                    </ul>
+                    <p><strong>Infra:</strong></p>
+                    <ul>
+                        <li>One-command deployment</li>
+                        <li>Auto-scaling</li>
+                        <li>Cron jobs</li>
+                    </ul>
+                    <p>All custom, not templates.</p>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Option 4</span>
+                    <span class="tweet-type">Time-Saving Angle</span>
+                </div>
+                <div class="tweet-content">
+                    <p>Manual quiz funnel build:</p>
+                    <ul>
+                        <li>Research: 8 hours</li>
+                        <li>Design: 6 hours</li>
+                        <li>Copywriting: 10 hours</li>
+                        <li>Development: 40 hours</li>
+                        <li>Email sequences: 8 hours</li>
+                        <li>Testing: 8 hours</li>
+                    </ul>
+                    <p>= 80 hours</p>
+                    <p><code>/lead-magnet-quiz</code>: 7 days</p>
+                    <p>This is what AI agents are for.</p>
+                </div>
+            </div>
+
+            <div class="tweet-card">
+                <div class="tweet-header">
+                    <span class="tweet-number">Option 5</span>
+                    <span class="tweet-type">Show Don't Tell</span>
+                </div>
+                <div class="tweet-content">
+                    <p>Ran <code>/lead-magnet-quiz "Madi's On A Roll"</code></p>
+                    <p>7 days later:</p>
+                    <ul>
+                        <li>✅ Live quiz at madisonaroll.vercel.app</li>
+                        <li>✅ 14 email sequences in database</li>
+                        <li>✅ Analytics dashboard running</li>
+                        <li>✅ 5 video components ready to render</li>
+                        <li>✅ Client preview site published</li>
+                    </ul>
+                    <p>Zero manual coding. All production-ready.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- EXTRAS -->
+        <section id="extras" class="thread-section">
+            <div class="section-header">
+                <h2>Extras: Hashtags & Visual Ideas</h2>
+                <p class="section-description">Supporting content for maximizing engagement</p>
+            </div>
+
+            <div class="extras-grid">
+                <div class="extras-card">
+                    <h3>Hashtag Suggestions</h3>
+                    <ul class="hashtags">
+                        <li><span class="hashtag">#AIAgents</span></li>
+                        <li><span class="hashtag">#ClaudeCode</span></li>
+                        <li><span class="hashtag">#MarketingAutomation</span></li>
+                        <li><span class="hashtag">#LeadGeneration</span></li>
+                        <li><span class="hashtag">#NoCode</span></li>
+                        <li><span class="hashtag">#DeveloperTools</span></li>
+                        <li><span class="hashtag">#GrowthHacking</span></li>
+                        <li><span class="hashtag">#QuizFunnel</span></li>
+                        <li><span class="hashtag">#EmailMarketing</span></li>
+                        <li><span class="hashtag">#BuildInPublic</span></li>
+                    </ul>
+                </div>
+
+                <div class="extras-card">
+                    <h3>Visual Content Ideas</h3>
+                    <ul>
+                        <li>Screenshot: File tree showing all 50+ generated files</li>
+                        <li>Video: Time-lapse of command running → files generating</li>
+                        <li>Screenshot: Analytics dashboard with live data</li>
+                        <li>Screenshot: Email sequences CSV with all 14 emails</li>
+                        <li>Screenshot: Quiz interface on mobile + desktop</li>
+                        <li>Comparison: Manual build (80 hours) vs. AI workflow (15 min)</li>
+                        <li>Before/After: Empty folder → Complete project structure</li>
+                        <li>Screenshot: Vercel deployment success screen</li>
+                    </ul>
+                </div>
+
+                <div class="extras-card">
+                    <h3>Key Messages to Emphasize</h3>
+                    <ul>
+                        <li><strong>Production-ready, not prototypes</strong> - Real code, deployable immediately</li>
+                        <li><strong>Custom, not templates</strong> - Every quiz is researched and built for that business</li>
+                        <li><strong>Complete system</strong> - Frontend, backend, database, emails, analytics</li>
+                        <li><strong>One command</strong> - No complex configuration or multi-step setup</li>
+                        <li><strong>Multi-agent workflow</strong> - Shows the power of orchestrated AI agents</li>
+                        <li><strong>Time savings</strong> - 80 hours → 7 days</li>
+                        <li><strong>Open source</strong> - No subscriptions, runs locally</li>
+                        <li><strong>Multi-industry</strong> - Works for service businesses, e-commerce, coaches, etc.</li>
+                    </ul>
+                </div>
+
+                <div class="extras-card">
+                    <h3>Call-to-Action Options</h3>
+                    <ul>
+                        <li>"Try it yourself: [GitHub link]"</li>
+                        <li>"Want to build your own AI workflows? Thread below ⬇️"</li>
+                        <li>"DM me for the full workflow documentation"</li>
+                        <li>"Built with Claude Code. Link in bio."</li>
+                        <li>"This is just one of 28 skills in my marketing studio"</li>
+                        <li>"Follow for more AI agent workflows"</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <div class="footer">
+            <p>Generated by Vibe Marketing Studio • <a href="../public/index.html">View Customer Pages</a> • <a href="https://github.com/jpiece3/quiz-funnel-marketing">View on GitHub</a></p>
+        </div>
+    </div>
+</body>
+</html>

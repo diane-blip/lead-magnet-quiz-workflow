@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Complete breakdown of what's included in your custom quiz funnel - from strategy to deployment">
+    <title>What's Included: Your Complete Quiz Funnel Package</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ==================== VARIABLES ==================== */
+        :root {
+            /* Colors */
+            --color-primary: #0cc0df;
+            --color-primary-dark: #0a9bb5;
+            --color-primary-light: #3dd4f0;
+            --color-secondary: #8b5cf6;
+            --color-success: #22c55e;
+            --color-warning: #f59e0b;
+            --color-info: #3b82f6;
+
+            /* Neutrals */
+            --color-bg-primary: #0a0a0f;
+            --color-bg-secondary: #0f0f16;
+            --color-bg-tertiary: #14141d;
+            --color-bg-card: rgba(255, 255, 255, 0.03);
+            --color-bg-card-hover: rgba(255, 255, 255, 0.06);
+
+            --color-text-primary: #ffffff;
+            --color-text-secondary: rgba(255, 255, 255, 0.7);
+            --color-text-muted: rgba(255, 255, 255, 0.5);
+
+            --color-border: rgba(255, 255, 255, 0.08);
+            --color-border-hover: rgba(12, 192, 223, 0.4);
+
+            /* Typography */
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-display: 'Space Grotesk', var(--font-primary);
+
+            /* Spacing */
+            --space-xs: 8px;
+            --space-sm: 16px;
+            --space-md: 24px;
+            --space-lg: 32px;
+            --space-xl: 48px;
+            --space-2xl: 64px;
+            --space-3xl: 96px;
+
+            /* Layout */
+            --max-width: 1200px;
+            --max-width-narrow: 800px;
+
+            /* Borders */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+
+            /* Shadows */
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+            --shadow-glow: 0 0 40px rgba(12, 192, 223, 0.2);
+        }
+
+        /* ==================== RESET ==================== */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            font-size: 1.0625rem;
+            line-height: 1.7;
+            color: var(--color-text-secondary);
+            background-color: var(--color-bg-primary);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ==================== TYPOGRAPHY ==================== */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-display);
+            color: var(--color-text-primary);
+            line-height: 1.2;
+            font-weight: 700;
+            margin-bottom: var(--space-sm);
+        }
+
+        h1 { font-size: clamp(2.5rem, 5vw, 4rem); }
+        h2 { font-size: clamp(2rem, 4vw, 3rem); }
+        h3 { font-size: clamp(1.5rem, 3vw, 2rem); }
+        h4 { font-size: 1.5rem; }
+        h5 { font-size: 1.25rem; }
+
+        p {
+            margin-bottom: var(--space-md);
+        }
+
+        strong {
+            color: var(--color-text-primary);
+            font-weight: 600;
+        }
+
+        /* ==================== LAYOUT ==================== */
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 var(--space-md);
+        }
+
+        .container-narrow {
+            max-width: var(--max-width-narrow);
+            margin: 0 auto;
+            padding: 0 var(--space-md);
+        }
+
+        section {
+            padding: var(--space-3xl) 0;
+        }
+
+        /* ==================== HERO ==================== */
+        .hero {
+            padding: var(--space-3xl) 0 var(--space-2xl);
+            background: linear-gradient(180deg,
+                rgba(12, 192, 223, 0.1) 0%,
+                transparent 100%);
+            border-bottom: 1px solid var(--color-border);
+            text-align: center;
+        }
+
+        .hero h1 {
+            margin-bottom: var(--space-md);
+            background: linear-gradient(135deg,
+                var(--color-primary-light) 0%,
+                var(--color-primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-xl);
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-xl);
+            margin-top: var(--space-xl);
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            font-family: var(--font-display);
+            color: var(--color-primary);
+            line-height: 1;
+            margin-bottom: var(--space-xs);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* ==================== SECTION HEADERS ==================== */
+        .section-header {
+            text-align: center;
+            margin-bottom: var(--space-2xl);
+        }
+
+        .section-eyebrow {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: var(--space-xs);
+        }
+
+        .section-title {
+            margin-bottom: var(--space-sm);
+        }
+
+        .section-description {
+            font-size: 1.25rem;
+            color: var(--color-text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ==================== CARDS ==================== */
+        .card {
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            background: var(--color-bg-card-hover);
+            border-color: var(--color-border-hover);
+            transform: translateY(-2px);
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: var(--space-md);
+            background: linear-gradient(135deg,
+                rgba(12, 192, 223, 0.2) 0%,
+                rgba(12, 192, 223, 0.05) 100%);
+        }
+
+        .card h3 {
+            margin-bottom: var(--space-sm);
+            font-size: 1.5rem;
+        }
+
+        .card p {
+            margin-bottom: var(--space-md);
+            font-size: 1rem;
+        }
+
+        /* ==================== GRID ==================== */
+        .grid {
+            display: grid;
+            gap: var(--space-lg);
+        }
+
+        .grid-2 {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        .grid-3 {
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        }
+
+        /* ==================== FEATURE LIST ==================== */
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            padding: var(--space-sm) 0;
+            padding-left: var(--space-lg);
+            position: relative;
+            color: var(--color-text-secondary);
+        }
+
+        .feature-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--color-success);
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        /* ==================== DELIVERABLE CARDS ==================== */
+        .deliverable {
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            margin-bottom: var(--space-lg);
+        }
+
+        .deliverable-header {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+        }
+
+        .deliverable-icon {
+            width: 64px;
+            height: 64px;
+            min-width: 64px;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            background: linear-gradient(135deg,
+                rgba(12, 192, 223, 0.2) 0%,
+                rgba(12, 192, 223, 0.05) 100%);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .deliverable-title {
+            flex: 1;
+        }
+
+        .deliverable-title h3 {
+            font-size: 1.75rem;
+            margin-bottom: var(--space-xs);
+        }
+
+        .deliverable-subtitle {
+            color: var(--color-text-muted);
+            font-size: 0.9375rem;
+        }
+
+        .deliverable-content {
+            display: grid;
+            gap: var(--space-md);
+        }
+
+        .deliverable-section {
+            padding: var(--space-md);
+            background: var(--color-bg-card);
+            border-radius: var(--radius-md);
+        }
+
+        .deliverable-section h4 {
+            font-size: 1.125rem;
+            margin-bottom: var(--space-sm);
+            color: var(--color-primary);
+        }
+
+        /* ==================== CODE BLOCKS ==================== */
+        .code-block {
+            background: var(--color-bg-tertiary);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: var(--space-md);
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+            overflow-x: auto;
+            margin: var(--space-md) 0;
+        }
+
+        .code-block code {
+            color: var(--color-primary-light);
+        }
+
+        /* ==================== BADGE ==================== */
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(12, 192, 223, 0.15);
+            color: var(--color-primary);
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-right: var(--space-xs);
+            margin-bottom: var(--space-xs);
+        }
+
+        .badge-success {
+            background: rgba(34, 197, 94, 0.15);
+            color: var(--color-success);
+        }
+
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--color-warning);
+        }
+
+        .badge-info {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--color-info);
+        }
+
+        /* ==================== TABLE ==================== */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--space-md) 0;
+        }
+
+        th, td {
+            padding: var(--space-sm);
+            text-align: left;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        th {
+            color: var(--color-text-primary);
+            font-weight: 600;
+            background: var(--color-bg-card);
+        }
+
+        td {
+            color: var(--color-text-secondary);
+        }
+
+        tr:hover {
+            background: var(--color-bg-card);
+        }
+
+        /* ==================== CTA SECTION ==================== */
+        .cta-section {
+            background: linear-gradient(135deg,
+                rgba(12, 192, 223, 0.1) 0%,
+                rgba(139, 92, 246, 0.1) 100%);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-xl);
+            padding: var(--space-2xl);
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            margin-bottom: var(--space-md);
+        }
+
+        .cta-section p {
+            font-size: 1.25rem;
+            margin-bottom: var(--space-xl);
+        }
+
+        /* ==================== BUTTON ==================== */
+        .btn {
+            display: inline-block;
+            padding: 16px 32px;
+            background: var(--color-primary);
+            color: var(--color-bg-primary);
+            font-weight: 600;
+            font-size: 1.0625rem;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background: var(--color-primary-light);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* ==================== TIMELINE ==================== */
+        .timeline {
+            position: relative;
+            padding-left: var(--space-xl);
+            margin: var(--space-xl) 0;
+        }
+
+        .timeline::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg,
+                var(--color-primary) 0%,
+                transparent 100%);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: var(--space-lg);
+            padding-left: var(--space-md);
+        }
+
+        .timeline-item::before {
+            content: "";
+            position: absolute;
+            left: -34px;
+            top: 6px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--color-primary);
+            box-shadow: 0 0 0 4px var(--color-bg-primary), 0 0 0 6px var(--color-primary);
+        }
+
+        .timeline-item h4 {
+            color: var(--color-primary);
+            margin-bottom: var(--space-xs);
+        }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 768px) {
+            :root {
+                --space-3xl: 64px;
+                --space-2xl: 48px;
+            }
+
+            .hero-stats {
+                gap: var(--space-md);
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+
+            .deliverable {
+                padding: var(--space-md);
+            }
+
+            .deliverable-header {
+                flex-direction: column;
+            }
+
+            .deliverable-icon {
+                width: 56px;
+                height: 56px;
+                min-width: 56px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HERO -->
+    <section class="hero">
+        <div class="container-narrow">
+            <h1>Your Complete Quiz Funnel Package</h1>
+            <p class="hero-subtitle">Everything you get when we build your custom quiz funnel — from strategy to deployment</p>
+
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">Production Files</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">14</div>
+                    <div class="stat-label">Email Sequences</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">Video Assets</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">1</div>
+                    <div class="stat-label">Command to Deploy</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- OVERVIEW -->
+    <section>
+        <div class="container">
+            <div class="section-header">
+                <div class="section-eyebrow">The Complete Package</div>
+                <h2 class="section-title">More Than Just a Quiz</h2>
+                <p class="section-description">
+                    This isn't a template. Every quiz funnel is custom-built for your business with deep market research,
+                    brand-matched design, and automated systems that work 24/7.
+                </p>
+            </div>
+
+            <div class="grid grid-3">
+                <div class="card">
+                    <div class="card-icon">📊</div>
+                    <h3>Research-Powered</h3>
+                    <p>We analyze your market, competitors, and customers to create quiz questions that actually segment leads meaningfully.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🎨</div>
+                    <h3>Brand-Matched</h3>
+                    <p>Design automatically adapts to your brand colors, fonts, and visual style. Looks like you built it in-house.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">⚡</div>
+                    <h3>Production-Ready</h3>
+                    <p>Not a prototype. Real, deployable code with database, APIs, email automation, and analytics built in.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAIN DELIVERABLES -->
+    <section style="background: var(--color-bg-secondary);">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-eyebrow">What's Included</div>
+                <h2 class="section-title">Complete Deliverables Breakdown</h2>
+            </div>
+
+            <!-- DELIVERABLE 1: QUIZ APPLICATION -->
+            <div class="deliverable">
+                <div class="deliverable-header">
+                    <div class="deliverable-icon">🎯</div>
+                    <div class="deliverable-title">
+                        <h3>Interactive Quiz Application</h3>
+                        <p class="deliverable-subtitle">The core experience that captures and scores your leads</p>
+                    </div>
+                </div>
+
+                <div class="deliverable-content">
+                    <div class="deliverable-section">
+                        <h4>What's Included</h4>
+                        <ul class="feature-list">
+                            <li><strong>Landing Page</strong> — SEO-optimized page that drives quiz starts</li>
+                            <li><strong>6-12 Custom Questions</strong> — Strategically designed to segment your audience</li>
+                            <li><strong>Email Capture Form</strong> — Collects contact info before showing results</li>
+                            <li><strong>3 Result Pages</strong> — Custom content for hot, warm, and cold leads</li>
+                            <li><strong>Progress Indicators</strong> — Animated progress bar and question transitions</li>
+                            <li><strong>Mobile-Responsive</strong> — Perfect experience on all devices</li>
+                        </ul>
+                    </div>
+
+                    <div class="deliverable-section">
+                        <h4>Technical Features</h4>
+                        <ul class="feature-list">
+                            <li>5-factor scoring engine (FIT, NEED, TIMELINE, ECONOMICS, AUTHORITY)</li>
+                            <li>Real-time score calculation</li>
+                            <li>Animated transitions between questions</li>
+                            <li>Form validation and error handling</li>
+                            <li>Analytics event tracking on every interaction</li>
+                        </ul>
+                    </div>
+
+                    <div class="deliverable-section">
+                        <h4>Files Generated</h4>
+                        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                            <span class="badge">index.html</span>
+                            <span class="badge">quiz/index.html</span>
+                            <span class="badge">quiz/quiz.js</span>
+                            <span class="badge">quiz/styles.css</span>
+                            <span class="badge">quiz/thank-you.html</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DELIVERABLE 2: EMAIL AUTOMATION -->
+            <div class="deliverable">
+                <div class="deliverable-header">
+                    <div class="deliverable-icon">✉️</div>
+                    <div class="deliverable-title">
+                        <h3>Automated Email Sequences</h3>
+                        <p class="deliverable-subtitle">14 pre-written emails that nurture leads automatically</p>
+                    </div>
+                </div>
+
+                <div class="deliverable-content">
+                    <div class="deliverable-section">
+                        <h4>Email Sequences Included</h4>
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Sequence</th>
+                                    <th>Emails</th>
+                                    <th>Purpose</th>
+                                    <th>Trigger</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Welcome</strong></td>
+                                    <td>3</td>
+                                    <td>Introduce brand, deliver results</td>
+                                    <td>All quiz takers</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Cold Nurture</strong></td>
+                                    <td>4</td>
+                                    <td>Education + brand story</td>
+                                    <td>Score: 0-49</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Warm Activation</strong></td>
+                                    <td>3</td>
+                                    <td>Social proof + product guides</td>
+                                    <td>Score: 50-79</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Hot Path</strong></td>
+                                    <td>2</td>
+                                    <td>Direct CTA + urgency</td>
+                                    <td>Score: 80-100</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Win-Back</strong></td>
+                                    <td>2</td>
+                                    <td>Re-engage non-openers</td>
+                                    <td>No opens in 7 days</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="deliverable-section">
+                        <h4>Automation Features</h4>
+                        <ul class="feature-list">
+                            <li><strong>Scheduled Sending</strong> — Emails sent at optimal intervals automatically</li>
+                            <li><strong>Database-Stored Templates</strong> — Easy to edit without redeploying code</li>
+                            <li><strong>Segment-Based Routing</strong> — Each lead gets the right sequence for their score</li>
+                            <li><strong>Personalization Tags</strong> — Name, business, quiz results inserted automatically</li>
+                            <li><strong>Email Tracking</strong> — Logs when each email is sent and delivered</li>
+                        </ul>
+                    </div>
+
+                    <div class="deliverable-section">
+                        <h4>What You Get</h4>
+                        <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px;">
+                            <span class="badge-success badge">email-sequences.md</span>
+                            <span class="badge-success badge">email-sequences.csv</span>
+                            <span class="badge-success badge">email-sequences.html</span>
+                            <span class="badge-info badge">api/email-sender.js</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DELIVERABLE 3: ANALYTICS DASHBOARD -->
+            <div class="deliverable">
+                <div class="deliverable-header">
+                    <div class="deliverable-icon">📈</div>
+                    <div class="deliverable-title">
+                        <h3>Analytics Dashboard</h3>
+                        <p class="deliverable-subtitle">Real-time insights into your funnel performance</p>
+                    </div>
+                </div>
+
+                <div class="deliverable-content">
+                    <div class="deliverable-section">
+                        <h4>Dashboard Features</h4>
+                        <ul class="feature-list">
+                            <li><strong>KPI Cards</strong> — Page views, start rate, completion rate, email captures</li>
+                            <li><strong>Conversion Funnel</strong> — Visual breakdown of drop-off at each step</li>
+                            <li><strong>Temperature Distribution</strong> — Pie chart showing hot/warm/cold split</li>
+                            <li><strong>Daily Activity Chart</strong> — Timeline of quiz activity over past 30 days</li>
+                            <li><strong>Answer Distribution</strong> — See which answers are most popular</li>
+                            <li><strong>UTM Source Tracking</strong> — Know which marketing channels drive conversions</li>
+                            <li><strong>Recent Leads Table</strong> — Latest submissions with scores and segments</li>
+                        </ul>
+                    </div>
+
+                    <div class="deliverable-section">
+                        <h4>Events Tracked</h4>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 12px;">
+                            <div>✓ Page views</div>
+                            <div>✓ Quiz starts</div>
+                            <div>✓ Questions viewed</div>
+                            <div>✓ Answers selected</div>
+                            <div>✓ Email captured</div>
+                            <div>✓ Quiz completed</div>
+                            <div>✓ Results viewed</div>
+                            <div>✓ CTA clicked</div>
+                        </div>
+                    </div>
+
+                    <div class="deliverable-section">
+                        <h4>Security & Access</h4>
+                        <p><strong>Password Protected:</strong> Dashboard is secured with environment variable password. Only you can access your data.</p>
+                        <p style="margin-top: 12px;"><strong>Access URL:</strong> <code style="background: var(--color-bg-tertiary); padding: 4px 8px; border-radius: 4px;">[your-domain]/admin</code></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DELIVERABLE 4: DESIGN SYSTEM -->
+            <div class="deliverable">
+                <div class="deliverable-header">
+                    <div class="deliverable-icon">🎨</div>
+                    <div class="deliverable-title">
+                        <h3>Custom Design System</h3>
+                        <p class="deliverable-subtitle">Brand-matched visual identity with 5 design modes</p>
+                    </div>
+                </div>
+
+                <div class="deliverable-content">
+                    <div class="deliverable-section">
+                        <h4>Design Modes</h4>
+                        <p style="margin-bottom: 16px;">Your quiz is automatically designed in one of 5 visual styles based on your brand personality:</p>
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Mode</th>
+                                    <th>Characteristics</th>
+                                    <th>Best For</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Soft</strong></td>
+                                    <td>Rounded corners, gentle shadows, bouncy animations</td>
+                                    <td>Food, wellness, family brands</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Sharp</strong></td>
+                                    <td>Angular edges, bold contrasts, precise animations</td>
+                                    <td>Tech, finance, professional services</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Glass</strong></td>
+                                    <td>Frosted backgrounds, transparency, subtle depth</td>
+                                    <td>Modern apps, luxury brands, premium services</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Glossy</strong></td>
+                                    <td>Gradient backgrounds, shine effects, vibrant colors</td>
+                                    <td>Consumer products, entertainment, creative industries</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Minimal</strong></td>
+                                    <td>Clean lines, generous whitespace, subtle motion</td>
+                                    <td>Professional services, B2B, consulting</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="deliverable-section">
+                        <h4>What's Customized</h4>
+                        <ul class="feature-list">
+                            <li><strong>Color Palette</strong> — Primary, secondary, backgrounds, and feedback colors</li>
+                            <li><strong>Typography</strong> — Google Fonts selected to match your brand voice</li>
+                            <li><strong>Spacing System</strong> — Consistent rhythm throughout the design</li>
+                            <li><strong>Component Styles</strong> — Buttons, inputs, cards, progress bars</li>
+                            <li><strong>Motion Patterns</strong> — Entrance, transition, and exit animations</li>
+                            <li><strong>Responsive Breakpoints</strong> — Mobile, tablet, and desktop layouts</li>
+                        </ul>
+                    </div>
+
+                    <div class="deliverable-section">
+                        <h4>Design Documentation</h4>
+                        <p>You'll receive a complete <code>design.md</code> file with:</p>
+                        <ul class="feature-list" style="margin-top: 12px;">
+                            <li>Hex codes for all colors</li>
+                            <li>Font names, sizes, and weights</li>
+                            <li>Spacing values and guidelines</li>
+                            <li>Copy-paste CSS for each component</li>
+                            <li>Animation specifications</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DELIVERABLE 5: VIDEO ASSETS -->
+            <div class="deliverable">
+                <div class="deliverable-header">
+                    <div class="deliverable-icon">🎬</div>
+                    <div class="deliverable-title">
+                        <h3>Video Assets (Remotion)</h3>
+                        <p class="deliverable-subtitle">5 video components ready to render for social media and ads</p>
+                    </div>
+                </div>
+
+                <div class="deliverable-content">
+                    <div class="deliverable-section">
+                        <h4>Video Templates Included</h4>
+
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <h4>Quiz Intro Teaser (15 seconds)</h4>
+                                <p>Eye-catching animation to promote the quiz on social media. Shows quiz preview with brand colors.</p>
+                            </div>
+
+                            <div class="timeline-item">
+                                <h4>Result Reveal - Hot Lead (30 seconds)</h4>
+                                <p>Celebratory animation for high-scoring quiz takers. Emphasizes product recommendations and next steps.</p>
+                            </div>
+
+                            <div class="timeline-item">
+                                <h4>Result Reveal - Warm Lead (30 seconds)</h4>
+                                <p>Engaging animation for mid-range scores. Focuses on education and value proposition.</p>
+                            </div>
+
+                            <div class="timeline-item">
+                                <h4>Result Reveal - Cold Lead (30 seconds)</h4>
+                                <p>Friendly animation for early-stage leads. Builds trust and introduces the brand story.</p>
+                            </div>
+
+                            <div class="timeline-item">
+                                <h4>Social Ad (15 seconds)</h4>
+                                <p>Instagram/TikTok ready ad promoting the quiz. Optimized for vertical mobile format.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="deliverable-section">
+                        <h4>Technical Specs</h4>
+                        <ul class="feature-list">
+                            <li><strong>Format:</strong> React/TypeScript components (.tsx files)</li>
+                            <li><strong>Rendering:</strong> Use <code>npx remotion render</code> to create MP4 files</li>
+                            <li><strong>Customizable:</strong> Edit text, colors, timing in the .tsx files</li>
+                            <li><strong>Aspect Ratios:</strong> 16:9 (landscape), 9:16 (vertical), 1:1 (square)</li>
+                            <li><strong>Resolution:</strong> 1080p by default, adjustable up to 4K</li>
+                        </ul>
+                    </div>
+
+                    <div class="deliverable-section">
+                        <h4>Use Cases</h4>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 12px;">
+                            <div>📱 Instagram Stories</div>
+                            <div>🎵 TikTok ads</div>
+                            <div>📘 Facebook feed</div>
+                            <div>🔗 LinkedIn posts</div>
+                            <div>📧 Email embeds</div>
+                            <div>🌐 Website headers</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DELIVERABLE 6: BACKEND & DATABASE -->
+            <div class="deliverable">
+                <div class="deliverable-header">
+                    <div class="deliverable-icon">⚙️</div>
+                    <div class="deliverable-title">
+                        <h3>Backend Infrastructure</h3>
+                        <p class="deliverable-subtitle">Production-grade database, APIs, and automation</p>
+                    </div>
+                </div>
+
+                <div class="deliverable-content">
+                    <div class="deliverable-section">
+                        <h4>Database Schema (6 Tables)</h4>
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Table</th>
+                                    <th>Purpose</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>leads</code></td>
+                                    <td>Stores contact info, quiz score, and segment (hot/warm/cold)</td>
+                                </tr>
+                                <tr>
+                                    <td><code>quiz_responses</code></td>
+                                    <td>Records every answer to every question for analysis</td>
+                                </tr>
+                                <tr>
+                                    <td><code>recommended_products</code></td>
+                                    <td>Tracks which products were recommended to each lead</td>
+                                </tr>
+                                <tr>
+                                    <td><code>email_log</code></td>
+                                    <td>Manages email queue and tracks delivery status</td>
+                                </tr>
+                                <tr>
+                                    <td><code>email_templates</code></td>
+                                    <td>Stores all 14 email templates for easy editing</td>
+                                </tr>
+                                <tr>
+                                    <td><code>analytics_events</code></td>
+                                    <td>Captures all funnel events for dashboard reporting</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="deliverable-section">
+                        <h4>API Endpoints (4 Functions)</h4>
+                        <ul class="feature-list">
+                            <li><code>POST /api/quiz-submit</code> — Processes quiz submissions, calculates scores, schedules emails</li>
+                            <li><code>POST /api/analytics-event</code> — Logs funnel events (page views, clicks, completions)</li>
+                            <li><code>GET /api/analytics-query</code> — Fetches dashboard data (password protected)</li>
+                            <li><code>CRON /api/email-sender</code> — Runs hourly to send scheduled emails from queue</li>
+                        </ul>
+                    </div>
+
+                    <div class="deliverable-section">
+                        <h4>Setup Automation</h4>
+                        <p>One-command database setup:</p>
+                        <div class="code-block">
+                            <code>npm run setup-db</code>
+                        </div>
+                        <p style="margin-top: 12px;">This script automatically:</p>
+                        <ul class="feature-list" style="margin-top: 8px;">
+                            <li>Creates all 6 tables with proper indexes</li>
+                            <li>Seeds email templates from CSV</li>
+                            <li>Configures table prefixes for multi-tenant setups</li>
+                            <li>Validates database connection</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DELIVERABLE 7: STRATEGY DOCUMENTS -->
+            <div class="deliverable">
+                <div class="deliverable-header">
+                    <div class="deliverable-icon">📋</div>
+                    <div class="deliverable-title">
+                        <h3>Strategy Documentation</h3>
+                        <p class="deliverable-subtitle">Complete breakdown of research, architecture, and decisions</p>
+                    </div>
+                </div>
+
+                <div class="deliverable-content">
+                    <div class="deliverable-section">
+                        <h4>Documents Included</h4>
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Document</th>
+                                    <th>What It Contains</th>
+                                    <th>Format</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Market Research</strong></td>
+                                    <td>Customer segments, psychological angles, competitor analysis</td>
+                                    <td>MD + HTML</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Product Catalog</strong></td>
+                                    <td>All products with descriptions, pricing, categories</td>
+                                    <td>JSON + MD</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Quiz Architecture</strong></td>
+                                    <td>Scoring model, question strategy, segmentation logic</td>
+                                    <td>MD</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Design Specs</strong></td>
+                                    <td>Colors, fonts, spacing, component CSS</td>
+                                    <td>MD</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Quiz Copy</strong></td>
+                                    <td>All questions, answers, progress messages, result pages</td>
+                                    <td>MD</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Copy Explainer</strong></td>
+                                    <td>Detailed breakdown of every copywriting decision</td>
+                                    <td>HTML</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Landing Page Copy</strong></td>
+                                    <td>Headline, benefits, CTAs, SEO meta tags</td>
+                                    <td>MD</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Email Sequences</strong></td>
+                                    <td>All 14 emails with subject lines and timing</td>
+                                    <td>CSV + MD + HTML</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Questions & Answers</strong></td>
+                                    <td>Complete Q&A export for easy review</td>
+                                    <td>CSV + MD</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="deliverable-section">
+                        <h4>Client Preview Site</h4>
+                        <p>All strategy documents are published to a GitHub Pages preview site for easy client review.</p>
+                        <p style="margin-top: 12px;"><strong>Includes:</strong></p>
+                        <ul class="feature-list" style="margin-top: 8px;">
+                            <li>Navigation page linking to all documents</li>
+                            <li>Formatted HTML versions of research and copy</li>
+                            <li>Interactive email sequence preview</li>
+                            <li>Quiz copy explainer with psychology breakdown</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DELIVERABLE 8: DEPLOYMENT PACKAGE -->
+            <div class="deliverable">
+                <div class="deliverable-header">
+                    <div class="deliverable-icon">🚀</div>
+                    <div class="deliverable-title">
+                        <h3>Deployment Package</h3>
+                        <p class="deliverable-subtitle">Everything needed to launch and maintain your quiz funnel</p>
+                    </div>
+                </div>
+
+                <div class="deliverable-content">
+                    <div class="deliverable-section">
+                        <h4>Documentation</h4>
+                        <ul class="feature-list">
+                            <li><strong>README.md</strong> — Project overview, quick start, folder structure</li>
+                            <li><strong>POST-COMPLETION-GUIDE.md</strong> — Step-by-step deployment walkthrough with screenshots</li>
+                            <li><strong>builder-prompt.md</strong> — AI-ready instructions to rebuild or modify the quiz</li>
+                            <li><strong>.env.example</strong> — Template for all environment variables</li>
+                        </ul>
+                    </div>
+
+                    <div class="deliverable-section">
+                        <h4>Deployment Steps</h4>
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <h4>1. Create Supabase Project</h4>
+                                <p>Free tier supports 50,000 monthly active users. Get API credentials from dashboard.</p>
+                            </div>
+
+                            <div class="timeline-item">
+                                <h4>2. Configure Environment</h4>
+                                <p>Copy .env.example, add Supabase credentials, set admin password.</p>
+                            </div>
+
+                            <div class="timeline-item">
+                                <h4>3. Setup Database</h4>
+                                <p>Run <code>npm run setup-db</code> to create tables and seed templates.</p>
+                            </div>
+
+                            <div class="timeline-item">
+                                <h4>4. Deploy to Vercel</h4>
+                                <p>Run <code>vercel --prod</code> or connect GitHub repo via dashboard.</p>
+                            </div>
+
+                            <div class="timeline-item">
+                                <h4>5. Add Environment Variables</h4>
+                                <p>Copy env vars to Vercel project settings and redeploy.</p>
+                            </div>
+
+                            <div class="timeline-item">
+                                <h4>6. Verify & Test</h4>
+                                <p>Complete a test quiz, check database, verify emails scheduled, access dashboard.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="deliverable-section">
+                        <h4>GitHub Repositories</h4>
+                        <p>Your quiz funnel is published to two repositories:</p>
+                        <ul class="feature-list" style="margin-top: 12px;">
+                            <li><strong>Private Repo</strong> — Complete codebase with all files and deployment config</li>
+                            <li><strong>Public Preview Repo</strong> — Client-facing documentation on GitHub Pages</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TECHNICAL SPECS -->
+    <section>
+        <div class="container">
+            <div class="section-header">
+                <div class="section-eyebrow">Under the Hood</div>
+                <h2 class="section-title">Technical Specifications</h2>
+                <p class="section-description">Production-grade infrastructure built on modern, scalable technologies</p>
+            </div>
+
+            <div class="grid grid-2">
+                <div class="card">
+                    <h3>Frontend Stack</h3>
+                    <ul class="feature-list">
+                        <li>Vanilla HTML5/CSS3/JavaScript (no framework bloat)</li>
+                        <li>Responsive design (mobile-first)</li>
+                        <li>CSS custom properties for theming</li>
+                        <li>Local image assets (fast loading)</li>
+                        <li>Accessibility-compliant (WCAG 2.1)</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>Backend Stack</h3>
+                    <ul class="feature-list">
+                        <li>Vercel Edge Functions (serverless)</li>
+                        <li>Supabase (PostgreSQL database)</li>
+                        <li>Cron jobs for email automation</li>
+                        <li>Environment-based configuration</li>
+                        <li>Multi-tenant table prefixes</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>Email Integration</h3>
+                    <ul class="feature-list">
+                        <li>Resend.com API (optional)</li>
+                        <li>Template-based emails</li>
+                        <li>Scheduled sending via queue</li>
+                        <li>Personalization with merge tags</li>
+                        <li>Delivery tracking and logs</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>Analytics & Tracking</h3>
+                    <ul class="feature-list">
+                        <li>Event-based tracking (8 event types)</li>
+                        <li>Session tracking via UUID</li>
+                        <li>UTM parameter capture</li>
+                        <li>Chart.js for visualizations</li>
+                        <li>Password-protected dashboard</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOSTING COSTS -->
+    <section style="background: var(--color-bg-secondary);">
+        <div class="container-narrow">
+            <div class="section-header">
+                <div class="section-eyebrow">Monthly Operating Costs</div>
+                <h2 class="section-title">Affordable to Run</h2>
+                <p class="section-description">Free tier covers most small to medium businesses</p>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Service</th>
+                        <th>Free Tier</th>
+                        <th>Paid Tier (if needed)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Vercel</strong> (Hosting + APIs)</td>
+                        <td>100GB bandwidth, unlimited sites</td>
+                        <td>$20/mo (Pro plan)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Supabase</strong> (Database)</td>
+                        <td>500MB database, 50K users/mo</td>
+                        <td>$25/mo (Pro plan)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Resend</strong> (Email - Optional)</td>
+                        <td>100 emails/day</td>
+                        <td>$20/mo (1K emails/mo)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p style="margin-top: var(--space-md); text-align: center; color: var(--color-text-muted);">
+                <strong>Total:</strong> $0/mo for most businesses on free tier, ~$45-65/mo at scale
+            </p>
+        </div>
+    </section>
+
+    <!-- FILE COUNT -->
+    <section>
+        <div class="container-narrow">
+            <div class="section-header">
+                <div class="section-eyebrow">Complete Package</div>
+                <h2 class="section-title">50+ Production Files</h2>
+            </div>
+
+            <div class="grid grid-2">
+                <div>
+                    <h4 style="margin-bottom: var(--space-sm); color: var(--color-primary);">Code Files</h4>
+                    <ul class="feature-list">
+                        <li>5 HTML pages</li>
+                        <li>3 CSS files</li>
+                        <li>2 JavaScript files</li>
+                        <li>4 API endpoints</li>
+                        <li>1 SQL schema</li>
+                        <li>1 Setup script</li>
+                        <li>5 Remotion components</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 style="margin-bottom: var(--space-sm); color: var(--color-primary);">Documentation</h4>
+                    <ul class="feature-list">
+                        <li>9 Strategy documents (MD)</li>
+                        <li>4 Client previews (HTML)</li>
+                        <li>3 Data exports (CSV/JSON)</li>
+                        <li>3 Configuration files</li>
+                        <li>1 README</li>
+                        <li>1 Deployment guide</li>
+                        <li>1 Builder prompt</li>
+                    </ul>
+                </div>
+            </div>
+
+            <p style="margin-top: var(--space-xl); text-align: center; font-size: 1.25rem;">
+                <strong style="color: var(--color-primary);">~5,000 lines of production code</strong> generated automatically
+            </p>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section style="background: var(--color-bg-secondary); padding-bottom: var(--space-3xl);">
+        <div class="container-narrow">
+            <div class="cta-section">
+                <h2>Ready to Build Your Quiz Funnel?</h2>
+                <p>Everything you need to capture, score, and nurture leads automatically.</p>
+                <a href="#contact" class="btn">Get Started</a>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

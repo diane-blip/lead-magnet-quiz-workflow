@@ -1,0 +1,317 @@
+{
+  "vertical_id": "wedding",
+  "vertical_name": "Perfect Wedding Vision Board",
+  "description": "Interactive wedding preference builder for wedding planners and venues",
+
+  "builder_title": "Design Your Dream Wedding",
+  "builder_tagline": "Build your perfect wedding vision in 60 seconds",
+
+  "preference_dimensions": {
+    "vibe": {
+      "label": "Wedding Style",
+      "description": "Overall aesthetic and atmosphere",
+      "selection_type": "card_selection",
+      "min_selections": 1,
+      "max_selections": 1,
+      "display_config": {
+        "card_size": "large",
+        "show_images": true,
+        "image_source": "glif_generated",
+        "columns": 2
+      },
+      "options": [
+        {
+          "id": "rustic-barn",
+          "label": "Rustic Barn",
+          "icon": "barn",
+          "tags": ["rustic", "barn", "country", "natural"],
+          "glif_prompt_keywords": "rustic barn wedding, wooden beams, fairy lights, wildflowers, natural textures",
+          "graphic_elements": {
+            "palette": "warm-earth",
+            "mood": "cozy and authentic"
+          }
+        },
+        {
+          "id": "elegant-ballroom",
+          "label": "Elegant Ballroom",
+          "icon": "crown",
+          "tags": ["elegant", "ballroom", "formal", "classic"],
+          "glif_prompt_keywords": "elegant ballroom wedding, crystal chandeliers, white florals, gold accents, formal table settings",
+          "graphic_elements": {
+            "palette": "ivory-gold",
+            "mood": "timeless and refined"
+          }
+        },
+        {
+          "id": "beach-sunset",
+          "label": "Beach Sunset",
+          "icon": "sunset",
+          "tags": ["beach", "sunset", "coastal", "relaxed"],
+          "glif_prompt_keywords": "beach sunset wedding, ocean backdrop, flowing fabrics, tropical flowers, golden hour light",
+          "graphic_elements": {
+            "palette": "ocean-sunset",
+            "mood": "dreamy and free"
+          }
+        },
+        {
+          "id": "garden-romance",
+          "label": "Garden Romance",
+          "icon": "flower",
+          "tags": ["garden", "romantic", "floral", "outdoor"],
+          "glif_prompt_keywords": "romantic garden wedding, lush greenery, arched trellis, soft florals, dappled sunlight",
+          "graphic_elements": {
+            "palette": "sage-blush",
+            "mood": "romantic and lush"
+          }
+        },
+        {
+          "id": "modern-industrial",
+          "label": "Modern Industrial",
+          "icon": "building",
+          "tags": ["modern", "industrial", "urban", "minimalist"],
+          "glif_prompt_keywords": "modern industrial wedding, exposed brick, geometric decor, dramatic lighting, monochrome palette",
+          "graphic_elements": {
+            "palette": "charcoal-copper",
+            "mood": "bold and contemporary"
+          }
+        },
+        {
+          "id": "intimate-backyard",
+          "label": "Intimate Backyard",
+          "icon": "home",
+          "tags": ["intimate", "backyard", "casual", "personal"],
+          "glif_prompt_keywords": "intimate backyard wedding, string lights, mismatched chairs, personal touches, warm candlelight",
+          "graphic_elements": {
+            "palette": "warm-neutral",
+            "mood": "personal and heartfelt"
+          }
+        }
+      ]
+    },
+
+    "season": {
+      "label": "Your Season",
+      "description": "When you envision your big day",
+      "selection_type": "card_selection",
+      "min_selections": 1,
+      "max_selections": 1,
+      "display_config": {
+        "card_size": "medium",
+        "show_images": false,
+        "columns": 4
+      },
+      "options": [
+        {
+          "id": "spring",
+          "label": "Spring",
+          "icon": "sprout",
+          "tags": ["spring"],
+          "season_colors": "soft pastels, cherry blossom pink, fresh green, lavender",
+          "season_lighting": "bright airy spring light, soft sunshine"
+        },
+        {
+          "id": "summer",
+          "label": "Summer",
+          "icon": "sun",
+          "tags": ["summer"],
+          "season_colors": "bright whites, ocean blue, coral, sunny yellow",
+          "season_lighting": "golden summer sun, warm and vibrant"
+        },
+        {
+          "id": "fall",
+          "label": "Fall",
+          "icon": "leaf",
+          "tags": ["fall", "autumn"],
+          "season_colors": "deep burgundy, burnt orange, sage green, cream, amber",
+          "season_lighting": "warm golden hour glow, rich autumn light"
+        },
+        {
+          "id": "winter",
+          "label": "Winter",
+          "icon": "snowflake",
+          "tags": ["winter"],
+          "season_colors": "deep navy, silver, white, emerald green, cranberry",
+          "season_lighting": "candlelit warmth, moody romantic glow"
+        }
+      ]
+    },
+
+    "guest_count": {
+      "label": "Guest Count",
+      "description": "How many people you want to celebrate with",
+      "selection_type": "scale_selector",
+      "min_selections": 1,
+      "max_selections": 1,
+      "display_config": {
+        "show_labels": true,
+        "style": "segmented_bar"
+      },
+      "options": [
+        {
+          "id": "micro",
+          "label": "Under 50",
+          "tags": ["micro-wedding", "intimate"],
+          "atmosphere_description": "intimate micro-wedding gathering"
+        },
+        {
+          "id": "small",
+          "label": "50-100",
+          "tags": ["small-wedding"],
+          "atmosphere_description": "cozy small wedding reception"
+        },
+        {
+          "id": "medium",
+          "label": "100-150",
+          "tags": ["medium-wedding"],
+          "atmosphere_description": "warm mid-size wedding celebration"
+        },
+        {
+          "id": "large",
+          "label": "150-200",
+          "tags": ["large-wedding"],
+          "atmosphere_description": "grand wedding reception"
+        },
+        {
+          "id": "grand",
+          "label": "200+",
+          "tags": ["grand-wedding", "large-event"],
+          "atmosphere_description": "magnificent grand-scale wedding"
+        }
+      ]
+    },
+
+    "must_haves": {
+      "label": "Dream Elements",
+      "description": "The details that make it yours",
+      "selection_type": "chip_multi_select",
+      "min_selections": 1,
+      "max_selections": 5,
+      "display_config": {
+        "chip_style": "pill_with_icon",
+        "columns": 3,
+        "show_count": true
+      },
+      "options": [
+        { "id": "live-band", "label": "Live Band", "icon": "music", "tags": ["live-band", "entertainment"], "visual_description": "live band performing on stage" },
+        { "id": "photo-booth", "label": "Photo Booth", "icon": "camera", "tags": ["photo-booth", "entertainment"], "visual_description": "vintage photo booth with props" },
+        { "id": "signature-cocktails", "label": "Signature Cocktails", "icon": "wine", "tags": ["cocktails", "bar"], "visual_description": "artisan cocktail bar with custom drinks" },
+        { "id": "fireworks", "label": "Fireworks", "icon": "sparkles", "tags": ["fireworks", "grand-exit"], "visual_description": "fireworks display over reception" },
+        { "id": "outdoor-ceremony", "label": "Outdoor Ceremony", "icon": "trees", "tags": ["outdoor", "ceremony"], "visual_description": "outdoor ceremony under natural canopy" },
+        { "id": "brunch-wedding", "label": "Brunch Wedding", "icon": "coffee", "tags": ["brunch", "daytime"], "visual_description": "elegant brunch reception table setting" },
+        { "id": "destination", "label": "Destination", "icon": "plane", "tags": ["destination", "travel"], "visual_description": "destination wedding in exotic locale" },
+        { "id": "dj", "label": "DJ & Dance Floor", "icon": "headphones", "tags": ["dj", "dance-floor", "entertainment"], "visual_description": "DJ setup with dance floor and lights" },
+        { "id": "floral-arch", "label": "Floral Arch", "icon": "flower", "tags": ["floral-arch", "ceremony"], "visual_description": "stunning floral ceremony arch" },
+        { "id": "sparkler-exit", "label": "Sparkler Exit", "icon": "star", "tags": ["sparkler-exit", "grand-exit"], "visual_description": "sparkler-lined exit path" }
+      ]
+    },
+
+    "budget": {
+      "label": "Investment Range",
+      "description": "This helps us match the right recommendations",
+      "selection_type": "scale_selector",
+      "min_selections": 1,
+      "max_selections": 1,
+      "display_config": {
+        "show_labels": true,
+        "style": "segmented_bar"
+      },
+      "options": [
+        { "id": "budget-starter", "label": "Under $20K", "tags": ["budget-starter"], "qualification_signal": "cool" },
+        { "id": "budget-mid", "label": "$20K - $40K", "tags": ["budget-mid"], "qualification_signal": "warm" },
+        { "id": "budget-upper", "label": "$40K - $60K", "tags": ["budget-upper"], "qualification_signal": "warm" },
+        { "id": "budget-premium", "label": "$60K - $80K", "tags": ["budget-premium"], "qualification_signal": "hot" },
+        { "id": "budget-luxury", "label": "$80K+", "tags": ["budget-luxury"], "qualification_signal": "hot" }
+      ]
+    },
+
+    "timeline": {
+      "label": "Wedding Date",
+      "description": "When are you planning to say 'I do'?",
+      "selection_type": "card_selection",
+      "min_selections": 1,
+      "max_selections": 1,
+      "display_config": {
+        "card_size": "small",
+        "show_images": false,
+        "columns": 2
+      },
+      "options": [
+        { "id": "set-date", "label": "Date Set", "icon": "calendar-check", "tags": ["date-set", "committed"], "qualification_signal": "hot" },
+        { "id": "season-2026", "label": "Season 2026", "icon": "calendar", "tags": ["season-2026", "planning"], "qualification_signal": "warm" },
+        { "id": "season-2027", "label": "Season 2027", "icon": "calendar-plus", "tags": ["season-2027", "early-planning"], "qualification_signal": "warm" },
+        { "id": "not-sure", "label": "Not Sure Yet", "icon": "help-circle", "tags": ["not-sure", "exploring"], "qualification_signal": "cool" }
+      ]
+    }
+  },
+
+  "default_selection_flow": [
+    { "step": 1, "dimension": "vibe", "type": "card_selection" },
+    { "step": 2, "dimension": "season", "type": "card_selection" },
+    { "step": 3, "dimension": "guest_count", "type": "scale_selector" },
+    { "step": 4, "dimension": "must_haves", "type": "chip_multi_select" },
+    { "step": 5, "dimension": "budget", "type": "scale_selector" },
+    { "step": 6, "dimension": "timeline", "type": "card_selection" }
+  ],
+
+  "default_profiles": [
+    {
+      "profile_id": "the-romantic",
+      "profile_name": "The Romantic",
+      "trigger_tags": ["garden", "romantic", "floral", "outdoor", "intimate", "floral-arch"],
+      "match_threshold": 0.5,
+      "description": "Lush florals, soft lighting, and heartfelt details. Your wedding is a love letter brought to life.",
+      "share_text": "I'm The Romantic! Garden vibes, lush florals, and all the love. Design your dream wedding:",
+      "graphic_mood": "romantic, soft, dreamy, lush greenery with blush tones"
+    },
+    {
+      "profile_id": "the-classic",
+      "profile_name": "The Classic",
+      "trigger_tags": ["elegant", "ballroom", "formal", "classic", "large-wedding", "grand-wedding"],
+      "match_threshold": 0.5,
+      "description": "Timeless elegance meets refined taste. Chandeliers, champagne, and a night your guests will never forget.",
+      "share_text": "I'm The Classic! Elegant ballroom, timeless style, unforgettable night. Design your dream wedding:",
+      "graphic_mood": "elegant, formal, timeless, crystal chandeliers with ivory and gold"
+    },
+    {
+      "profile_id": "the-adventurer",
+      "profile_name": "The Adventurer",
+      "trigger_tags": ["beach", "destination", "travel", "rustic", "outdoor", "casual"],
+      "match_threshold": 0.5,
+      "description": "Rules are for other people. Your wedding is an experience, an escape, a story worth telling.",
+      "share_text": "I'm The Adventurer! Beach sunsets, destination vibes, no rules. Design your dream wedding:",
+      "graphic_mood": "adventurous, free-spirited, beach or destination, golden sunset"
+    },
+    {
+      "profile_id": "the-entertainer",
+      "profile_name": "The Entertainer",
+      "trigger_tags": ["dj", "dance-floor", "live-band", "entertainment", "photo-booth", "fireworks"],
+      "match_threshold": 0.5,
+      "description": "Your wedding is the party of the year. Epic music, dance floor magic, and moments that make everyone's highlight reel.",
+      "share_text": "I'm The Entertainer! Live band, dance floor, party of the year. Design your dream wedding:",
+      "graphic_mood": "energetic, celebratory, party atmosphere, dance floor with dramatic lighting"
+    }
+  ],
+
+  "qualification_signals": {
+    "urgency": {
+      "hot": ["date-set"],
+      "warm": ["season-2026", "season-2027", "planning"],
+      "cool": ["not-sure", "exploring"]
+    },
+    "budget_fit": {
+      "hot": ["budget-premium", "budget-luxury"],
+      "warm": ["budget-mid", "budget-upper"],
+      "cool": ["budget-starter"]
+    },
+    "composite_formula": "urgency * 0.6 + budget_fit * 0.4"
+  },
+
+  "graphic_prompt_template": "Pinterest-style wedding mood board collage, editorial quality.\nStyle: {vibe_label} aesthetic, {vibe_glif_keywords}.\nSeason: {season_label} palette with {season_colors}.\nKey visual elements: {must_haves_visual_descriptions}.\n{guest_count_atmosphere} reception space.\nRomantic, aspirational, shareable. Magazine quality editorial layout.\nWarm {season_lighting}.\nNo text overlays, purely visual mood board.\nUltra-detailed, professional wedding photography quality, 8K.",
+
+  "email_sequence_angle": {
+    "welcome": "Deliver vision board graphic + introduce planner's portfolio matches",
+    "inspiration": "Real Weddings That Match Your Vision + venue spotlights",
+    "consultation": "Venue availability urgency + portfolio case study",
+    "winback": "New venues added + seasonal inspiration"
+  }
+}

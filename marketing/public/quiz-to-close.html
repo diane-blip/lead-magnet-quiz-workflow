@@ -1,0 +1,1577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Quiz-to-Close: Research-powered quiz funnels that capture, score, and nurture leads automatically. We research your market, write every word of copy, and build automated systems in 10 days.">
+    <meta name="keywords" content="quiz funnel, lead generation, lead magnet, automated nurturing, quiz marketing">
+    <title>Quiz-to-Close | Research-Powered Quiz Funnels That Convert</title>
+
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* ==================== CSS VARIABLES ==================== */
+        :root {
+            /* Colors - Dark Theme */
+            --color-bg-primary: #0a0a0f;
+            --color-bg-secondary: #0f0f16;
+            --color-bg-tertiary: #14141d;
+            --color-bg-card: rgba(255, 255, 255, 0.03);
+            --color-bg-card-hover: rgba(255, 255, 255, 0.06);
+
+            /* Colors - Primary (Cyan) */
+            --color-primary: #0cc0df;
+            --color-primary-rgb: 12, 192, 223;
+            --color-primary-glow: #3dd4f0;
+            --color-primary-dark: #0a9bb5;
+
+            /* Colors - Text */
+            --color-text-primary: #ffffff;
+            --color-text-secondary: rgba(255, 255, 255, 0.7);
+            --color-text-muted: rgba(255, 255, 255, 0.5);
+            --color-text-inverse: #0a0a0f;
+
+            /* Colors - Borders */
+            --color-border: rgba(255, 255, 255, 0.08);
+            --color-border-hover: rgba(12, 192, 223, 0.4);
+
+            /* Colors - Temperature */
+            --color-hot: #22c55e;
+            --color-warm: #f59e0b;
+            --color-cold: #3b82f6;
+
+            /* Typography */
+            --font-primary: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+            /* Spacing */
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+            --space-2xl: 48px;
+            --space-3xl: 64px;
+            --space-4xl: 96px;
+            --space-section: 120px;
+
+            /* Layout */
+            --max-width: 1200px;
+            --max-width-narrow: 800px;
+
+            /* Border Radius */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            --radius-full: 9999px;
+
+            /* Transitions */
+            --transition-fast: 0.15s ease;
+            --transition-default: 0.3s ease;
+            --transition-slow: 0.5s ease;
+        }
+
+        /* ==================== RESET & BASE ==================== */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            font-weight: 400;
+            font-size: 1.125rem;
+            color: var(--color-text-secondary);
+            line-height: 1.7;
+            background-color: var(--color-bg-primary);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ==================== TYPOGRAPHY ==================== */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-primary);
+            color: var(--color-text-primary);
+            line-height: 1.1;
+            font-weight: 700;
+        }
+
+        h1 {
+            font-size: clamp(3rem, 7vw, 5rem);
+            font-weight: 900;
+            letter-spacing: -0.03em;
+        }
+
+        h2 {
+            font-size: clamp(2rem, 5vw, 3.25rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        h3 {
+            font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+            font-weight: 600;
+            letter-spacing: -0.01em;
+        }
+
+        h4 {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: var(--space-md);
+        }
+
+        p:last-child {
+            margin-bottom: 0;
+        }
+
+        a {
+            color: var(--color-primary);
+            text-decoration: none;
+            transition: color var(--transition-default);
+        }
+
+        a:hover {
+            color: var(--color-primary-glow);
+        }
+
+        /* ==================== UTILITIES ==================== */
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 var(--space-lg);
+        }
+
+        .container--narrow {
+            max-width: var(--max-width-narrow);
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-glow) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        /* ==================== BUTTONS ==================== */
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) var(--space-xl);
+            background: var(--color-primary);
+            color: var(--color-text-inverse);
+            border: none;
+            border-radius: var(--radius-full);
+            font-family: var(--font-primary);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-default);
+            text-decoration: none;
+            box-shadow: 0 0 30px rgba(var(--color-primary-rgb), 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 50px rgba(var(--color-primary-rgb), 0.5);
+            color: var(--color-text-inverse);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) var(--space-xl);
+            background: transparent;
+            color: var(--color-primary);
+            border: 2px solid var(--color-primary);
+            border-radius: var(--radius-full);
+            font-family: var(--font-primary);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-default);
+            text-decoration: none;
+        }
+
+        .btn-secondary:hover {
+            background: var(--color-primary);
+            color: var(--color-text-inverse);
+            box-shadow: 0 0 30px rgba(var(--color-primary-rgb), 0.3);
+        }
+
+        /* ==================== BADGE ==================== */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm) var(--space-md);
+            background: rgba(var(--color-primary-rgb), 0.1);
+            border: 1px solid rgba(var(--color-primary-rgb), 0.3);
+            color: var(--color-primary);
+            border-radius: var(--radius-full);
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* ==================== CARDS ==================== */
+        .card {
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all var(--transition-default);
+        }
+
+        .card:hover {
+            background: var(--color-bg-card-hover);
+            border-color: var(--color-border-hover);
+            transform: translateY(-6px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4),
+                        0 0 40px rgba(var(--color-primary-rgb), 0.2),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        /* ==================== SECTION HEADER ==================== */
+        .section-header {
+            text-align: center;
+            margin-bottom: var(--space-3xl);
+        }
+
+        .section-header p {
+            max-width: 600px;
+            margin: var(--space-md) auto 0;
+            color: var(--color-text-muted);
+        }
+
+        /* ==================== STATS BAR ==================== */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-3xl);
+            flex-wrap: wrap;
+            padding: var(--space-2xl) 0;
+            border-top: 1px solid var(--color-border);
+            border-bottom: 1px solid var(--color-border);
+            margin: var(--space-3xl) 0;
+            position: relative;
+        }
+
+        .stats-bar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat__number {
+            font-size: clamp(3.5rem, 8vw, 5.5rem);
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            line-height: 1;
+            margin-bottom: var(--space-xs);
+        }
+
+        .stat__label {
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* ==================== HERO SECTION ==================== */
+        .hero {
+            position: relative;
+            padding: var(--space-section) 0;
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(var(--color-primary-rgb), 0.2) 0%, transparent 50%),
+                radial-gradient(ellipse 60% 40% at 80% 100%, rgba(var(--color-primary-rgb), 0.12) 0%, transparent 50%),
+                radial-gradient(circle at 20% 50%, rgba(var(--color-primary-rgb), 0.05) 0%, transparent 25%);
+            pointer-events: none;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, black 30%, transparent 70%);
+            -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, black 30%, transparent 70%);
+        }
+
+        .hero__content {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .hero__badge {
+            margin-bottom: var(--space-xl);
+        }
+
+        .hero__headline {
+            margin-bottom: var(--space-lg);
+        }
+
+        .hero__subheadline {
+            font-size: clamp(1.125rem, 2vw, 1.375rem);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-xl);
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero__cta {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .hero__cta-note {
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
+        }
+
+        /* ==================== PROBLEM SECTION ==================== */
+        .problem {
+            padding: var(--space-section) 0;
+            background: var(--color-bg-secondary);
+        }
+
+        .problem__grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-lg);
+        }
+
+        @media (max-width: 768px) {
+            .problem__grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .problem-card {
+            position: relative;
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-left: 3px solid var(--color-primary);
+            border-radius: var(--radius-md);
+            padding: var(--space-xl);
+            font-size: 1.0625rem;
+            color: var(--color-text-primary);
+            font-style: italic;
+            transition: all var(--transition-default);
+        }
+
+        .problem-card:hover {
+            background: var(--color-bg-card-hover);
+            border-left-color: var(--color-primary-glow);
+            transform: translateX(4px);
+        }
+
+        .problem-card::before {
+            content: '"';
+            position: absolute;
+            top: var(--space-md);
+            left: var(--space-md);
+            font-size: 3rem;
+            color: var(--color-primary);
+            opacity: 0.3;
+            line-height: 1;
+        }
+
+        /* ==================== SOLUTION SECTION ==================== */
+        .solution {
+            padding: var(--space-section) 0;
+            background: var(--color-bg-primary);
+        }
+
+        .solution__grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-xl);
+        }
+
+        .solution-card {
+            text-align: center;
+            padding: var(--space-2xl);
+        }
+
+        .solution-card__icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto var(--space-lg);
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-glow) 100%);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 10px 30px rgba(var(--color-primary-rgb), 0.3);
+        }
+
+        .solution-card__title {
+            margin-bottom: var(--space-sm);
+            color: var(--color-text-primary);
+        }
+
+        .solution-card__description {
+            color: var(--color-text-secondary);
+            font-size: 1rem;
+        }
+
+        /* ==================== PROCESS SECTION ==================== */
+        .process {
+            padding: var(--space-section) 0;
+            background: var(--color-bg-secondary);
+        }
+
+        .process__timeline {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .process__timeline::before {
+            content: '';
+            position: absolute;
+            left: 28px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-primary-glow) 50%, var(--color-primary) 100%);
+            opacity: 0.5;
+        }
+
+        .phase {
+            position: relative;
+            padding-left: 80px;
+            padding-bottom: var(--space-2xl);
+        }
+
+        .phase:last-child {
+            padding-bottom: 0;
+        }
+
+        .phase__marker {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 56px;
+            height: 56px;
+            background: var(--color-bg-primary);
+            border: 2px solid var(--color-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-primary);
+            font-weight: 800;
+            font-size: 1.25rem;
+            box-shadow: 0 0 20px rgba(var(--color-primary-rgb), 0.3);
+        }
+
+        .phase__content {
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+        }
+
+        .phase__header {
+            display: flex;
+            align-items: baseline;
+            gap: var(--space-md);
+            margin-bottom: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        .phase__title {
+            margin-bottom: 0;
+        }
+
+        .phase__days {
+            font-size: 0.875rem;
+            color: var(--color-primary);
+            font-weight: 600;
+            background: rgba(var(--color-primary-rgb), 0.1);
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-full);
+        }
+
+        .phase__list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+
+        .phase__list li {
+            position: relative;
+            padding-left: var(--space-lg);
+            color: var(--color-text-secondary);
+        }
+
+        .phase__list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--color-primary);
+            font-weight: 700;
+        }
+
+        /* ==================== DELIVERABLES SECTION ==================== */
+        .deliverables {
+            padding: var(--space-section) 0;
+            background: var(--color-bg-primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .deliverables::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(var(--color-primary-rgb), 0.05) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .deliverables__grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-xl);
+            position: relative;
+            z-index: 1;
+        }
+
+        .deliverable-card {
+            background: linear-gradient(135deg, rgba(var(--color-primary-rgb), 0.08) 0%, var(--color-bg-card) 100%);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-xl);
+            padding: var(--space-2xl);
+            transition: all var(--transition-default);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .deliverable-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-primary-glow) 100%);
+            opacity: 0;
+            transition: opacity var(--transition-default);
+        }
+
+        .deliverable-card:hover {
+            border-color: var(--color-border-hover);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4),
+                        0 0 30px rgba(var(--color-primary-rgb), 0.15);
+            transform: translateY(-4px);
+        }
+
+        .deliverable-card:hover::before {
+            opacity: 1;
+        }
+
+        .deliverable-card__header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+        }
+
+        .deliverable-card__icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(var(--color-primary-rgb), 0.15);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-primary);
+            flex-shrink: 0;
+        }
+
+        .deliverable-card__title {
+            color: var(--color-text-primary);
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .deliverable-card__list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+
+        .deliverable-card__list li {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-sm);
+            color: var(--color-text-secondary);
+        }
+
+        .deliverable-card__list li::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--color-primary);
+            border-radius: 50%;
+            margin-top: 0.6em;
+            flex-shrink: 0;
+        }
+
+        /* ==================== INTELLIGENCE SECTION ==================== */
+        .intelligence {
+            padding: var(--space-section) 0;
+            background: var(--color-bg-secondary);
+        }
+
+        .intelligence__content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .intelligence__features {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-lg);
+        }
+
+        .intelligence-feature {
+            display: flex;
+            gap: var(--space-lg);
+            align-items: flex-start;
+            padding: var(--space-xl);
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            transition: all var(--transition-default);
+        }
+
+        .intelligence-feature:hover {
+            background: var(--color-bg-card-hover);
+            border-color: var(--color-border-hover);
+            transform: translateX(8px);
+        }
+
+        .intelligence-feature__icon {
+            flex-shrink: 0;
+            width: 56px;
+            height: 56px;
+            background: rgba(var(--color-primary-rgb), 0.1);
+            border: 1px solid rgba(var(--color-primary-rgb), 0.3);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .intelligence-feature__content h4 {
+            margin-bottom: var(--space-xs);
+            color: var(--color-text-primary);
+        }
+
+        .intelligence-feature__content p {
+            color: var(--color-text-secondary);
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        /* ==================== NURTURING SECTION ==================== */
+        .nurturing {
+            padding: var(--space-section) 0;
+            background: var(--color-bg-primary);
+            position: relative;
+        }
+
+        .nurturing::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse 80% 50% at 50% 100%, rgba(var(--color-primary-rgb), 0.08) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .nurturing__grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-xl);
+            position: relative;
+            z-index: 1;
+        }
+
+        .temperature-card {
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            border-top: 3px solid;
+            transition: all var(--transition-default);
+        }
+
+        .temperature-card:hover {
+            background: var(--color-bg-card-hover);
+            transform: translateY(-4px);
+        }
+
+        .temperature-card--hot {
+            border-top-color: var(--color-hot);
+        }
+
+        .temperature-card--warm {
+            border-top-color: var(--color-warm);
+        }
+
+        .temperature-card--cold {
+            border-top-color: var(--color-cold);
+        }
+
+        .temperature-card__header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+        }
+
+        .temperature-card__badge {
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .temperature-card--hot .temperature-card__badge {
+            background: rgba(34, 197, 94, 0.15);
+            color: var(--color-hot);
+        }
+
+        .temperature-card--warm .temperature-card__badge {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--color-warm);
+        }
+
+        .temperature-card--cold .temperature-card__badge {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--color-cold);
+        }
+
+        .temperature-card__score {
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
+        }
+
+        .temperature-card__title {
+            margin-bottom: var(--space-sm);
+            color: var(--color-text-primary);
+        }
+
+        .temperature-card__description {
+            color: var(--color-text-secondary);
+            font-size: 0.9375rem;
+            margin: 0;
+        }
+
+        .nurturing__tagline {
+            text-align: center;
+            font-size: 1.125rem;
+            color: var(--color-text-secondary);
+            max-width: 600px;
+            margin: var(--space-2xl) auto 0;
+            font-style: italic;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ==================== ANALYTICS SECTION ==================== */
+        .analytics {
+            padding: var(--space-section) 0;
+            background: var(--color-bg-secondary);
+        }
+
+        .analytics__grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: var(--space-lg);
+        }
+
+        .analytics-card {
+            text-align: center;
+            padding: var(--space-xl);
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            transition: all var(--transition-default);
+        }
+
+        .analytics-card:hover {
+            background: var(--color-bg-card-hover);
+            border-color: var(--color-border-hover);
+            transform: translateY(-4px);
+        }
+
+        .analytics-card__icon {
+            width: 56px;
+            height: 56px;
+            margin: 0 auto var(--space-md);
+            background: rgba(var(--color-primary-rgb), 0.1);
+            border: 1px solid rgba(var(--color-primary-rgb), 0.3);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .analytics-card__title {
+            font-size: 1rem;
+            color: var(--color-text-primary);
+            font-weight: 500;
+        }
+
+        /* ==================== AUDIENCE SECTION ==================== */
+        .audience {
+            padding: var(--space-section) 0;
+            background: var(--color-bg-primary);
+        }
+
+        .audience__tags {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: var(--space-md);
+        }
+
+        .audience-tag {
+            padding: var(--space-md) var(--space-xl);
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-full);
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--color-text-primary);
+            transition: all var(--transition-default);
+        }
+
+        .audience-tag:hover {
+            border-color: var(--color-border-hover);
+            background: var(--color-bg-card-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* ==================== FAQ SECTION ==================== */
+        .faq {
+            padding: var(--space-section) 0;
+            background: var(--color-bg-secondary);
+        }
+
+        .faq__list {
+            max-width: 750px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--color-border);
+            padding: var(--space-xl) 0;
+        }
+
+        .faq-item:first-child {
+            padding-top: 0;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .faq-item__question {
+            font-size: 1.125rem;
+            color: var(--color-text-primary);
+            margin-bottom: var(--space-sm);
+            font-weight: 600;
+        }
+
+        .faq-item__answer {
+            color: var(--color-text-secondary);
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        /* ==================== FINAL CTA SECTION ==================== */
+        .final-cta {
+            padding: var(--space-section) 0;
+            background: var(--color-bg-primary);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .final-cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(ellipse 100% 80% at 50% 50%, rgba(var(--color-primary-rgb), 0.2) 0%, transparent 60%),
+                radial-gradient(circle at 30% 70%, rgba(var(--color-primary-rgb), 0.1) 0%, transparent 30%),
+                radial-gradient(circle at 70% 30%, rgba(var(--color-primary-rgb), 0.08) 0%, transparent 30%);
+            pointer-events: none;
+        }
+
+        .final-cta::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(var(--color-primary-rgb), 0.15) 0%, transparent 70%);
+            animation: glow-pulse 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        .final-cta__content {
+            position: relative;
+            max-width: 700px;
+            margin: 0 auto;
+            z-index: 1;
+        }
+
+        .final-cta__headline {
+            margin-bottom: var(--space-lg);
+            font-size: clamp(2.25rem, 5vw, 3.5rem);
+        }
+
+        .final-cta__subhead {
+            color: var(--color-text-secondary);
+            font-size: 1.25rem;
+            margin-bottom: var(--space-xl);
+        }
+
+        /* ==================== FOOTER ==================== */
+        .footer {
+            padding: var(--space-2xl) 0;
+            background: var(--color-bg-secondary);
+            text-align: center;
+            border-top: 1px solid var(--color-border);
+        }
+
+        .footer__brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-text-primary);
+            margin-bottom: var(--space-md);
+        }
+
+        .footer__brand span {
+            color: var(--color-primary);
+        }
+
+        .footer__link {
+            display: inline-block;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-bottom: var(--space-lg);
+            transition: all var(--transition-default);
+        }
+
+        .footer__link:hover {
+            color: var(--color-primary-glow);
+        }
+
+        .footer__copyright {
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
+        }
+
+        /* ==================== ANIMATIONS ==================== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes glow-pulse {
+            0%, 100% {
+                box-shadow: 0 0 30px rgba(var(--color-primary-rgb), 0.3);
+            }
+            50% {
+                box-shadow: 0 0 50px rgba(var(--color-primary-rgb), 0.5);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .animate-glow {
+            animation: glow-pulse 3s ease-in-out infinite;
+        }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 768px) {
+            .hero {
+                padding: var(--space-3xl) 0;
+                min-height: auto;
+            }
+
+            .stats-bar {
+                gap: var(--space-xl);
+            }
+
+            .stat__number {
+                font-size: clamp(2rem, 8vw, 3rem);
+            }
+
+            .process__timeline::before {
+                left: 20px;
+            }
+
+            .phase {
+                padding-left: 64px;
+            }
+
+            .phase__marker {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+
+            .intelligence-feature {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .intelligence-feature__icon {
+                margin: 0 auto;
+            }
+
+            .deliverables__grid {
+                grid-template-columns: 1fr;
+            }
+
+            section {
+                padding: var(--space-3xl) 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 var(--space-md);
+            }
+
+            .btn-primary,
+            .btn-secondary {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .phase__header {
+                flex-direction: column;
+                gap: var(--space-xs);
+            }
+
+            .audience__tags {
+                flex-direction: column;
+            }
+
+            .audience-tag {
+                width: 100%;
+                text-align: center;
+            }
+
+            .stats-bar {
+                flex-direction: column;
+                gap: var(--space-lg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero" id="top">
+        <div class="container">
+            <div class="hero__content animate-fade-in-up">
+                <div class="hero__badge">
+                    <span class="badge">AI-Powered Quiz Funnels</span>
+                </div>
+                <h1 class="hero__headline">Quiz Funnels That <span class="text-gradient">Think for You</span></h1>
+                <p class="hero__subheadline">AI research finds your angles. Smart scoring segments every lead. Automated emails nurture 24/7. You get a complete system—strategy, copy, deployable quiz, and automated follow-up—in 10 days.</p>
+                <div class="hero__cta">
+                    <a href="https://cal.com/james-pinder-simpleflo/15-minute-chat" class="btn-primary animate-glow">Book Your Strategy Call</a>
+                    <p class="hero__cta-note">Free 15-minute consultation</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Bar -->
+    <div class="container">
+        <div class="stats-bar">
+            <div class="stat">
+                <div class="stat__number text-gradient">10</div>
+                <div class="stat__label">Days to Launch</div>
+            </div>
+            <div class="stat">
+                <div class="stat__number text-gradient">14</div>
+                <div class="stat__label">Email Sequences</div>
+            </div>
+            <div class="stat">
+                <div class="stat__number text-gradient">3</div>
+                <div class="stat__label">Lead Temperatures</div>
+            </div>
+            <div class="stat">
+                <div class="stat__number text-gradient">24/7</div>
+                <div class="stat__label">Automated Nurturing</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Problem Section -->
+    <section class="problem" id="problem">
+        <div class="container">
+            <div class="section-header">
+                <h2>Sound Familiar?</h2>
+            </div>
+            <div class="problem__grid">
+                <div class="problem-card">
+                    It's been 6 months. The lead magnet is still 'on the list.' Meanwhile, competitors are capturing every visitor you're losing.
+                </div>
+                <div class="problem-card">
+                    Every quiz builder gives you the same 20 templates. None of them know your market, your customers, or why people actually buy from you.
+                </div>
+                <div class="problem-card">
+                    Writing quiz copy means researching competitors, analyzing customer psychology, mapping pain points... who has 40+ hours for that?
+                </div>
+                <div class="problem-card">
+                    You captured 50 leads last month. How many got a follow-up within 24 hours? How many got the RIGHT follow-up?
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution" id="solution">
+        <div class="container">
+            <div class="section-header">
+                <h2>A Complete Lead Generation System.<br><span class="text-gradient">Researched, Built, and Automated.</span></h2>
+            </div>
+            <div class="solution__grid">
+                <div class="solution-card card">
+                    <div class="solution-card__icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    </div>
+                    <h3 class="solution-card__title">Deep Research</h3>
+                    <p class="solution-card__description">Competitor positioning, customer psychology, search intent analysis. We research first so your quiz speaks their language—because we've listened.</p>
+                </div>
+                <div class="solution-card card">
+                    <div class="solution-card__icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                    </div>
+                    <h3 class="solution-card__title">Intelligent Design</h3>
+                    <p class="solution-card__description">Questions engineered to surface buying intent. By the time someone finishes, you know: are they ready to buy today, considering options, or just browsing? Each gets a different path.</p>
+                </div>
+                <div class="solution-card card">
+                    <div class="solution-card__icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                    </div>
+                    <h3 class="solution-card__title">Automated Nurturing</h3>
+                    <p class="solution-card__description">14 emails, 3 distinct sequences. Hot leads get direct booking links. Warm leads get case studies. Cold leads get education. Zero manual work.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section class="process" id="process">
+        <div class="container">
+            <div class="section-header">
+                <h2>10 Days From Kickoff to Live Funnel</h2>
+                <p>A thorough process that delivers a complete system—not a rushed template job.</p>
+            </div>
+            <div class="process__timeline">
+                <div class="phase">
+                    <div class="phase__marker">1</div>
+                    <div class="phase__content">
+                        <div class="phase__header">
+                            <h3 class="phase__title">Discovery & Research</h3>
+                            <span class="phase__days">Days 1-3</span>
+                        </div>
+                        <ul class="phase__list">
+                            <li>Market analysis and competitor research</li>
+                            <li>Customer psychology and pain point mapping</li>
+                            <li>Keyword and search intent analysis</li>
+                            <li>Brand voice extraction</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="phase">
+                    <div class="phase__marker">2</div>
+                    <div class="phase__content">
+                        <div class="phase__header">
+                            <h3 class="phase__title">Strategy & Architecture</h3>
+                            <span class="phase__days">Days 4-5</span>
+                        </div>
+                        <ul class="phase__list">
+                            <li>Quiz flow design and question mapping</li>
+                            <li>Scoring model and lead segmentation logic</li>
+                            <li>Result profiles matched to your products/services</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="phase">
+                    <div class="phase__marker">3</div>
+                    <div class="phase__content">
+                        <div class="phase__header">
+                            <h3 class="phase__title">Copy & Creative</h3>
+                            <span class="phase__days">Days 6-8</span>
+                        </div>
+                        <ul class="phase__list">
+                            <li>Landing page copy</li>
+                            <li>Quiz questions and result pages</li>
+                            <li>Email sequences for each lead temperature</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="phase">
+                    <div class="phase__marker">4</div>
+                    <div class="phase__content">
+                        <div class="phase__header">
+                            <h3 class="phase__title">Build & Launch</h3>
+                            <span class="phase__days">Days 9-10</span>
+                        </div>
+                        <ul class="phase__list">
+                            <li>Deployable quiz application</li>
+                            <li>Analytics dashboard setup</li>
+                            <li>Automated nurturing connected</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Deliverables Section -->
+    <section class="deliverables" id="deliverables">
+        <div class="container">
+            <div class="section-header">
+                <h2>Everything You Need to Start Converting</h2>
+            </div>
+            <div class="deliverables__grid">
+                <div class="deliverable-card">
+                    <div class="deliverable-card__header">
+                        <div class="deliverable-card__icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                        </div>
+                        <h4 class="deliverable-card__title">Research & Strategy</h4>
+                    </div>
+                    <ul class="deliverable-card__list">
+                        <li>Complete market analysis report</li>
+                        <li>Customer segment profiles</li>
+                        <li>Competitive positioning insights</li>
+                    </ul>
+                </div>
+                <div class="deliverable-card">
+                    <div class="deliverable-card__header">
+                        <div class="deliverable-card__icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M16 11h6"/><path d="M19 8v6"/></svg>
+                        </div>
+                        <h4 class="deliverable-card__title">Quiz System</h4>
+                    </div>
+                    <ul class="deliverable-card__list">
+                        <li>Custom quiz with smart scoring</li>
+                        <li>Temperature-based lead routing</li>
+                        <li>Personalized result pages</li>
+                    </ul>
+                </div>
+                <div class="deliverable-card">
+                    <div class="deliverable-card__header">
+                        <div class="deliverable-card__icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                        </div>
+                        <h4 class="deliverable-card__title">Copy & Content</h4>
+                    </div>
+                    <ul class="deliverable-card__list">
+                        <li>High-converting landing page</li>
+                        <li>Email nurture sequences (14 emails)</li>
+                        <li>All quiz copy and CTAs</li>
+                    </ul>
+                </div>
+                <div class="deliverable-card">
+                    <div class="deliverable-card__header">
+                        <div class="deliverable-card__icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 7h.01"/><path d="M17 7h.01"/><path d="M7 17h.01"/><path d="M17 17h.01"/></svg>
+                        </div>
+                        <h4 class="deliverable-card__title">Technology</h4>
+                    </div>
+                    <ul class="deliverable-card__list">
+                        <li>Deployable quiz application</li>
+                        <li>Analytics dashboard</li>
+                        <li>Automated lead capture and routing</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Intelligence Section -->
+    <section class="intelligence" id="intelligence">
+        <div class="container">
+            <div class="section-header">
+                <h2>Powered by Research. <span class="text-gradient">Driven by Data.</span></h2>
+            </div>
+            <div class="intelligence__content">
+                <div class="intelligence__features">
+                    <div class="intelligence-feature">
+                        <div class="intelligence-feature__icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                        </div>
+                        <div class="intelligence-feature__content">
+                            <h4><span class="text-gradient">Research-First Architecture</span></h4>
+                            <p>We analyze 20+ data points before strategy begins: competitor quiz flows, keyword intent patterns, customer review language, social sentiment. Your quiz is built on evidence, not assumptions.</p>
+                        </div>
+                    </div>
+                    <div class="intelligence-feature">
+                        <div class="intelligence-feature__icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a8 8 0 0 0-8 8c0 1.892.402 3.13 1.5 4.5L12 22l6.5-7.5c1.098-1.37 1.5-2.608 1.5-4.5a8 8 0 0 0-8-8z"/><circle cx="12" cy="10" r="3"/></svg>
+                        </div>
+                        <div class="intelligence-feature__content">
+                            <h4><span class="text-gradient">Behavioral Scoring Engine</span></h4>
+                            <p>Questions aren't random. Each one is weighted based on buying signals specific to YOUR business. Someone who selects 'I need this solved this month' vs 'just exploring' gets a completely different experience.</p>
+                        </div>
+                    </div>
+                    <div class="intelligence-feature">
+                        <div class="intelligence-feature__icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M8 3H3v5"/><path d="M12 22v-8.3a4 4 0 0 0-1.172-2.872L3 3"/><path d="m15 9 6-6"/></svg>
+                        </div>
+                        <div class="intelligence-feature__content">
+                            <h4><span class="text-gradient">Temperature-Based Routing</span></h4>
+                            <p>Leads auto-sort into Hot (80-100), Warm (50-79), or Cold (0-49) buckets. Your sales team only sees high-intent leads. Your email system handles the rest.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nurturing Section -->
+    <section class="nurturing" id="nurturing">
+        <div class="container">
+            <div class="section-header">
+                <h2>Leads Nurtured Automatically. <span class="text-gradient">24/7.</span></h2>
+            </div>
+            <div class="nurturing__grid">
+                <div class="temperature-card temperature-card--hot">
+                    <div class="temperature-card__header">
+                        <span class="temperature-card__badge">Hot</span>
+                        <span class="temperature-card__score">Score: 80-100</span>
+                    </div>
+                    <h4 class="temperature-card__title">Ready to Buy</h4>
+                    <p class="temperature-card__description">Immediate booking prompts, direct CTAs, and fast-track sequences that capitalize on high intent.</p>
+                </div>
+                <div class="temperature-card temperature-card--warm">
+                    <div class="temperature-card__header">
+                        <span class="temperature-card__badge">Warm</span>
+                        <span class="temperature-card__score">Score: 50-79</span>
+                    </div>
+                    <h4 class="temperature-card__title">Considering Options</h4>
+                    <p class="temperature-card__description">Case studies, social proof, and consideration content that builds trust and moves them closer.</p>
+                </div>
+                <div class="temperature-card temperature-card--cold">
+                    <div class="temperature-card__header">
+                        <span class="temperature-card__badge">Cold</span>
+                        <span class="temperature-card__score">Score: 0-49</span>
+                    </div>
+                    <h4 class="temperature-card__title">Just Learning</h4>
+                    <p class="temperature-card__description">Educational sequences and problem-awareness content that nurtures them until they're ready.</p>
+                </div>
+            </div>
+            <p class="nurturing__tagline">"Every lead gets the right message at the right time—without you lifting a finger."</p>
+        </div>
+    </section>
+
+    <!-- Analytics Section -->
+    <section class="analytics" id="analytics">
+        <div class="container">
+            <div class="section-header">
+                <h2>See What's Working. <span class="text-gradient">In Real Time.</span></h2>
+            </div>
+            <div class="analytics__grid">
+                <div class="analytics-card">
+                    <div class="analytics-card__icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                    </div>
+                    <h4 class="analytics-card__title">Lead Flow Visualization</h4>
+                </div>
+                <div class="analytics-card">
+                    <div class="analytics-card__icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect width="4" height="7" x="7" y="10" rx="1"/><rect width="4" height="12" x="15" y="5" rx="1"/></svg>
+                    </div>
+                    <h4 class="analytics-card__title">Score Distribution</h4>
+                </div>
+                <div class="analytics-card">
+                    <div class="analytics-card__icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                    </div>
+                    <h4 class="analytics-card__title">Email Engagement</h4>
+                </div>
+                <div class="analytics-card">
+                    <div class="analytics-card__icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                    </div>
+                    <h4 class="analytics-card__title">Conversion Tracking</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Audience Section -->
+    <section class="audience" id="audience">
+        <div class="container">
+            <div class="section-header">
+                <h2>Built for Businesses Ready to Scale Lead Generation</h2>
+            </div>
+            <div class="audience__tags">
+                <span class="audience-tag">E-commerce Brands</span>
+                <span class="audience-tag">Coaches & Consultants</span>
+                <span class="audience-tag">Service-Based Businesses</span>
+                <span class="audience-tag">Course Creators</span>
+                <span class="audience-tag">Agencies</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq" id="faq">
+        <div class="container">
+            <div class="section-header">
+                <h2>Questions & Answers</h2>
+            </div>
+            <div class="faq__list">
+                <div class="faq-item">
+                    <h4 class="faq-item__question">How long does it take?</h4>
+                    <p class="faq-item__answer">10 days from kickoff to live funnel. This isn't a rushed template job—it's a thorough process that includes market research, custom copy, and a fully built system.</p>
+                </div>
+                <div class="faq-item">
+                    <h4 class="faq-item__question">What do I need to provide?</h4>
+                    <p class="faq-item__answer">Access to your website/products and a kickoff call. We handle the research, strategy, copy, and build. You approve.</p>
+                </div>
+                <div class="faq-item">
+                    <h4 class="faq-item__question">Can I customize the output?</h4>
+                    <p class="faq-item__answer">Absolutely. You own all source files. The quiz, landing page, and email sequences are yours to modify and deploy however you like.</p>
+                </div>
+                <div class="faq-item">
+                    <h4 class="faq-item__question">How does the automated nurturing work?</h4>
+                    <p class="faq-item__answer">Leads are automatically scored based on their quiz responses and routed into email sequences matched to their readiness level. Hot leads get direct CTAs. Cold leads get educational content.</p>
+                </div>
+                <div class="faq-item">
+                    <h4 class="faq-item__question">What platforms does this work with?</h4>
+                    <p class="faq-item__answer">The quiz deploys anywhere (it's a standalone web app). Email sequences export to any platform—Mailchimp, ConvertKit, ActiveCampaign, you name it.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA Section -->
+    <section class="final-cta" id="book">
+        <div class="container">
+            <div class="final-cta__content">
+                <h2 class="final-cta__headline">Stop Losing Leads to <span class="text-gradient">Slow Follow-Up</span></h2>
+                <p class="final-cta__subhead">Book a call to see if Quiz-to-Close is right for your business.</p>
+                <a href="https://cal.com/james-pinder-simpleflo/15-minute-chat" class="btn-primary animate-glow">Book Your Strategy Call</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__brand">Quiz<span>-to-</span>Close</div>
+            <a href="https://cal.com/james-pinder-simpleflo/15-minute-chat" class="footer__link">Book a Strategy Call</a>
+            <p class="footer__copyright">&copy; 2025 Quiz-to-Close. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

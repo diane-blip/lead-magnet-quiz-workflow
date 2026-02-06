@@ -1,0 +1,313 @@
+{
+  "vertical_id": "real-estate",
+  "vertical_name": "Dream Home Wishlist",
+  "description": "Interactive home preference builder for real estate agents and brokerages",
+
+  "builder_title": "Build Your Dream Home Wishlist",
+  "builder_tagline": "See your perfect home come to life in 60 seconds",
+
+  "preference_dimensions": {
+    "style": {
+      "label": "Home Style",
+      "description": "Overall architectural and interior aesthetic",
+      "selection_type": "card_selection",
+      "min_selections": 1,
+      "max_selections": 1,
+      "display_config": {
+        "card_size": "large",
+        "show_images": true,
+        "image_source": "glif_generated",
+        "columns": 2
+      },
+      "options": [
+        {
+          "id": "modern-luxury",
+          "label": "Modern Luxury",
+          "icon": "building",
+          "tags": ["modern", "luxury", "clean-lines", "contemporary"],
+          "glif_prompt_keywords": "modern luxury home, clean architectural lines, floor-to-ceiling windows, sleek finishes, open concept",
+          "graphic_elements": {
+            "palette": "monochrome-warm",
+            "mood": "sleek and sophisticated"
+          }
+        },
+        {
+          "id": "suburban-family",
+          "label": "Classic Family Home",
+          "icon": "home",
+          "tags": ["suburban", "family", "traditional", "spacious"],
+          "glif_prompt_keywords": "classic family home, large yard, front porch, traditional architecture, warm brick or siding",
+          "graphic_elements": {
+            "palette": "warm-neutral",
+            "mood": "warm and welcoming"
+          }
+        },
+        {
+          "id": "historic-charm",
+          "label": "Historic Charm",
+          "icon": "landmark",
+          "tags": ["historic", "character", "charm", "vintage"],
+          "glif_prompt_keywords": "historic home with character, original details, crown molding, hardwood floors, period architecture",
+          "graphic_elements": {
+            "palette": "rich-heritage",
+            "mood": "storied and elegant"
+          }
+        },
+        {
+          "id": "urban-loft",
+          "label": "Urban Loft",
+          "icon": "layout",
+          "tags": ["urban", "loft", "industrial", "city"],
+          "glif_prompt_keywords": "urban loft space, exposed brick, high ceilings, industrial windows, open floor plan, city views",
+          "graphic_elements": {
+            "palette": "charcoal-warm",
+            "mood": "edgy and creative"
+          }
+        },
+        {
+          "id": "waterfront",
+          "label": "Waterfront Living",
+          "icon": "waves",
+          "tags": ["waterfront", "coastal", "lakefront", "scenic"],
+          "glif_prompt_keywords": "waterfront property, panoramic water views, dock or deck, natural light, coastal architecture",
+          "graphic_elements": {
+            "palette": "coastal-blue",
+            "mood": "serene and expansive"
+          }
+        },
+        {
+          "id": "new-construction",
+          "label": "New Construction",
+          "icon": "hammer",
+          "tags": ["new-build", "modern", "smart-home", "energy-efficient"],
+          "glif_prompt_keywords": "new construction home, modern finishes, smart home features, energy-efficient design, clean landscaping",
+          "graphic_elements": {
+            "palette": "fresh-neutral",
+            "mood": "fresh and polished"
+          }
+        }
+      ]
+    },
+
+    "location_vibe": {
+      "label": "Your Neighborhood",
+      "description": "The setting and community feel you want",
+      "selection_type": "card_selection",
+      "min_selections": 1,
+      "max_selections": 1,
+      "display_config": {
+        "card_size": "medium",
+        "show_images": false,
+        "columns": 3
+      },
+      "options": [
+        {
+          "id": "walkable-downtown",
+          "label": "Walkable Downtown",
+          "icon": "map-pin",
+          "tags": ["urban", "walkable", "downtown"],
+          "location_vibe_description": "walkable urban neighborhood with cafes, shops, and nightlife nearby"
+        },
+        {
+          "id": "quiet-suburbs",
+          "label": "Quiet Suburbs",
+          "icon": "trees",
+          "tags": ["suburban", "quiet", "residential"],
+          "location_vibe_description": "quiet suburban neighborhood with tree-lined streets and good schools"
+        },
+        {
+          "id": "country-acreage",
+          "label": "Country Acreage",
+          "icon": "mountain",
+          "tags": ["rural", "acreage", "privacy"],
+          "location_vibe_description": "spacious rural property with land, privacy, and nature"
+        },
+        {
+          "id": "trendy-neighborhood",
+          "label": "Up-and-Coming",
+          "icon": "trending-up",
+          "tags": ["trendy", "emerging", "investment"],
+          "location_vibe_description": "trendy up-and-coming neighborhood with character and growth potential"
+        },
+        {
+          "id": "waterfront-community",
+          "label": "Waterfront Community",
+          "icon": "anchor",
+          "tags": ["waterfront", "coastal", "scenic"],
+          "location_vibe_description": "waterfront community with water access, marinas, and scenic views"
+        },
+        {
+          "id": "family-friendly",
+          "label": "Family-Friendly",
+          "icon": "users",
+          "tags": ["family", "safe", "schools"],
+          "location_vibe_description": "family-friendly neighborhood with parks, schools, and community events"
+        }
+      ]
+    },
+
+    "must_haves": {
+      "label": "Must-Have Features",
+      "description": "The features your dream home needs",
+      "selection_type": "chip_multi_select",
+      "min_selections": 1,
+      "max_selections": 5,
+      "display_config": {
+        "chip_style": "pill_with_icon",
+        "columns": 3,
+        "show_count": true
+      },
+      "options": [
+        { "id": "open-kitchen", "label": "Open Kitchen", "icon": "utensils", "tags": ["open-kitchen", "entertaining"], "visual_description": "spacious open-concept kitchen with island" },
+        { "id": "home-office", "label": "Home Office", "icon": "briefcase", "tags": ["home-office", "work-from-home"], "visual_description": "dedicated home office with natural light" },
+        { "id": "outdoor-space", "label": "Outdoor Living", "icon": "sun", "tags": ["outdoor", "patio", "deck"], "visual_description": "outdoor living space with patio or deck" },
+        { "id": "garage", "label": "2+ Car Garage", "icon": "car", "tags": ["garage", "parking"], "visual_description": "spacious two-car garage" },
+        { "id": "primary-suite", "label": "Primary Suite", "icon": "bed", "tags": ["primary-suite", "luxury"], "visual_description": "luxurious primary bedroom suite with ensuite bath" },
+        { "id": "pool", "label": "Pool", "icon": "droplets", "tags": ["pool", "outdoor", "luxury"], "visual_description": "backyard pool with surrounding landscaping" },
+        { "id": "smart-home", "label": "Smart Home", "icon": "wifi", "tags": ["smart-home", "technology"], "visual_description": "smart home technology with integrated controls" },
+        { "id": "walkout-basement", "label": "Finished Basement", "icon": "layers", "tags": ["basement", "extra-space"], "visual_description": "finished walkout basement with recreation area" },
+        { "id": "large-yard", "label": "Large Yard", "icon": "tree", "tags": ["yard", "outdoor", "family"], "visual_description": "expansive landscaped yard with mature trees" },
+        { "id": "gourmet-kitchen", "label": "Gourmet Kitchen", "icon": "chef-hat", "tags": ["gourmet-kitchen", "high-end"], "visual_description": "gourmet kitchen with professional-grade appliances" },
+        { "id": "natural-light", "label": "Natural Light", "icon": "sun", "tags": ["natural-light", "windows"], "visual_description": "abundant natural light through large windows" },
+        { "id": "fireplace", "label": "Fireplace", "icon": "flame", "tags": ["fireplace", "cozy"], "visual_description": "statement fireplace in living area" }
+      ]
+    },
+
+    "bedrooms": {
+      "label": "Bedrooms",
+      "description": "How much space you need",
+      "selection_type": "scale_selector",
+      "min_selections": 1,
+      "max_selections": 1,
+      "display_config": {
+        "show_labels": true,
+        "style": "segmented_bar"
+      },
+      "options": [
+        { "id": "beds-2", "label": "2 Bedrooms", "tags": ["small", "starter"], "atmosphere_description": "cozy two-bedroom home" },
+        { "id": "beds-3", "label": "3 Bedrooms", "tags": ["medium", "growing-family"], "atmosphere_description": "comfortable three-bedroom home" },
+        { "id": "beds-4", "label": "4 Bedrooms", "tags": ["large", "family"], "atmosphere_description": "spacious four-bedroom family home" },
+        { "id": "beds-5", "label": "5+ Bedrooms", "tags": ["estate", "luxury", "large-family"], "atmosphere_description": "expansive five-plus bedroom estate" }
+      ]
+    },
+
+    "budget": {
+      "label": "Investment Range",
+      "description": "This helps us match the right listings",
+      "selection_type": "scale_selector",
+      "min_selections": 1,
+      "max_selections": 1,
+      "display_config": {
+        "show_labels": true,
+        "style": "segmented_bar"
+      },
+      "options": [
+        { "id": "budget-starter", "label": "Under $300K", "tags": ["budget-starter"], "qualification_signal": "cool" },
+        { "id": "budget-mid", "label": "$300K - $500K", "tags": ["budget-mid"], "qualification_signal": "warm" },
+        { "id": "budget-upper", "label": "$500K - $750K", "tags": ["budget-upper"], "qualification_signal": "warm" },
+        { "id": "budget-premium", "label": "$750K - $1M", "tags": ["budget-premium"], "qualification_signal": "hot" },
+        { "id": "budget-luxury", "label": "$1M+", "tags": ["budget-luxury"], "qualification_signal": "hot" }
+      ]
+    },
+
+    "timeline": {
+      "label": "Move-In Timeline",
+      "description": "When are you looking to move?",
+      "selection_type": "card_selection",
+      "min_selections": 1,
+      "max_selections": 1,
+      "display_config": {
+        "card_size": "small",
+        "show_images": false,
+        "columns": 2
+      },
+      "options": [
+        { "id": "asap", "label": "ASAP", "icon": "zap", "tags": ["immediate", "urgent"], "qualification_signal": "hot" },
+        { "id": "3-months", "label": "Within 3 Months", "icon": "calendar", "tags": ["3-months", "active-search"], "qualification_signal": "hot" },
+        { "id": "6-months", "label": "3-6 Months", "icon": "calendar-days", "tags": ["6-months", "planning"], "qualification_signal": "warm" },
+        { "id": "next-year", "label": "Next Year", "icon": "calendar-plus", "tags": ["next-year", "early-planning"], "qualification_signal": "warm" },
+        { "id": "just-looking", "label": "Just Looking", "icon": "eye", "tags": ["browsing", "exploring"], "qualification_signal": "cool" }
+      ]
+    }
+  },
+
+  "default_selection_flow": [
+    { "step": 1, "dimension": "style", "type": "card_selection" },
+    { "step": 2, "dimension": "location_vibe", "type": "card_selection" },
+    { "step": 3, "dimension": "bedrooms", "type": "scale_selector" },
+    { "step": 4, "dimension": "must_haves", "type": "chip_multi_select" },
+    { "step": 5, "dimension": "budget", "type": "scale_selector" },
+    { "step": 6, "dimension": "timeline", "type": "card_selection" }
+  ],
+
+  "default_profiles": [
+    {
+      "profile_id": "the-minimalist",
+      "profile_name": "The Minimalist",
+      "trigger_tags": ["modern", "clean-lines", "urban", "loft", "smart-home", "natural-light"],
+      "match_threshold": 0.5,
+      "description": "Clean lines, open spaces, and intentional design. Your dream home is proof that less really is more. Every element earns its place.",
+      "share_text": "I'm The Minimalist! Clean lines, open spaces, every detail intentional. Build your Dream Home Wishlist:",
+      "graphic_mood": "minimal, clean, modern architecture, open spaces with natural light and neutral tones"
+    },
+    {
+      "profile_id": "the-nester",
+      "profile_name": "The Nester",
+      "trigger_tags": ["family", "suburban", "spacious", "yard", "family-friendly", "safe", "schools"],
+      "match_threshold": 0.5,
+      "description": "Home is where the heart is, and yours is big. You want a place where memories are made, kids can play, and everyone has room to grow.",
+      "share_text": "I'm The Nester! Big yard, cozy spaces, and room for everyone. Build your Dream Home Wishlist:",
+      "graphic_mood": "warm, family-friendly, spacious rooms with cozy details, large yard with swing set"
+    },
+    {
+      "profile_id": "the-entertainer",
+      "profile_name": "The Entertainer",
+      "trigger_tags": ["open-kitchen", "outdoor", "pool", "gourmet-kitchen", "entertaining", "luxury"],
+      "match_threshold": 0.5,
+      "description": "Your home is where the party happens. An open kitchen for cooking with friends, outdoor space for gatherings, and every detail designed for hosting.",
+      "share_text": "I'm The Entertainer! Gourmet kitchen, pool, outdoor living. My home is the gathering place. Build your Dream Home Wishlist:",
+      "graphic_mood": "inviting, social, open-concept kitchen flowing to outdoor entertaining area with pool"
+    },
+    {
+      "profile_id": "the-urbanite",
+      "profile_name": "The Urbanite",
+      "trigger_tags": ["urban", "walkable", "downtown", "trendy", "city", "loft"],
+      "match_threshold": 0.5,
+      "description": "You want to be where the action is. Walkable streets, great restaurants, cultural experiences. Your home is your launchpad to city life.",
+      "share_text": "I'm The Urbanite! Walkable streets, city vibes, culture on my doorstep. Build your Dream Home Wishlist:",
+      "graphic_mood": "urban, energetic, city views from stylish loft or condo, vibrant neighborhood"
+    },
+    {
+      "profile_id": "the-retreater",
+      "profile_name": "The Retreater",
+      "trigger_tags": ["waterfront", "rural", "privacy", "scenic", "acreage", "fireplace"],
+      "match_threshold": 0.5,
+      "description": "Peace, quiet, and a view that never gets old. Your dream home is a sanctuary. Water, trees, or open sky. Room to breathe.",
+      "share_text": "I'm The Retreater! Waterfront views, wide open spaces, total tranquility. Build your Dream Home Wishlist:",
+      "graphic_mood": "serene, waterfront or rural, panoramic nature views, peaceful private setting"
+    }
+  ],
+
+  "qualification_signals": {
+    "urgency": {
+      "hot": ["immediate", "urgent", "active-search"],
+      "warm": ["3-months", "6-months", "planning"],
+      "cool": ["browsing", "exploring", "next-year"]
+    },
+    "budget_fit": {
+      "hot": ["budget-premium", "budget-luxury"],
+      "warm": ["budget-mid", "budget-upper"],
+      "cool": ["budget-starter"]
+    },
+    "composite_formula": "urgency * 0.6 + budget_fit * 0.4"
+  },
+
+  "graphic_prompt_template": "Pinterest-style dream home mood board collage, editorial interior photography.\nStyle: {style_label} home aesthetic, {style_glif_keywords}.\nLocation vibe: {location_vibe_description}.\nMust-have features visualized: {must_haves_visual_descriptions}.\n{bedrooms_atmosphere} with {bedrooms_label}.\nAspirational, shareable, real estate magazine quality.\nWarm natural lighting, inviting atmosphere.\nNo text overlays, purely visual.\nUltra-detailed, architectural photography, 8K.",
+
+  "email_sequence_angle": {
+    "welcome": "Deliver wishlist graphic + introduce agent's portfolio matches",
+    "inspiration": "Neighborhood spotlights + listings that match their style",
+    "consultation": "Market insights + soft buyer consultation ask",
+    "winback": "New listings alert + seasonal market update"
+  }
+}

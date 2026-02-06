@@ -1,0 +1,283 @@
+{
+  "vertical_id": "contractor",
+  "vertical_name": "Renovation Vision Board",
+  "description": "Interactive renovation preference builder for contractors and remodeling companies",
+
+  "builder_title": "Design Your Dream Renovation",
+  "builder_tagline": "See your renovation vision come to life in 60 seconds",
+
+  "preference_dimensions": {
+    "project_type": {
+      "label": "Project Type",
+      "description": "What kind of renovation are you planning?",
+      "selection_type": "card_selection",
+      "min_selections": 1,
+      "max_selections": 1,
+      "display_config": {
+        "card_size": "large",
+        "show_images": true,
+        "image_source": "glif_generated",
+        "columns": 2
+      },
+      "options": [
+        {
+          "id": "kitchen-remodel",
+          "label": "Kitchen Remodel",
+          "icon": "utensils",
+          "tags": ["kitchen", "remodel", "cooking"],
+          "glif_prompt_keywords": "modern kitchen renovation, quartz countertops, custom cabinetry, pendant lighting, stainless appliances",
+          "graphic_elements": {
+            "palette": "warm-white",
+            "mood": "functional and beautiful"
+          }
+        },
+        {
+          "id": "bathroom-renovation",
+          "label": "Bathroom Renovation",
+          "icon": "bath",
+          "tags": ["bathroom", "renovation", "spa"],
+          "glif_prompt_keywords": "luxury bathroom renovation, walk-in shower, freestanding tub, marble tile, modern vanity",
+          "graphic_elements": {
+            "palette": "spa-neutral",
+            "mood": "serene and luxurious"
+          }
+        },
+        {
+          "id": "whole-home",
+          "label": "Whole Home Renovation",
+          "icon": "home",
+          "tags": ["whole-home", "comprehensive", "full-renovation"],
+          "glif_prompt_keywords": "complete home renovation, open floor plan, modern finishes throughout, cohesive design, bright and airy",
+          "graphic_elements": {
+            "palette": "cohesive-neutral",
+            "mood": "transformed and cohesive"
+          }
+        },
+        {
+          "id": "addition",
+          "label": "Room Addition",
+          "icon": "plus-square",
+          "tags": ["addition", "expansion", "extra-space"],
+          "glif_prompt_keywords": "home addition, seamless architectural integration, new living space, natural light, matching exterior",
+          "graphic_elements": {
+            "palette": "fresh-neutral",
+            "mood": "expanded and seamless"
+          }
+        },
+        {
+          "id": "outdoor-living",
+          "label": "Outdoor Living Space",
+          "icon": "sun",
+          "tags": ["outdoor", "deck", "patio", "landscape"],
+          "glif_prompt_keywords": "outdoor living renovation, covered patio, outdoor kitchen, fire pit, landscaping, composite decking",
+          "graphic_elements": {
+            "palette": "earth-green",
+            "mood": "relaxing and natural"
+          }
+        },
+        {
+          "id": "basement-finish",
+          "label": "Basement Finish",
+          "icon": "layers",
+          "tags": ["basement", "finish", "recreation"],
+          "glif_prompt_keywords": "finished basement, home theater, bar area, rec room, modern lighting, cozy carpet",
+          "graphic_elements": {
+            "palette": "warm-dark",
+            "mood": "cozy and entertainment-ready"
+          }
+        }
+      ]
+    },
+
+    "design_style": {
+      "label": "Design Style",
+      "description": "The overall look and feel you want",
+      "selection_type": "card_selection",
+      "min_selections": 1,
+      "max_selections": 1,
+      "display_config": {
+        "card_size": "medium",
+        "show_images": false,
+        "columns": 3
+      },
+      "options": [
+        {
+          "id": "contemporary",
+          "label": "Contemporary",
+          "icon": "layout",
+          "tags": ["contemporary", "modern", "clean"],
+          "style_keywords": "clean lines, minimalist, contemporary fixtures, neutral palette with bold accents"
+        },
+        {
+          "id": "farmhouse",
+          "label": "Modern Farmhouse",
+          "icon": "home",
+          "tags": ["farmhouse", "rustic", "warm"],
+          "style_keywords": "shiplap accents, barn doors, warm wood tones, farmhouse sink, black hardware"
+        },
+        {
+          "id": "transitional",
+          "label": "Transitional",
+          "icon": "sliders",
+          "tags": ["transitional", "balanced", "timeless"],
+          "style_keywords": "blend of traditional and contemporary, neutral palette, classic shapes with modern materials"
+        },
+        {
+          "id": "industrial",
+          "label": "Industrial",
+          "icon": "settings",
+          "tags": ["industrial", "urban", "raw"],
+          "style_keywords": "exposed elements, metal and wood, concrete finishes, Edison bulbs, open shelving"
+        },
+        {
+          "id": "coastal",
+          "label": "Coastal",
+          "icon": "waves",
+          "tags": ["coastal", "relaxed", "beachy"],
+          "style_keywords": "light and airy, blue and white palette, natural textures, shiplap, beadboard"
+        },
+        {
+          "id": "traditional",
+          "label": "Traditional",
+          "icon": "bookmark",
+          "tags": ["traditional", "classic", "elegant"],
+          "style_keywords": "crown molding, raised panel doors, marble or granite, rich wood tones, ornate fixtures"
+        }
+      ]
+    },
+
+    "must_haves": {
+      "label": "Must-Have Features",
+      "description": "The details that matter most to you",
+      "selection_type": "chip_multi_select",
+      "min_selections": 1,
+      "max_selections": 5,
+      "display_config": {
+        "chip_style": "pill_with_icon",
+        "columns": 3,
+        "show_count": true
+      },
+      "options": [
+        { "id": "custom-cabinets", "label": "Custom Cabinetry", "icon": "archive", "tags": ["custom-cabinets", "storage"], "visual_description": "custom built cabinetry with soft-close drawers" },
+        { "id": "quartz-counters", "label": "Quartz Countertops", "icon": "gem", "tags": ["quartz", "countertops", "high-end"], "visual_description": "polished quartz countertop surfaces" },
+        { "id": "hardwood-floors", "label": "Hardwood Floors", "icon": "layers", "tags": ["hardwood", "flooring"], "visual_description": "wide-plank hardwood flooring" },
+        { "id": "walk-in-shower", "label": "Walk-In Shower", "icon": "droplets", "tags": ["walk-in-shower", "spa"], "visual_description": "spacious walk-in shower with rainfall showerhead" },
+        { "id": "open-concept", "label": "Open Concept", "icon": "maximize", "tags": ["open-concept", "flow"], "visual_description": "open concept living with kitchen flowing to dining" },
+        { "id": "built-in-storage", "label": "Built-In Storage", "icon": "grid", "tags": ["built-in", "organization"], "visual_description": "custom built-in shelving and storage solutions" },
+        { "id": "energy-efficient", "label": "Energy Efficient", "icon": "leaf", "tags": ["energy-efficient", "green"], "visual_description": "energy-efficient windows and insulation" },
+        { "id": "lighting-design", "label": "Lighting Design", "icon": "lightbulb", "tags": ["lighting", "ambiance"], "visual_description": "layered lighting design with recessed and pendant lights" },
+        { "id": "tile-work", "label": "Custom Tile Work", "icon": "grid-3x3", "tags": ["tile", "custom", "backsplash"], "visual_description": "custom tile backsplash and accent walls" },
+        { "id": "outdoor-kitchen", "label": "Outdoor Kitchen", "icon": "flame", "tags": ["outdoor-kitchen", "grilling"], "visual_description": "outdoor kitchen with built-in grill and counters" }
+      ]
+    },
+
+    "budget": {
+      "label": "Investment Range",
+      "description": "This helps us match the right approach",
+      "selection_type": "scale_selector",
+      "min_selections": 1,
+      "max_selections": 1,
+      "display_config": {
+        "show_labels": true,
+        "style": "segmented_bar"
+      },
+      "options": [
+        { "id": "budget-refresh", "label": "Under $25K", "tags": ["budget-refresh"], "qualification_signal": "cool" },
+        { "id": "budget-mid", "label": "$25K - $50K", "tags": ["budget-mid"], "qualification_signal": "warm" },
+        { "id": "budget-upper", "label": "$50K - $100K", "tags": ["budget-upper"], "qualification_signal": "warm" },
+        { "id": "budget-premium", "label": "$100K - $200K", "tags": ["budget-premium"], "qualification_signal": "hot" },
+        { "id": "budget-luxury", "label": "$200K+", "tags": ["budget-luxury"], "qualification_signal": "hot" }
+      ]
+    },
+
+    "timeline": {
+      "label": "Project Timeline",
+      "description": "When do you want to start?",
+      "selection_type": "card_selection",
+      "min_selections": 1,
+      "max_selections": 1,
+      "display_config": {
+        "card_size": "small",
+        "show_images": false,
+        "columns": 2
+      },
+      "options": [
+        { "id": "ready-now", "label": "Ready to Start", "icon": "zap", "tags": ["ready-now", "immediate"], "qualification_signal": "hot" },
+        { "id": "1-3-months", "label": "1-3 Months", "icon": "calendar", "tags": ["1-3-months", "planning"], "qualification_signal": "hot" },
+        { "id": "3-6-months", "label": "3-6 Months", "icon": "calendar-days", "tags": ["3-6-months", "researching"], "qualification_signal": "warm" },
+        { "id": "next-year", "label": "Next Year", "icon": "calendar-plus", "tags": ["next-year", "future"], "qualification_signal": "warm" },
+        { "id": "just-ideas", "label": "Just Getting Ideas", "icon": "lightbulb", "tags": ["just-ideas", "exploring"], "qualification_signal": "cool" }
+      ]
+    }
+  },
+
+  "default_selection_flow": [
+    { "step": 1, "dimension": "project_type", "type": "card_selection" },
+    { "step": 2, "dimension": "design_style", "type": "card_selection" },
+    { "step": 3, "dimension": "must_haves", "type": "chip_multi_select" },
+    { "step": 4, "dimension": "budget", "type": "scale_selector" },
+    { "step": 5, "dimension": "timeline", "type": "card_selection" }
+  ],
+
+  "default_profiles": [
+    {
+      "profile_id": "the-modernizer",
+      "profile_name": "The Modernizer",
+      "trigger_tags": ["contemporary", "modern", "clean", "open-concept", "lighting", "smart-home"],
+      "match_threshold": 0.5,
+      "description": "Out with the old, in with the now. You want clean lines, smart features, and a space that feels like it belongs in a design magazine.",
+      "share_text": "I'm The Modernizer! Clean lines, open concept, and a total transformation. Design your Dream Renovation:",
+      "graphic_mood": "contemporary, sleek, before-and-after transformation, clean modern finishes"
+    },
+    {
+      "profile_id": "the-craftsman",
+      "profile_name": "The Craftsman",
+      "trigger_tags": ["custom-cabinets", "hardwood", "tile", "traditional", "classic", "built-in"],
+      "match_threshold": 0.5,
+      "description": "Quality over everything. Custom cabinetry, hardwood floors, handcrafted tile. You appreciate the details that set a home apart.",
+      "share_text": "I'm The Craftsman! Custom details, quality materials, built to last. Design your Dream Renovation:",
+      "graphic_mood": "detailed craftsmanship, custom woodwork, artisan tile, rich materials and textures"
+    },
+    {
+      "profile_id": "the-host",
+      "profile_name": "The Host",
+      "trigger_tags": ["kitchen", "open-concept", "outdoor-kitchen", "entertaining", "gourmet-kitchen"],
+      "match_threshold": 0.5,
+      "description": "Your home is where everyone gathers. A kitchen made for cooking together, outdoor space for summer dinners, and flow that makes hosting effortless.",
+      "share_text": "I'm The Host! Dream kitchen, outdoor dining, a home made for gathering. Design your Dream Renovation:",
+      "graphic_mood": "open kitchen, outdoor entertaining space, gathering-ready, warm and inviting"
+    },
+    {
+      "profile_id": "the-sanctuary-seeker",
+      "profile_name": "The Sanctuary Seeker",
+      "trigger_tags": ["bathroom", "spa", "walk-in-shower", "energy-efficient", "coastal", "relaxed"],
+      "match_threshold": 0.5,
+      "description": "Your home should feel like a retreat. Spa bathrooms, natural materials, and spaces designed for rest and renewal.",
+      "share_text": "I'm The Sanctuary Seeker! Spa bathroom, natural materials, pure relaxation. Design your Dream Renovation:",
+      "graphic_mood": "spa-like, serene, natural materials, freestanding tub, rainfall shower, soft lighting"
+    }
+  ],
+
+  "qualification_signals": {
+    "urgency": {
+      "hot": ["ready-now", "immediate", "1-3-months"],
+      "warm": ["3-6-months", "planning", "researching"],
+      "cool": ["just-ideas", "exploring", "next-year"]
+    },
+    "budget_fit": {
+      "hot": ["budget-premium", "budget-luxury"],
+      "warm": ["budget-mid", "budget-upper"],
+      "cool": ["budget-refresh"]
+    },
+    "composite_formula": "urgency * 0.6 + budget_fit * 0.4"
+  },
+
+  "graphic_prompt_template": "Professional renovation mood board, before-and-after editorial quality.\nProject: {project_type_label}, {project_type_glif_keywords}.\nDesign style: {design_style_label}, {design_style_keywords}.\nKey elements: {must_haves_visual_descriptions}.\n{budget_level} quality finishes and materials.\nProfessional contractor portfolio style.\nBright natural lighting showcasing craftsmanship.\nNo text overlays, purely visual mood board.\nUltra-detailed, architectural photography, 8K.",
+
+  "email_sequence_angle": {
+    "welcome": "Deliver renovation vision board + introduce contractor's portfolio matches",
+    "inspiration": "Before-and-after showcases + material spotlights + design tips",
+    "consultation": "Project timeline education + soft estimate consultation ask",
+    "winback": "Seasonal renovation tips + new project showcase"
+  }
+}

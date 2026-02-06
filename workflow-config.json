@@ -1,0 +1,14 @@
+{
+  "github_username": "YOUR_GITHUB_USERNAME",
+  "notion_database_id": "YOUR_NOTION_DATABASE_ID",
+  "paths": {
+    "output_directory": "./output",
+    "remotion_workspace": "./remotion"
+  },
+  "pricing": {
+    "quiz_build": 3497,
+    "vision_board_build": 2997,
+    "bundle": 5497,
+    "currency": "USD"
+  }
+}

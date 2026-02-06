@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interact Gives You a Quiz. We Give You a System That Converts.</title>
+    <meta name="description" content="Complete quiz funnel system with landing page, 14 email sequences, automation, analytics, and deployment. Generated in 7 days for $2,497.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ==================== VARIABLES ==================== */
+        :root {
+            /* Colors */
+            --color-primary: #0cc0df;
+            --color-primary-dark: #0a9bb5;
+            --color-primary-light: #3dd4f0;
+            --color-primary-rgb: 12, 192, 223;
+
+            /* Neutrals */
+            --color-bg-primary: #0a0a0f;
+            --color-bg-secondary: #0f0f16;
+            --color-bg-tertiary: #14141d;
+            --color-bg-card: rgba(255, 255, 255, 0.03);
+            --color-bg-card-hover: rgba(255, 255, 255, 0.06);
+
+            --color-text-primary: #ffffff;
+            --color-text-secondary: rgba(255, 255, 255, 0.7);
+            --color-text-muted: rgba(255, 255, 255, 0.5);
+
+            --color-border: rgba(255, 255, 255, 0.08);
+            --color-border-hover: rgba(12, 192, 223, 0.4);
+
+            /* Accent Colors */
+            --color-success: #22c55e;
+            --color-warning: #f59e0b;
+            --color-danger: #f5576c;
+
+            /* Typography */
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-display: 'Space Grotesk', var(--font-primary);
+
+            /* Spacing */
+            --space-xs: 8px;
+            --space-sm: 16px;
+            --space-md: 24px;
+            --space-lg: 32px;
+            --space-xl: 48px;
+            --space-2xl: 80px;
+            --space-3xl: 120px;
+            --space-section: 120px;
+
+            /* Layout */
+            --max-width: 900px;
+
+            /* Borders */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+        }
+
+        /* ==================== RESET ==================== */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            background-color: var(--color-bg-primary);
+            color: var(--color-text-secondary);
+            line-height: 1.7;
+            font-size: 1.0625rem;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: var(--space-md);
+        }
+
+        /* ==================== TYPOGRAPHY ==================== */
+        h1, h2, h3, h4 {
+            font-family: var(--font-display);
+            color: var(--color-text-primary);
+            line-height: 1.2;
+            font-weight: 700;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: var(--space-lg);
+        }
+
+        h2 {
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            margin-bottom: var(--space-lg);
+            color: var(--color-primary);
+        }
+
+        h3 {
+            font-size: clamp(1.3rem, 3vw, 1.8rem);
+            margin: var(--space-xl) 0 var(--space-md) 0;
+            color: var(--color-text-primary);
+        }
+
+        h4 {
+            font-size: 1.2rem;
+            color: var(--color-primary-light);
+            margin-bottom: var(--space-sm);
+        }
+
+        p {
+            font-size: 1.0625rem;
+            margin-bottom: var(--space-md);
+        }
+
+        strong {
+            color: var(--color-text-primary);
+            font-weight: 600;
+        }
+
+        /* ==================== HERO SECTION ==================== */
+        .hero {
+            text-align: center;
+            padding: var(--space-section) var(--space-md) var(--space-3xl);
+            background:
+                radial-gradient(ellipse 80% 50% at 50% 0%,
+                                rgba(var(--color-primary-rgb), 0.2) 0%,
+                                transparent 50%),
+                radial-gradient(ellipse 60% 40% at 80% 100%,
+                                rgba(var(--color-primary-rgb), 0.12) 0%,
+                                transparent 50%),
+                radial-gradient(circle at 20% 50%,
+                                rgba(var(--color-primary-rgb), 0.05) 0%,
+                                transparent 25%),
+                var(--color-bg-secondary);
+            border-radius: var(--radius-xl);
+            margin-bottom: var(--space-3xl);
+            border: 1px solid var(--color-border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
+            mask-image: radial-gradient(ellipse 60% 60% at 50% 50%,
+                                       black 20%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .hero h1 {
+            position: relative;
+            z-index: 1;
+            color: var(--color-text-primary);
+            line-height: 1.3;
+        }
+
+        .hero h1 .headline-light {
+            display: block;
+            font-weight: 400;
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-md);
+        }
+
+        .hero h1 .headline-heavy {
+            display: block;
+            font-weight: 800;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            color: var(--color-text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        .underline-accent {
+            text-decoration: underline;
+            text-decoration-color: var(--color-primary);
+            text-decoration-thickness: 2px;
+            text-underline-offset: 4px;
+        }
+
+        .subheadline {
+            font-size: 1.25rem;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-xl);
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-cta {
+            display: inline-block;
+            background: var(--color-primary);
+            color: var(--color-bg-primary);
+            padding: var(--space-md) var(--space-xl);
+            border-radius: 9999px;
+            text-decoration: none;
+            font-size: 1.125rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 30px rgba(var(--color-primary-rgb), 0.3);
+            position: relative;
+            z-index: 1;
+            animation: glow-pulse 2s ease-in-out infinite;
+        }
+
+        .hero-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 60px rgba(var(--color-primary-rgb), 0.6);
+            background: var(--color-primary-light);
+            animation: none;
+        }
+
+        .trust-signals {
+            margin-top: var(--space-lg);
+            color: var(--color-text-muted);
+            font-size: 0.9375rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ==================== SECTIONS ==================== */
+        section {
+            background:
+                radial-gradient(ellipse 60% 40% at 30% 0%,
+                                rgba(var(--color-primary-rgb), 0.06) 0%,
+                                transparent 50%),
+                var(--color-bg-card);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-section) var(--space-xl);
+            margin-bottom: var(--space-2xl);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* ==================== PROBLEM LIST ==================== */
+        .problem-list {
+            background: rgba(0, 0, 0, 0.4);
+            border-left: 4px solid var(--color-danger);
+            padding: var(--space-xl) var(--space-xl) var(--space-xl) calc(var(--space-xl) + var(--space-lg));
+            margin: var(--space-lg) 0;
+            border-radius: var(--radius-sm);
+            position: relative;
+        }
+
+        .problem-list::before {
+            content: '"';
+            position: absolute;
+            top: var(--space-lg);
+            left: var(--space-lg);
+            font-size: 4rem;
+            color: var(--color-danger);
+            opacity: 0.15;
+            line-height: 1;
+            font-family: var(--font-display);
+            font-weight: 700;
+        }
+
+        .problem-list ul {
+            list-style: none;
+        }
+
+        .problem-list li {
+            font-size: 1.0625rem;
+            margin-bottom: var(--space-md);
+            color: var(--color-text-secondary);
+            padding-left: var(--space-md);
+            position: relative;
+        }
+
+        .problem-list li::before {
+            content: "✗";
+            position: absolute;
+            left: 0;
+            color: var(--color-danger);
+            font-weight: 700;
+        }
+
+        /* ==================== MATH BOX ==================== */
+        .math-box {
+            background: rgba(245, 158, 11, 0.1);
+            border: 2px solid rgba(245, 158, 11, 0.3);
+            border-radius: var(--radius-md);
+            padding: var(--space-xl);
+            margin: var(--space-lg) 0;
+            text-align: center;
+        }
+
+        .math-box .total {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--color-warning);
+            margin-top: var(--space-md);
+        }
+
+        /* ==================== COMPARISON TABLE ==================== */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--space-lg) 0;
+            background: var(--color-bg-secondary);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+        }
+
+        th {
+            background: rgba(var(--color-primary-rgb), 0.15);
+            color: var(--color-text-primary);
+            padding: var(--space-md);
+            text-align: left;
+            font-weight: 600;
+        }
+
+        th.highlight {
+            background: rgba(var(--color-primary-rgb), 0.3);
+        }
+
+        td {
+            padding: var(--space-md);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        tr:hover {
+            background: var(--color-bg-card-hover);
+        }
+
+        .checkmark {
+            color: var(--color-success);
+            font-weight: 700;
+        }
+
+        .crossmark {
+            color: var(--color-danger);
+            font-weight: 700;
+        }
+
+        /* ==================== FEATURE GRID ==================== */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-xl);
+            margin: var(--space-2xl) 0;
+        }
+
+        .feature-box {
+            background: rgba(var(--color-primary-rgb), 0.08);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(var(--color-primary-rgb), 0.2);
+            border-radius: var(--radius-md);
+            padding: var(--space-xl);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .feature-box:nth-child(1) { animation-delay: 0.1s; }
+        .feature-box:nth-child(2) { animation-delay: 0.15s; }
+        .feature-box:nth-child(3) { animation-delay: 0.2s; }
+        .feature-box:nth-child(4) { animation-delay: 0.25s; }
+        .feature-box:nth-child(5) { animation-delay: 0.3s; }
+        .feature-box:nth-child(6) { animation-delay: 0.35s; }
+        .feature-box:nth-child(7) { animation-delay: 0.4s; }
+        .feature-box:nth-child(8) { animation-delay: 0.45s; }
+
+        .feature-box:hover {
+            background: rgba(var(--color-primary-rgb), 0.12);
+            border-color: var(--color-border-hover);
+            transform: translateY(-6px);
+            box-shadow:
+                0 20px 40px rgba(0, 0, 0, 0.3),
+                0 0 30px rgba(var(--color-primary-rgb), 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-box h4 {
+            margin-bottom: var(--space-sm);
+        }
+
+        .feature-box p {
+            font-size: 1rem;
+            color: var(--color-text-secondary);
+            margin-bottom: 0;
+        }
+
+        .feature-box code {
+            background: var(--color-bg-tertiary);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            color: var(--color-primary-light);
+        }
+
+        /* ==================== PROCESS STEPS ==================== */
+        .process-steps {
+            counter-reset: step;
+        }
+
+        .step {
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 4px solid var(--color-primary);
+            padding: var(--space-lg) var(--space-xl);
+            margin: var(--space-md) 0;
+            border-radius: var(--radius-sm);
+            position: relative;
+        }
+
+        .step::before {
+            counter-increment: step;
+            content: counter(step);
+            position: absolute;
+            left: -20px;
+            top: var(--space-md);
+            background: var(--color-bg-primary);
+            color: var(--color-primary);
+            width: 56px;
+            height: 56px;
+            border: 3px solid var(--color-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.25rem;
+            box-shadow:
+                0 0 30px rgba(var(--color-primary-rgb), 0.4),
+                0 0 60px rgba(var(--color-primary-rgb), 0.2);
+        }
+
+        .step h4 {
+            margin-bottom: var(--space-sm);
+        }
+
+        .step p {
+            color: var(--color-text-secondary);
+            margin-bottom: 0;
+        }
+
+        /* ==================== TESTIMONIAL (unused but keeping structure) ==================== */
+        .testimonial {
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 4px solid var(--color-success);
+            padding: var(--space-lg) var(--space-xl);
+            margin: var(--space-lg) 0;
+            border-radius: var(--radius-sm);
+            font-style: italic;
+        }
+
+        .testimonial-text {
+            font-size: 1.0625rem;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-md);
+        }
+
+        .testimonial-author {
+            font-size: 0.9375rem;
+            color: var(--color-text-muted);
+            font-style: normal;
+        }
+
+        /* ==================== PRICING BOX ==================== */
+        .pricing-box {
+            background: linear-gradient(135deg, rgba(var(--color-primary-rgb), 0.15) 0%, rgba(var(--color-primary-rgb), 0.05) 100%);
+            border: 2px solid rgba(var(--color-primary-rgb), 0.3);
+            border-radius: var(--radius-xl);
+            padding: var(--space-2xl);
+            text-align: center;
+            margin: var(--space-xl) 0;
+        }
+
+        .price {
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: var(--space-md) 0;
+        }
+
+        .price-subtext {
+            font-size: 1.0625rem;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-lg);
+        }
+
+        .value-stack {
+            text-align: left;
+            margin: var(--space-xl) 0;
+        }
+
+        .value-item {
+            display: flex;
+            align-items: center;
+            margin: var(--space-md) 0;
+            font-size: 1.0625rem;
+        }
+
+        .value-item::before {
+            content: "✓";
+            color: var(--color-success);
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin-right: var(--space-md);
+        }
+
+        /* ==================== FAQ ==================== */
+        .faq-item {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: var(--space-lg) var(--space-xl);
+            margin: var(--space-md) 0;
+        }
+
+        .faq-question {
+            color: var(--color-primary-light);
+            font-weight: 600;
+            font-size: 1.125rem;
+            margin-bottom: var(--space-sm);
+        }
+
+        .faq-answer {
+            color: var(--color-text-secondary);
+            font-size: 1rem;
+        }
+
+        /* ==================== FINAL CTA ==================== */
+        .final-cta {
+            text-align: center;
+            padding: var(--space-2xl) var(--space-xl);
+            background: linear-gradient(135deg, rgba(var(--color-primary-rgb), 0.15) 0%, rgba(var(--color-primary-rgb), 0.05) 100%);
+            border-radius: var(--radius-xl);
+            border: 2px solid rgba(var(--color-primary-rgb), 0.3);
+        }
+
+        .final-cta h2 {
+            margin-bottom: var(--space-md);
+        }
+
+        .final-cta p {
+            font-size: 1.125rem;
+            margin-bottom: var(--space-xl);
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--color-primary);
+            color: var(--color-bg-primary);
+            padding: var(--space-md) var(--space-2xl);
+            border-radius: 9999px;
+            text-decoration: none;
+            font-size: 1.25rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 30px rgba(var(--color-primary-rgb), 0.3);
+            margin-bottom: var(--space-md);
+            animation: glow-pulse 2s ease-in-out infinite;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 0 60px rgba(var(--color-primary-rgb), 0.6);
+            background: var(--color-primary-light);
+            animation: none;
+        }
+
+        .cta-subtext {
+            font-size: 0.9375rem;
+            color: var(--color-text-muted);
+            margin-top: var(--space-md);
+        }
+
+        /* ==================== ANIMATIONS ==================== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes glow-pulse {
+            0%, 100% {
+                box-shadow: 0 0 30px rgba(var(--color-primary-rgb), 0.3);
+            }
+            50% {
+                box-shadow: 0 0 50px rgba(var(--color-primary-rgb), 0.5);
+            }
+        }
+
+        /* ==================== MOBILE RESPONSIVE ==================== */
+        @media (max-width: 768px) {
+            .hero h1 .headline-light {
+                font-size: 1.25rem;
+                margin-bottom: var(--space-sm);
+            }
+
+            .hero h1 .headline-heavy {
+                font-size: 2rem;
+            }
+
+            .subheadline {
+                font-size: 1.0625rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            section {
+                padding: var(--space-2xl) var(--space-md);
+            }
+
+            .hero {
+                padding: var(--space-2xl) var(--space-md);
+            }
+
+            .price {
+                font-size: 2.5rem;
+            }
+
+            .step::before {
+                position: static;
+                display: inline-block;
+                margin-right: var(--space-md);
+                width: 48px;
+                height: 48px;
+            }
+
+            .problem-list {
+                padding: var(--space-lg) var(--space-lg);
+            }
+
+            .problem-list::before {
+                font-size: 3rem;
+            }
+
+            table {
+                font-size: 0.875rem;
+            }
+
+            th, td {
+                padding: var(--space-sm);
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+                gap: var(--space-lg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero">
+            <h1>
+                <span class="headline-light">Templates Leave You Stuck at <span class="underline-accent">Step 2</span>.</span>
+                <span class="headline-heavy">We Build Your Complete System<br>in <span class="underline-accent">5 Days</span>.</span>
+            </h1>
+            <p class="subheadline">
+                <strong>Turn anonymous visitors into segmented, ready-to-buy leads automatically.</strong><br>
+                Complete system: landing page, quiz, 14 email sequences, automation, analytics—live and capturing leads in 7 days.
+            </p>
+            <a href="#pricing" class="hero-cta">Get The 7-Day Lead Capture System — $2,497</a>
+            <p class="trust-signals">✓ You provide: 30-min intake call &nbsp; ✓ We build: Everything else &nbsp; ✓ Zero technical knowledge required</p>
+        </div>
+
+        <!-- Problem: The Hidden Cost -->
+        <section>
+            <h2>You're Comparing Quiz Tools</h2>
+            <p>Interact is $27/mo. Outgrow is $14/mo. Typeform is $25/mo.</p>
+            <p>Seems affordable.</p>
+            <p><strong>But here's what they don't tell you:</strong></p>
+
+            <div class="problem-list">
+                <ul>
+                    <li><strong>No landing page</strong> → Hire a designer: $500-2,000</li>
+                    <li><strong>No quiz copy</strong> → Hire a copywriter: $500-1,500</li>
+                    <li><strong>No email sequences</strong> → Write 14 emails yourself or hire: $500-1,500</li>
+                    <li><strong>No email automation</strong> → Need Zapier + Mailchimp: $80-300/mo</li>
+                    <li><strong>No analytics dashboard</strong> → Hire a developer: $1,000-3,000</li>
+                    <li><strong>No deployment</strong> → Hire another developer: $500-1,000</li>
+                </ul>
+            </div>
+
+            <div class="math-box">
+                <p>Designer + Copywriter + Developer + Email tool + Analytics + Zapier =</p>
+                <p class="total">$2,500-7,800 upfront<br>+ $80-300/mo ongoing</p>
+            </div>
+
+            <p style="text-align: center; font-size: 1.25rem; margin-top: var(--space-lg);">
+                <strong>That "cheap" quiz tool just cost you $3,000-10,000 in Year 1.</strong>
+            </p>
+        </section>
+
+        <!-- Agitation: What This Means -->
+        <section>
+            <h2>Here's What Actually Happens</h2>
+
+            <p>You sign up for Interact. Spend 3 hours building the quiz. It looks... generic. Like every other Interact quiz.</p>
+
+            <p>Now you need a landing page. You open Webflow or hire someone on Fiverr. $800. Two weeks later, you have a landing page.</p>
+
+            <p>Now you need email sequences. You open Google Docs. Stare at a blank page. "What do I even say in the first email?" Three hours later, you have 3 emails written. You need 14. You give up or hire a copywriter for $1,200.</p>
+
+            <p>Now you need to connect everything. Zapier. Mailchimp. Custom webhooks. Nothing works. You hire a developer on Upwork for $500 to "just make it work."</p>
+
+            <p><strong>Six weeks later:</strong> You've spent $2,500+ and you STILL don't have analytics or automated segmentation.</p>
+
+            <p style="font-size: 1.25rem; margin-top: var(--space-lg);">Sound familiar?</p>
+        </section>
+
+        <!-- Solution: What We Actually Give You -->
+        <section>
+            <h2>Start Capturing Qualified Leads This Week</h2>
+
+            <p>Not just a quiz template. A complete lead generation system that segments prospects by buying intent (hot/warm/cold) and nurtures them automatically:</p>
+
+            <div class="feature-grid">
+                <div class="feature-box">
+                    <h4>Landing Page</h4>
+                    <p>SEO-optimized copy, hero section, benefits, social proof, CTA</p>
+                </div>
+                <div class="feature-box">
+                    <h4>Quiz Application</h4>
+                    <p>6-12 questions, progress bar, scoring logic, thank you pages</p>
+                </div>
+                <div class="feature-box">
+                    <h4>14 Email Sequences</h4>
+                    <p>Welcome, cold nurture, warm activation, hot path, win-back</p>
+                </div>
+                <div class="feature-box">
+                    <h4>Email Automation</h4>
+                    <p>Triggered by quiz temperature (hot/warm/cold), Supabase + cron</p>
+                </div>
+                <div class="feature-box">
+                    <h4>Analytics Dashboard</h4>
+                    <p>KPIs, funnel metrics, temperature distribution, UTM tracking</p>
+                </div>
+                <div class="feature-box">
+                    <h4>Vercel Deployment</h4>
+                    <p>Production-ready, one command: <code>vercel --prod</code></p>
+                </div>
+                <div class="feature-box">
+                    <h4>Custom Research</h4>
+                    <p>Market analysis, competitor research, product catalog</p>
+                </div>
+                <div class="feature-box">
+                    <h4>Brand-Matched Design</h4>
+                    <p>Colors, typography, motion system from your website</p>
+                </div>
+            </div>
+
+            <p style="text-align: center; font-size: 1.25rem; margin-top: var(--space-xl); color: var(--color-primary-light);">
+                <strong>Everything custom-researched for your market.<br>Everything deployed and live—capturing leads.<br>In 7 days. You do nothing but a 30-minute intake call.</strong>
+            </p>
+        </section>
+
+        <!-- How It Works -->
+        <section>
+            <h2>How It Works</h2>
+
+            <p>We built a 5-stage AI agent workflow that does the work of an entire agency team:</p>
+
+            <div class="process-steps">
+                <div class="step">
+                    <h4>Stage 1: Research</h4>
+                    <p>AI agents analyze your website, competitors, products, and target audience. Market research that would take a human 8+ hours.</p>
+                </div>
+
+                <div class="step">
+                    <h4>Stage 2: Architecture + Design</h4>
+                    <p>Two agents work in parallel: one designs the 3-tier segmentation model (hot/warm/cold scoring), the other extracts your brand design system (colors, typography, motion).</p>
+                </div>
+
+                <div class="step">
+                    <h4>Stage 3: Copy</h4>
+                    <p>Copywriting agent writes landing page, quiz questions, progress messages, result pages, and all 14 email sequences in your brand voice.</p>
+                </div>
+
+                <div class="step">
+                    <h4>Stage 4: Build</h4>
+                    <p>Build agent generates production-ready HTML/CSS/JS, 4 Vercel Edge Functions, complete database schema, and analytics dashboard.</p>
+                </div>
+
+                <div class="step">
+                    <h4>Stage 5: Publish</h4>
+                    <p>Publish agent creates GitHub repositories (private codebase + public client preview) and Notion database entry for project tracking.</p>
+                </div>
+            </div>
+
+            <p style="text-align: center; font-size: 1.25rem; margin-top: var(--space-xl);">
+                <strong>What would take an agency 80+ hours and 6 weeks.</strong>
+            </p>
+        </section>
+
+        <!-- Comparison Table -->
+        <section>
+            <h2>So What's It Really Cost?</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>What You Get</th>
+                        <th>Interact</th>
+                        <th>Agency</th>
+                        <th class="highlight">Us</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Quiz builder</strong></td>
+                        <td><span class="checkmark">✓</span></td>
+                        <td><span class="checkmark">✓</span></td>
+                        <td><span class="checkmark">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Landing page</strong></td>
+                        <td><span class="crossmark">✗</span></td>
+                        <td><span class="checkmark">✓</span></td>
+                        <td><span class="checkmark">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Custom research</strong></td>
+                        <td><span class="crossmark">✗</span></td>
+                        <td><span class="checkmark">✓</span></td>
+                        <td><span class="checkmark">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Email sequences</strong></td>
+                        <td><span class="crossmark">✗</span></td>
+                        <td>Sometimes</td>
+                        <td><span class="checkmark">✓</span> (14 emails)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Email automation</strong></td>
+                        <td><span class="crossmark">✗</span></td>
+                        <td><span class="crossmark">✗</span></td>
+                        <td><span class="checkmark">✓</span> (Supabase + cron)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Analytics dashboard</strong></td>
+                        <td>Basic</td>
+                        <td><span class="crossmark">✗</span></td>
+                        <td><span class="checkmark">✓</span> Full dashboard</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Deployment</strong></td>
+                        <td><span class="crossmark">✗</span></td>
+                        <td><span class="checkmark">✓</span></td>
+                        <td><span class="checkmark">✓</span> (Vercel-ready)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Hidden costs</strong></td>
+                        <td>$2.5K-7.8K</td>
+                        <td>$1.2K+ revisions</td>
+                        <td>$0</td>
+                    </tr>
+                    <tr style="background: rgba(12, 192, 223, 0.1);">
+                        <td><strong>Timeline</strong></td>
+                        <td>Hours + manual setup</td>
+                        <td>3-6 weeks</td>
+                        <td><strong>7 days</strong></td>
+                    </tr>
+                    <tr style="background: rgba(12, 192, 223, 0.1);">
+                        <td><strong>Total Cost (Year 1)</strong></td>
+                        <td>$2,824-8,700</td>
+                        <td>$5,000-16,200</td>
+                        <td><strong>$2,497</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Pricing -->
+        <section id="pricing">
+            <div class="pricing-box">
+                <h2 style="color: var(--color-text-primary);">The 7-Day Lead Capture System</h2>
+                <p style="font-size: 1.125rem; color: var(--color-text-secondary); margin-bottom: var(--space-md);">
+                    Live quiz funnel capturing segmented leads in 7 days—no design work, no copywriting, no technical setup required.
+                </p>
+                <p class="price">$2,497</p>
+                <p class="price-subtext">One payment. Own it forever. Capture unlimited leads.</p>
+
+                <div class="value-stack">
+                    <h3 style="font-size: 1.125rem; color: var(--color-primary-light); margin: var(--space-xl) 0 var(--space-md); text-align: center;">What's Included:</h3>
+
+                    <div class="value-item">Complete Quiz Funnel System — Landing page, quiz app (6-12 questions), 3 result pages, Vercel deployment</div>
+                    <div class="value-item">Automated Lead Segmentation — Hot/warm/cold scoring with automated email routing</div>
+
+                    <h3 style="font-size: 1.125rem; color: var(--color-primary-light); margin: var(--space-xl) 0 var(--space-md); text-align: center;">Plus 7 Bonuses:</h3>
+
+                    <div class="value-item"><strong>Bonus 1:</strong> Custom Market Research Report ($1,500 value) — Competitor analysis, audience insights, positioning strategy</div>
+                    <div class="value-item"><strong>Bonus 2:</strong> 14 Pre-Written Email Sequences ($1,200 value) — Welcome, nurture, activation, win-back—ready to deploy</div>
+                    <div class="value-item"><strong>Bonus 3:</strong> Analytics Dashboard with UTM Tracking ($1,800 value) — Funnel metrics, conversion rates, source attribution</div>
+                    <div class="value-item"><strong>Bonus 4:</strong> Brand Design System Extraction ($800 value) — Colors, typography, motion patterns from your website</div>
+                    <div class="value-item"><strong>Bonus 5:</strong> Video Assets - Remotion Components ($1,500 value) — Quiz intro, result reveals, social ad templates</div>
+                    <div class="value-item"><strong>Bonus 6:</strong> Unlimited Regeneration Rights ($1,500 value) — Regenerate with new angles, products, copy—as many times as you want</div>
+                    <div class="value-item"><strong>Bonus 7:</strong> GitHub + Notion + Client Preview Setup ($500 value) — Private repo, client preview site, project tracking</div>
+                </div>
+
+                <a href="#contact" class="cta-button">Get The 7-Day Lead Capture System</a>
+                <p class="cta-subtext">✓ 30-min intake, we handle everything else &nbsp; ✓ You own the code &nbsp; ✓ Deployed and live in 7 days</p>
+            </div>
+
+            <p style="text-align: center; font-size: 1.125rem; margin-top: var(--space-lg); color: var(--color-text-secondary);">
+                <strong>Risk Reversal Guarantee:</strong> Not happy with the funnel? We rebuild it with your feedback—free.<br>
+                Still not satisfied? Full refund. You keep all research and strategy docs.
+            </p>
+
+            <p style="text-align: center; font-size: 1.125rem; margin-top: var(--space-md);">
+                <strong>Compare:</strong> Agencies charge $5K-15K and take 6 weeks (and don't include half this stuff).<br>
+                You get everything above for $2,497 in 7 days.
+            </p>
+        </section>
+
+        <!-- Proof: Perceived Likelihood + Cannot Be Compared -->
+        <section style="background: rgba(12, 192, 223, 0.05); border: 2px solid rgba(12, 192, 223, 0.2);">
+            <h2 style="text-align: center;">Why This Cannot Be Compared to Anything Else</h2>
+
+            <div style="max-width: 700px; margin: 0 auto;">
+                <p style="font-size: 1.125rem; margin-bottom: var(--space-lg);">
+                    <strong>This isn't a quiz tool. This isn't an agency. This is a 5-agent AI workflow you literally cannot get anywhere else.</strong>
+                </p>
+
+                <p style="font-size: 1.125rem; margin-bottom: var(--space-lg);">
+                    <strong>The 5-agent system works like this:</strong> Research Agent analyzes your market and competitors (8 hours of work). Architecture Agent designs the 3-tier segmentation model (6 hours). Design Agent extracts your brand system (4 hours). Copy Agent writes landing page + quiz + 14 emails (12 hours). Build Agent generates production-ready code with analytics (40 hours). Publish Agent deploys everything to GitHub + Vercel + Notion (2 hours).
+                </p>
+
+                <p style="font-size: 1.125rem; margin-bottom: var(--space-lg);">
+                    <strong>That's 72 hours of specialized work.</strong> Completed in 7 days. For $2,497. No human can do this. No agency offers this. Quiz tools give you 5% of this. This is the complete system—researched, designed, written, built, and deployed.
+                </p>
+
+                <p style="font-size: 1.125rem; margin-bottom: var(--space-lg);">
+                    <strong>Every funnel includes 3-tier segmentation:</strong> Hot leads (ready to buy) get immediate sales outreach. Warm leads (interested but not ready) get educational content. Cold leads (just browsing) get long-term nurture. This isn't a generic email blast—it's strategic segmentation that matches buying intent.
+                </p>
+
+                <p style="font-size: 1.125rem; margin-bottom: var(--space-lg);">
+                    <strong>You get production-ready code, not templates.</strong> Everything is version-controlled in GitHub, deployed to Vercel with Edge Functions, connected to Supabase for data, and includes a full analytics dashboard. One command: <code>vercel --prod</code>. That's it.
+                </p>
+
+                <p style="text-align: center; font-size: 1.25rem; color: var(--color-primary-light); margin-top: var(--space-xl);">
+                    <strong>This isn't a product. It's a capability transfer. We're giving you a system that doesn't exist anywhere else.</strong>
+                </p>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section>
+            <h2>Questions?</h2>
+
+            <div class="faq-item">
+                <div class="faq-question">Can I just use Typeform or Interact?</div>
+                <div class="faq-answer">Typeform is a form builder. It doesn't score leads, segment by temperature, or send automated email sequences. Interact gives you the quiz interface, but you still need to build the landing page ($500-2K), write emails ($500-1.5K), set up automation ($80-300/mo), create analytics ($1K-3K), and deploy everything ($500-1K). We give you the complete system.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Why not hire an agency?</div>
+                <div class="faq-answer">Agencies charge $5K-15K and take 3-6 weeks. Even then, they don't include email automation or analytics. You'll pay $1,200+ for revisions. We deliver in 7 days with everything included. If you need changes, regenerate in 7 days.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Is this custom or a template?</div>
+                <div class="faq-answer">Every quiz is custom-researched for your market. We analyze your website, competitors, products, and audience. The design matches your brand. The copy uses your voice. The questions target your specific customers. It's not a template—it's custom-built in 7 days using AI agents.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Can I customize it after?</div>
+                <div class="faq-answer">Yes. All code is yours, fully editable, and deployed to your Vercel account. Want to change copy? Edit the HTML. Want different questions? Regenerate in 7 days with new inputs. You own everything.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">What if I need changes or revisions?</div>
+                <div class="faq-answer">Just regenerate. Unlike agencies that charge $1,200 for revisions and take another week, you can regenerate your entire quiz funnel in 7 days. Try different angles, different products, different copy—as many times as you want.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Does it work for my industry?</div>
+                <div class="faq-answer">We've built quiz funnels for: catering, plumbing, coaching, SaaS, e-commerce, consulting, agencies. The workflow researches your specific market and adapts. Provide your website URL and we'll custom-build for your industry.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">What do I need to provide?</div>
+                <div class="faq-answer"><strong>Just a 30-minute intake call.</strong> We ask about your business, products, target audience, and current lead capture process. That's it. No copywriting, no design work, no technical setup. We handle everything: research, architecture, design, copy, build, deployment, and documentation.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Do I need technical knowledge?</div>
+                <div class="faq-answer">Zero. We deliver production-ready code deployed to Vercel. Click one button to go live. The only "technical" thing you do is paste your Supabase and Resend API keys (we give you exact instructions). No coding, no hosting setup, no configuration files. It just works.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">What tech stack does this use?</div>
+                <div class="faq-answer">HTML/CSS/JS frontend, Vercel Edge Functions for APIs, Supabase (PostgreSQL) for database, Resend for emails, Chart.js for analytics. Everything production-ready, scalable, and fully documented.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">How many leads can I capture?</div>
+                <div class="faq-answer">Unlimited. No usage-based pricing. You own the code and deploy to your Vercel account. Scale to 10 leads/month or 10,000 leads/month—same price.</div>
+            </div>
+        </section>
+
+        <!-- Final CTA -->
+        <div class="final-cta">
+            <h2>Start Capturing Segmented Leads This Week</h2>
+            <p style="font-size: 1.125rem; line-height: 1.7; margin-bottom: var(--space-xl);">
+                One 30-minute call. Five days later, you have a live system capturing qualified leads, segmenting them by buying intent, and nurturing them automatically. No design work. No copywriting. No technical setup. Just results.
+            </p>
+            <p style="font-size: 1.0625rem; color: var(--color-text-secondary); margin-bottom: var(--space-xl);">
+                Not happy? We'll rebuild it with your feedback—free. Still not satisfied? Full refund. You keep everything we created.
+            </p>
+            <a href="#contact" class="cta-button">Get The 7-Day Lead Capture System — $2,497</a>
+            <p class="cta-subtext">
+                ✓ 30-min intake, we do the rest &nbsp; ✓ Deployed and live in 7 days &nbsp; ✓ You own the code
+            </p>
+        </div>
+
+        <p style="text-align: center; color: var(--color-text-muted); margin: var(--space-2xl) 0; font-size: 0.9375rem;">
+            Generated by Vibe Marketing Studio | Quiz Funnel Builder
+        </p>
+    </div>
+</body>
+</html>

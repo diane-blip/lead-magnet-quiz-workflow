@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Call Scripts | Quiz Funnel Marketing</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e0e0e0;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        header .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #b0b0b0;
+            margin-bottom: 20px;
+        }
+
+        .section-nav {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .section-nav a {
+            background: rgba(102, 126, 234, 0.2);
+            color: #667eea;
+            padding: 12px 24px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .section-nav a:hover {
+            background: rgba(102, 126, 234, 0.4);
+            transform: translateY(-2px);
+        }
+
+        section {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: #667eea;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(102, 126, 234, 0.3);
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            margin: 30px 0 15px 0;
+            color: #8b9dc3;
+        }
+
+        h4 {
+            font-size: 1.1rem;
+            margin: 20px 0 10px 0;
+            color: #a0aec0;
+        }
+
+        p {
+            margin-bottom: 15px;
+            color: #d0d0d0;
+        }
+
+        .script-block {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px 25px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #667eea;
+            font-size: 1.05rem;
+            line-height: 1.8;
+        }
+
+        .script-block em {
+            color: #888;
+            font-style: italic;
+        }
+
+        .tonality-note {
+            background: rgba(102, 126, 234, 0.1);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .tonality-note h4 {
+            color: #667eea;
+            margin-top: 0;
+        }
+
+        .tonality-note ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .tonality-note li {
+            margin-bottom: 8px;
+            padding-left: 0;
+        }
+
+        .tonality-note code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: #f0f0f0;
+        }
+
+        .phase-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 40px 0 20px 0;
+        }
+
+        .phase-letter {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .phase-title {
+            flex: 1;
+        }
+
+        .phase-title h3 {
+            margin: 0;
+            color: #e0e0e0;
+        }
+
+        .phase-title span {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th {
+            background: rgba(102, 126, 234, 0.2);
+            color: #e0e0e0;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid rgba(102, 126, 234, 0.3);
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: #d0d0d0;
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .objection-card {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 3px solid #ef4444;
+        }
+
+        .objection-card h4 {
+            color: #ef4444;
+            margin-top: 0;
+            font-size: 1rem;
+        }
+
+        .objection-card .response {
+            background: rgba(34, 197, 94, 0.1);
+            border-left: 3px solid #22c55e;
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 10px;
+        }
+
+        .step-card {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 4px solid #667eea;
+        }
+
+        .step-card h4 {
+            color: #667eea;
+            margin-top: 0;
+        }
+
+        .checklist {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .checklist h4 {
+            color: #22c55e;
+            margin-top: 0;
+        }
+
+        .checklist ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .checklist li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .checklist li::before {
+            content: "☐";
+            position: absolute;
+            left: 0;
+            color: #22c55e;
+        }
+
+        .copy-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(102, 126, 234, 0.2);
+            color: #667eea;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            margin-top: 10px;
+        }
+
+        .copy-btn:hover {
+            background: rgba(102, 126, 234, 0.4);
+        }
+
+        .copy-btn.copied {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+            border-color: rgba(34, 197, 94, 0.3);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #667eea;
+            text-decoration: none;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .back-link:hover {
+            color: #8b9dc3;
+        }
+
+        .divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.3), transparent);
+            margin: 60px 0;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            section {
+                padding: 20px;
+            }
+
+            .phase-header {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">← Back to Strategy Hub</a>
+
+        <header>
+            <span class="badge">Sales Ready</span>
+            <h1>Call Scripts</h1>
+            <p class="subtitle">Cold call script + CLOSER framework sales call script for quiz funnel services</p>
+        </header>
+
+        <nav class="section-nav">
+            <a href="#cold-call">Cold Call Script</a>
+            <a href="#sales-call">Sales Call (CLOSER)</a>
+            <a href="#objections">Objection Handling</a>
+        </nav>
+
+        <!-- PART 1: COLD CALL SCRIPT -->
+        <section id="cold-call">
+            <h2>Part 1: Cold Call Script</h2>
+
+            <p><strong>Goal:</strong> Book a 15-minute discovery call. Nothing more.</p>
+            <p><strong>Duration:</strong> 60-90 seconds max</p>
+            <p><strong>Mindset:</strong> You're not selling the service. You're selling the meeting.</p>
+
+            <div class="tonality-note">
+                <h4>Tonality Notes</h4>
+                <ul>
+                    <li><strong>Speed:</strong> 150-170 words per minute (slightly faster than conversational)</li>
+                    <li><strong>Energy:</strong> Confident but not aggressive. You're busy, you have something valuable.</li>
+                    <li><strong>Pauses:</strong> Use them. Silence creates space for them to respond.</li>
+                    <li><strong>Never sound like you're reading.</strong> Internalize this, don't memorize word-for-word.</li>
+                </ul>
+            </div>
+
+            <h3>Opening (Gatekeeper)</h3>
+            <div class="script-block">
+                "Hey, is [First Name] around?"
+                <br><br>
+                <em>(If they ask who's calling)</em>
+                <br><br>
+                "It's [Your Name]... they'll know what it's about."
+                <br><br>
+                <em>(If they push further)</em>
+                <br><br>
+                "I'm following up on their lead generation... just need 30 seconds."
+            </div>
+            <button class="copy-btn" onclick="copyText(this, 'cold-opening')">Copy Script</button>
+
+            <h3>When Prospect Answers</h3>
+            <div class="script-block">
+                "Hey [Name]... this is [Your Name](.) I know I'm calling out of the blue... so I'll be quick(.)
+                <br><br>
+                I help coaches and course creators turn their lead magnets into automated sales machines... instead of PDFs that collect dust(.)
+                <br><br>
+                I was looking at your funnel... and I think you're leaving money on the table with how you're capturing leads(.)
+                <br><br>
+                Is that something worth a 15-minute conversation... or am I totally off base(?)"
+            </div>
+            <button class="copy-btn" onclick="copyText(this, 'cold-main')">Copy Script</button>
+
+            <h3>If They Say "Tell Me More"</h3>
+            <div class="script-block">
+                "Sure(.) So right now... most coaches are using ebooks or checklists to capture emails... but those convert at maybe 15-20 percent(.)
+                <br><br>
+                What we build is interactive quiz funnels that convert at 40-60 percent... and they segment your leads automatically... so you know exactly who's hot and who's just browsing(.)
+                <br><br>
+                I built one for a business coach last month... and she's getting 3x more qualified calls than before(.)
+                <br><br>
+                I'd love to show you what that could look like for your business(.) Do you have 7 days this week... or is next week better(?)"
+            </div>
+            <button class="copy-btn" onclick="copyText(this, 'cold-tellmore')">Copy Script</button>
+
+            <h3>If They Say "I'm Not Interested"</h3>
+            <div class="script-block">
+                "Totally fair(.) Quick question though... are you not interested because you don't need more leads... or because you've tried something like this before and it didn't work(?)"
+                <br><br>
+                <em>(This often opens a real conversation)</em>
+                <br><br>
+                <strong>If "don't need more leads":</strong><br>
+                "Got it(.) So you're fully booked and turning people away(?)"
+                <br><br>
+                <strong>If "tried before, didn't work":</strong><br>
+                "Makes sense(.) What did you try... a quiz builder like Typeform or something custom(?)"
+            </div>
+            <button class="copy-btn" onclick="copyText(this, 'cold-notinterested')">Copy Script</button>
+
+            <h3>If They Say "Send Me Some Info"</h3>
+            <div class="script-block">
+                "I could... but honestly that stuff just ends up in a folder(.) Here's what I'd rather do(.)
+                <br><br>
+                Let me spend 5 minutes looking at your current funnel... and I'll send you a quick video showing exactly where you're losing leads(.) No pitch... just a breakdown(.)
+                <br><br>
+                If it's useful... we can chat(.) If not... no worries(.) What's the best email for that(?)"
+            </div>
+            <button class="copy-btn" onclick="copyText(this, 'cold-sendinfo')">Copy Script</button>
+
+            <h3>Booking the Call</h3>
+            <div class="script-block">
+                "Perfect(.) So I've got [day] at [time] or [day] at [time]... which works better(?)"
+                <br><br>
+                <em>(Always give two options - don't leave it open-ended)</em>
+                <br><br>
+                "Cool(.) I'll send you a calendar invite right now(.) What's the best email(?)"
+                <br><br>
+                "Got it(.) I'll see you [day](.) And just so you know... I'll come prepared with some specific ideas for your business(.) Talk soon(.)"
+            </div>
+            <button class="copy-btn" onclick="copyText(this, 'cold-booking')">Copy Script</button>
+
+            <h3>Cold Call Objection Cheat Sheet</h3>
+            <table>
+                <tr>
+                    <th>Objection</th>
+                    <th>Response</th>
+                </tr>
+                <tr>
+                    <td>"I'm busy right now"</td>
+                    <td>"Totally get it(.) I'll be quick... 30 seconds(.) I help coaches turn PDFs into automated quiz funnels that convert 2-3x better(.) Worth a 15-minute call this week?"</td>
+                </tr>
+                <tr>
+                    <td>"We already have a lead magnet"</td>
+                    <td>"Perfect(.) What are you using right now(?) ... And what's your conversion rate on that(?) ... Most people I talk to are at 15-20%(.) The quizzes I build convert at 40-60%(.) Worth exploring?"</td>
+                </tr>
+                <tr>
+                    <td>"I'm happy with my current setup"</td>
+                    <td>"Love it(.) So you're getting all the qualified leads you can handle(?)"</td>
+                </tr>
+                <tr>
+                    <td>"Call me back later"</td>
+                    <td>"Sure(.) When specifically works... Tuesday or Wednesday(?)"</td>
+                </tr>
+                <tr>
+                    <td>"How did you get my number?"</td>
+                    <td>"I was researching coaches in [their niche] and your name kept coming up(.) Figured it was worth a conversation(.)"</td>
+                </tr>
+            </table>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- PART 2: SALES CALL SCRIPT -->
+        <section id="sales-call">
+            <h2>Part 2: Sales Call Script (CLOSER Framework)</h2>
+
+            <p><strong>Goal:</strong> Close the deal on the call. Or get a clear next step.</p>
+            <p><strong>Duration:</strong> 30-45 minutes</p>
+            <p><strong>Structure:</strong> CLOSER (Clarify, Label, Overview, Sell, Explain, Reinforce)</p>
+
+            <div class="tonality-note">
+                <h4>Tonality Notes (For Practice)</h4>
+                <ul>
+                    <li><code>(...)</code> = Short pause, draw attention</li>
+                    <li><code>(.)</code> = Full stop, expect response</li>
+                    <li><code>(?)</code> = Raise voice, solicit response</li>
+                    <li><strong>After asking to buy:</strong> 8-second silence (do NOT break it)</li>
+                    <li><strong>Speed:</strong> 135-185 words per minute</li>
+                    <li><strong>Volume:</strong> Loud enough to project confidence</li>
+                    <li><strong>Articulation:</strong> Every word clear and rounded</li>
+                </ul>
+            </div>
+
+            <!-- C - CLARIFY -->
+            <div class="phase-header">
+                <div class="phase-letter">C</div>
+                <div class="phase-title">
+                    <h3>CLARIFY</h3>
+                    <span>Discovery Phase - Uncover pain, desire, and urgency</span>
+                </div>
+            </div>
+
+            <div class="script-block">
+                "Hey [Name]... thanks for hopping on(.) So I saw you [booked a call / took the audit / filled out the form]... and it looks like lead generation is something you're looking at right now(?)"
+                <br><br>
+                <em>(Wait for response)</em>
+                <br><br>
+                "Cool(.) So help me understand... what's going on with your current lead magnet setup(?)"
+                <br><br>
+                <em>(They give vague answer)</em>
+                <br><br>
+                "Can you give me an example(?)"
+                <br><br>
+                <em>(Still vague? Push deeper)</em>
+                <br><br>
+                "Can you be more specific... like walk me through what happens when someone hits your landing page today(?)"
+            </div>
+
+            <p><strong>Keep alternating "example" and "specific" until you get 2-3 concrete problems. Then chunk up:</strong></p>
+
+            <div class="script-block">
+                "Okay... so it sounds like you've got three things happening here(.)
+                <br><br>
+                One... you're using a PDF or ebook that everyone downloads but nobody reads(.)
+                <br><br>
+                Two... all your leads look the same... so you don't know who's actually ready to buy versus who's just grabbing free stuff(.)
+                <br><br>
+                And three... your follow-up is basically one generic email sequence... and most people go cold before they ever book a call(.)
+                <br><br>
+                Does that sound about right(?)"
+                <br><br>
+                <em>(Wait for confirmation)</em>
+                <br><br>
+                <strong>Pre-close:</strong>
+                <br><br>
+                "So if we could fix those three things... would that help you close more clients(?)"
+                <br><br>
+                <em>(They say YES = they've accepted the sale)</em>
+            </div>
+            <button class="copy-btn" onclick="copyText(this, 'closer-c')">Copy Clarify Phase</button>
+
+            <!-- L - LABEL -->
+            <div class="phase-header">
+                <div class="phase-letter">L</div>
+                <div class="phase-title">
+                    <h3>LABEL</h3>
+                    <span>Restate the Problem - Show you understand</span>
+                </div>
+            </div>
+
+            <div class="script-block">
+                "Got it(.) So what I'm hearing is... you've built a decent audience... you're driving traffic... but your lead magnet isn't doing its job(.)
+                <br><br>
+                People download the PDF... maybe they skim it... but they don't engage(.) They don't feel like you understand their specific problem(.) So by the time you follow up... they've already tuned out or moved on(.)
+                <br><br>
+                And because you don't know anything about them... you're treating a hot lead the same as a cold one(.) Which means you're either wasting time on tire-kickers... or missing the people who are actually ready to buy(.)
+                <br><br>
+                Is that the situation(?)"
+                <br><br>
+                <em>(Pause - let them confirm)</em>
+            </div>
+            <button class="copy-btn" onclick="copyText(this, 'closer-l')">Copy Label Phase</button>
+
+            <!-- O - OVERVIEW -->
+            <div class="phase-header">
+                <div class="phase-letter">O</div>
+                <div class="phase-title">
+                    <h3>OVERVIEW</h3>
+                    <span>Your Past Experience - Establish credibility</span>
+                </div>
+            </div>
+
+            <div class="script-block">
+                "Okay... so here's the good news(.) This is exactly what I built this system for(.)
+                <br><br>
+                I've worked with coaches and course creators just like you... people doing anywhere from 100K to 2 million a year... and this is the number one problem(.)
+                <br><br>
+                They're great at building audiences(.) They're great at creating content(.) But their lead capture is broken(.)
+                <br><br>
+                Not because they're lazy... but because PDF lead magnets don't work anymore(.) People are drowning in free ebooks(.) They need something that actually engages them(.)
+                <br><br>
+                So what I do is... I build you a custom quiz funnel that does three things automatically(.)
+                <br><br>
+                <strong>One</strong>... it engages your leads from the first click(.) Instead of a boring download... they take a 2-minute quiz that feels like a conversation(.)
+                <br><br>
+                <strong>Two</strong>... it segments and scores every lead based on their answers(.) So you know exactly who's hot... who's warm... and who's just browsing(.)
+                <br><br>
+                <strong>And three</strong>... it triggers personalized follow-up sequences based on where they are(.) Hot leads get pushed to book a call(.) Cold leads get nurtured until they're ready(.)
+                <br><br>
+                The whole thing takes about 7 days to build... and then it runs without you(.) Does that make sense so far(?)"
+            </div>
+            <button class="copy-btn" onclick="copyText(this, 'closer-o')">Copy Overview Phase</button>
+
+            <!-- S - SELL -->
+            <div class="phase-header">
+                <div class="phase-letter">S</div>
+                <div class="phase-title">
+                    <h3>SELL THE VACATION</h3>
+                    <span>3-Step Pitch - Dream, Speed, Ease</span>
+                </div>
+            </div>
+
+            <div class="step-card">
+                <h4>Step 1: The Dream Outcome</h4>
+                <div class="script-block">
+                    "So here's what this looks like for you in 30 days(.)
+                    <br><br>
+                    You wake up... you check your dashboard... and you've got five new leads who took your quiz while you were sleeping(.)
+                    <br><br>
+                    But here's the difference(.) You already know everything about them(.) You know their biggest challenge(.) You know their budget(.) You know their timeline(.) You know if they're a fit before you ever get on a call(.)
+                    <br><br>
+                    Three of them are hot leads... they've already received a custom email sequence... and they're asking how to work with you(.)
+                    <br><br>
+                    The other two are warm... they're getting nurtured automatically... and they'll come back when they're ready(.)
+                    <br><br>
+                    You didn't chase anyone(.) You didn't manually sort through a list(.) You didn't send a single email(.)
+                    <br><br>
+                    The system did all of it(.) While you were sleeping(.) While you were with clients(.) While you were actually living your life(.)
+                    <br><br>
+                    That's the outcome(.) Qualified leads... segmented and scored... booking calls on autopilot(.)"
+                </div>
+            </div>
+
+            <div class="step-card">
+                <h4>Step 2: The Speed Advantage</h4>
+                <div class="script-block">
+                    "Now... here's why this costs what it costs(.)
+                    <br><br>
+                    Most agencies take 60 to 90 days to build something like this(.) Discovery... design... development... revisions... launch... and then you wait another month to see if it even works(.)
+                    <br><br>
+                    I do it in 7 days(.)
+                    <br><br>
+                    <strong>Week one</strong>... strategy call and quiz design(.) We map your entire customer journey... identify your ideal segments... and write questions that actually reveal buying intent(.)
+                    <br><br>
+                    <strong>Week two</strong>... your quiz is live(.) Custom designed... branded to your business... converting leads while I build the backend(.)
+                    <br><br>
+                    <strong>Week three</strong>... full automation running(.) Email sequences... lead scoring... dashboard... everything connected(.)
+                    <br><br>
+                    7 days... not three months(.)
+                    <br><br>
+                    Why(?) Because I've done this before(.) I'm not designing from scratch(.) I'm taking a proven framework and customizing it to your business(.)
+                    <br><br>
+                    <strong>Faster delivery equals faster results</strong>(.)"
+                </div>
+            </div>
+
+            <div class="step-card">
+                <h4>Step 3: What You DON'T Have to Do</h4>
+                <div class="script-block">
+                    "And here's the other reason this is worth 2,497 dollars(.)
+                    <br><br>
+                    You don't have to... learn quiz software(.)
+                    <br><br>
+                    You don't have to... write email sequences(.)
+                    <br><br>
+                    You don't have to... figure out automation logic or conditional routing or API webhooks(.)
+                    <br><br>
+                    You don't have to... spend 40 hours trying to make it all work together(.)
+                    <br><br>
+                    You show up to three calls(.)
+                    <br><br>
+                    <strong>One</strong>... 90-minute strategy session where you tell me about your business and your ideal clients(.)
+                    <br><br>
+                    <strong>Two</strong>... 10 minutes to review the quiz questions and approve(.)
+                    <br><br>
+                    <strong>Three</strong>... 7 days to test the system and learn your dashboard(.)
+                    <br><br>
+                    That's it(.) Less than 3 hours of your time total(.)
+                    <br><br>
+                    I handle the database... the integrations... the conditional logic... the sequences... the scoring... the design(.)
+                    <br><br>
+                    You handle... showing up to calls with people who already want to buy(.)
+                    <br><br>
+                    Does that sound like something that would work for you(?)"
+                    <br><br>
+                    <em>(8-second pause - let them process)</em>
+                </div>
+            </div>
+            <button class="copy-btn" onclick="copyText(this, 'closer-s')">Copy Sell Phase</button>
+
+            <!-- E - EXPLAIN -->
+            <div class="phase-header" id="objections">
+                <div class="phase-letter">E</div>
+                <div class="phase-title">
+                    <h3>EXPLAIN AWAY CONCERNS</h3>
+                    <span>Objection Handling</span>
+                </div>
+            </div>
+
+            <div class="objection-card">
+                <h4>"I need to think about it"</h4>
+                <div class="response">
+                    "Totally fair(.) What specifically do you need to think about... is it the investment... the timing... or you're just not sure this will work for your audience(?)"
+                    <br><br>
+                    <em>(Listen, then reframe based on their answer)</em>
+                </div>
+            </div>
+
+            <div class="objection-card">
+                <h4>"I don't have time to implement this"</h4>
+                <div class="response">
+                    "That's exactly why you need this more than anyone else(.)
+                    <br><br>
+                    The fact that you don't have time... means you're stuck doing everything manually... which is exactly what this eliminates(.)
+                    <br><br>
+                    The whole setup is three calls and less than 3 hours of your time total(.) After that... it runs without you(.)
+                    <br><br>
+                    So if time is the issue... this is how you buy your time back(.)"
+                </div>
+            </div>
+
+            <div class="objection-card">
+                <h4>"I don't have the budget right now"</h4>
+                <div class="response">
+                    "I get it(.) So let me ask you this... how much is a new client worth to you on average(?)"
+                    <br><br>
+                    <em>(They answer - let's say $2,000)</em>
+                    <br><br>
+                    "Okay... so if this system books you two extra clients in the next 60 days... it pays for itself... and everything after that is profit(.)
+                    <br><br>
+                    And here's the thing... we guarantee it(.)
+                    <br><br>
+                    If you use the quiz funnel and you don't see at least a 2x improvement in qualified leads within 90 days... I'll either fix it for free or refund you completely(.)
+                    <br><br>
+                    So the real question is... can you afford *not* to fix this... knowing that every tire-kicker who books a call right now is wasting your time... and every hot lead who goes cold is costing you way more than 3,000 bucks(?)"
+                </div>
+            </div>
+
+            <div class="objection-card">
+                <h4>"I've tried quizzes before and they didn't work"</h4>
+                <div class="response">
+                    "Good... that means you already know they can work(.) What happened with the last one(?)"
+                    <br><br>
+                    <em>(Listen - usually the answer is: Typeform/Interact, no strategy, no follow-up, no segmentation)</em>
+                    <br><br>
+                    "Got it(.) So the problem wasn't the quiz... the problem was there was no system behind it(.)
+                    <br><br>
+                    Taking the quiz is step one(.) But if there's no scoring... no segmentation... no personalized follow-up... then yeah... it's just a fancy form(.)
+                    <br><br>
+                    What I build is the full machine(.) The quiz is just the front door(.) The real value is everything that happens after(.)"
+                </div>
+            </div>
+
+            <div class="objection-card">
+                <h4>"I need to talk to my partner / spouse / business partner"</h4>
+                <div class="response">
+                    "Totally understand(.) What do you think they're going to want to know about this(?)"
+                    <br><br>
+                    <em>(Listen - then address those concerns directly)</em>
+                    <br><br>
+                    "Cool... so here's what I'd suggest(.) Why don't you walk them through what we talked about... show them the guarantee... and then if they have questions... we can do a quick 15-minute call with all of us(.) Does that work(?)"
+                </div>
+            </div>
+
+            <div class="objection-card">
+                <h4>"Can you send me a proposal?"</h4>
+                <div class="response">
+                    "I could... but here's the thing(.) The proposal is basically what I just told you(.)
+                    <br><br>
+                    7 days... 2,497 depending on complexity... you show up to three calls... I build everything... it runs automatically(.)
+                    <br><br>
+                    What would a proposal tell you that would help you make this decision(?)"
+                    <br><br>
+                    <em>(This usually reveals the real objection)</em>
+                </div>
+            </div>
+
+            <!-- R - REINFORCE -->
+            <div class="phase-header">
+                <div class="phase-letter">R</div>
+                <div class="phase-title">
+                    <h3>REINFORCE</h3>
+                    <span>Close and Lock It In</span>
+                </div>
+            </div>
+
+            <div class="script-block">
+                <strong>After they say YES:</strong>
+                <br><br>
+                "Awesome... let's do this(!)
+                <br><br>
+                So here's what happens next(.) I'm going to send you a calendar link... you'll book your 90-minute strategy session... and we'll kick off Week One within 48 hours(.)
+                <br><br>
+                On that call... we're going to map your entire customer journey... figure out exactly who your ideal segments are... and nail down quiz questions that reveal buying intent(.)
+                <br><br>
+                Then I disappear for a week... build your quiz and email sequences... and come back with a working demo(.)
+                <br><br>
+                7 days from now... you'll have qualified leads taking your quiz... getting segmented automatically... and booking calls while you sleep(.)
+                <br><br>
+                Sound good(?)"
+            </div>
+
+            <div class="script-block">
+                <strong>Confirmation Email Follow-Up:</strong>
+                <br><br>
+                "I'm going to send you a confirmation email right now with:
+                <br><br>
+                • Calendar link for your strategy session<br>
+                • Pre-call questionnaire (takes 5 minutes)<br>
+                • Examples of quiz funnels I've built for other coaches
+                <br><br>
+                Go ahead and book that first call... and I'll see you then(.)
+                <br><br>
+                Congrats on making the decision... this is going to change how you do lead gen forever(.)"
+            </div>
+            <button class="copy-btn" onclick="copyText(this, 'closer-r')">Copy Reinforce Phase</button>
+        </section>
+
+        <!-- Quick Reference -->
+        <section>
+            <h2>Quick Reference: Objection Reframes</h2>
+            <table>
+                <tr>
+                    <th>Objection</th>
+                    <th>Core Concern</th>
+                    <th>Reframe</th>
+                </tr>
+                <tr>
+                    <td>"I need to think about it"</td>
+                    <td>Fear of wrong decision</td>
+                    <td>Isolate the specific concern - money, time, or fit</td>
+                </tr>
+                <tr>
+                    <td>"I don't have the budget"</td>
+                    <td>ROI uncertainty</td>
+                    <td>Do the math: client value x expected close rate = payback</td>
+                </tr>
+                <tr>
+                    <td>"I don't have the time"</td>
+                    <td>Fear of more work</td>
+                    <td>Emphasize: 3 hours total, then it runs itself</td>
+                </tr>
+                <tr>
+                    <td>"I tried quizzes before"</td>
+                    <td>Past failure</td>
+                    <td>Diagnose what went wrong - usually no system behind it</td>
+                </tr>
+                <tr>
+                    <td>"Send me a proposal"</td>
+                    <td>Avoiding decision</td>
+                    <td>Surface the real objection</td>
+                </tr>
+                <tr>
+                    <td>"I need to talk to someone"</td>
+                    <td>Need permission/validation</td>
+                    <td>Prep them to sell it, offer joint call</td>
+                </tr>
+                <tr>
+                    <td>"This seems expensive"</td>
+                    <td>Value not clear</td>
+                    <td>Compare to cost of status quo (lost leads, wasted calls)</td>
+                </tr>
+            </table>
+
+            <div class="checklist">
+                <h4>Post-Call Checklist</h4>
+                <ul>
+                    <li>Send calendar link within 5 minutes</li>
+                    <li>Send confirmation email with pre-call questionnaire</li>
+                    <li>Add to CRM with notes on their specific pain points</li>
+                    <li>If they didn't buy: Schedule follow-up for 48 hours later</li>
+                    <li>If objection was budget: Send ROI calculator</li>
+                    <li>If objection was time: Send "3 hours total" breakdown</li>
+                </ul>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        const scriptTexts = {
+            'cold-opening': `Hey, is [First Name] around?
+
+(If they ask who's calling)
+
+It's [Your Name]... they'll know what it's about.
+
+(If they push further)
+
+I'm following up on their lead generation... just need 30 seconds.`,
+
+            'cold-main': `Hey [Name]... this is [Your Name]. I know I'm calling out of the blue... so I'll be quick.
+
+I help coaches and course creators turn their lead magnets into automated sales machines... instead of PDFs that collect dust.
+
+I was looking at your funnel... and I think you're leaving money on the table with how you're capturing leads.
+
+Is that something worth a 15-minute conversation... or am I totally off base?`,
+
+            'cold-tellmore': `Sure. So right now... most coaches are using ebooks or checklists to capture emails... but those convert at maybe 15-20 percent.
+
+What we build is interactive quiz funnels that convert at 40-60 percent... and they segment your leads automatically... so you know exactly who's hot and who's just browsing.
+
+I built one for a business coach last month... and she's getting 3x more qualified calls than before.
+
+I'd love to show you what that could look like for your business. Do you have 7 days this week... or is next week better?`,
+
+            'cold-notinterested': `Totally fair. Quick question though... are you not interested because you don't need more leads... or because you've tried something like this before and it didn't work?
+
+If "don't need more leads":
+Got it. So you're fully booked and turning people away?
+
+If "tried before, didn't work":
+Makes sense. What did you try... a quiz builder like Typeform or something custom?`,
+
+            'cold-sendinfo': `I could... but honestly that stuff just ends up in a folder. Here's what I'd rather do.
+
+Let me spend 5 minutes looking at your current funnel... and I'll send you a quick video showing exactly where you're losing leads. No pitch... just a breakdown.
+
+If it's useful... we can chat. If not... no worries. What's the best email for that?`,
+
+            'cold-booking': `Perfect. So I've got [day] at [time] or [day] at [time]... which works better?
+
+Cool. I'll send you a calendar invite right now. What's the best email?
+
+Got it. I'll see you [day]. And just so you know... I'll come prepared with some specific ideas for your business. Talk soon.`
+        };
+
+        function copyText(button, key) {
+            const text = scriptTexts[key] || button.previousElementSibling.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                button.classList.add('copied');
+                button.textContent = 'Copied!';
+                setTimeout(() => {
+                    button.classList.remove('copied');
+                    button.textContent = 'Copy Script';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
