@@ -48,12 +48,23 @@ echo "-----------------------------------------"
 echo "(Leave blank to skip - you can configure later)"
 echo ""
 
+echo "-- Project-level servers --"
 read -p "Notion API token (starts with ntn_): " notion_token
 read -p "Glif API token (starts with glif_): " glif_token
 read -p "Supabase access token (starts with sbp_): " supabase_token
+echo ""
+echo "-- Research & scraping servers --"
+read -p "Tavily API key (from app.tavily.com): " tavily_key
+read -p "DataForSEO username (email): " dfs_username
+read -p "DataForSEO password: " dfs_password
+echo ""
+echo "-- Browser servers (Playwright has no key, Browserbase is optional) --"
+read -p "Browserbase API key (optional, fallback for Playwright): " bb_api_key
+read -p "Browserbase project ID (optional): " bb_project_id
 
 cp "$MCP_TEMPLATE" "$MCP_TARGET"
 
+# Project-level servers
 if [ -n "$notion_token" ]; then
   sed -i '' "s|YOUR_NOTION_API_TOKEN|$notion_token|g" "$MCP_TARGET"
 fi
@@ -64,10 +75,29 @@ if [ -n "$supabase_token" ]; then
   sed -i '' "s|YOUR_SUPABASE_ACCESS_TOKEN|$supabase_token|g" "$MCP_TARGET"
 fi
 
-# Update memory file path
-sed -i '' "s|\./claude/memory.json|$REPO_ROOT/.claude/memory.json|g" "$MCP_TARGET"
+# Research & scraping servers
+if [ -n "$tavily_key" ]; then
+  sed -i '' "s|YOUR_TAVILY_API_KEY|$tavily_key|g" "$MCP_TARGET"
+fi
+if [ -n "$dfs_username" ]; then
+  sed -i '' "s|YOUR_DATAFORSEO_USERNAME|$dfs_username|g" "$MCP_TARGET"
+fi
+if [ -n "$dfs_password" ]; then
+  sed -i '' "s|YOUR_DATAFORSEO_PASSWORD|$dfs_password|g" "$MCP_TARGET"
+fi
 
-echo "MCP configuration saved to .claude/.mcp.json"
+# Browser servers
+if [ -n "$bb_api_key" ]; then
+  sed -i '' "s|YOUR_BROWSERBASE_API_KEY|$bb_api_key|g" "$MCP_TARGET"
+fi
+if [ -n "$bb_project_id" ]; then
+  sed -i '' "s|YOUR_BROWSERBASE_PROJECT_ID|$bb_project_id|g" "$MCP_TARGET"
+fi
+
+# Update memory file path to absolute
+sed -i '' "s|\./\.claude/memory.json|$REPO_ROOT/.claude/memory.json|g" "$MCP_TARGET"
+
+echo "MCP configuration saved to .claude/.mcp.json (8 servers)"
 echo ""
 
 # Step 3: Install Remotion dependencies

@@ -12,7 +12,7 @@
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-memory"],
       "env": {
-        "MEMORY_FILE_PATH": "./claude/memory.json"
+        "MEMORY_FILE_PATH": "./.claude/memory.json"
       }
     },
     "glif": {
@@ -27,6 +27,33 @@
       "args": ["-y", "@supabase/mcp-server-supabase@latest"],
       "env": {
         "SUPABASE_ACCESS_TOKEN": "YOUR_SUPABASE_ACCESS_TOKEN"
+      }
+    },
+    "tavily": {
+      "command": "npx",
+      "args": ["-y", "tavily-mcp@latest"],
+      "env": {
+        "TAVILY_API_KEY": "YOUR_TAVILY_API_KEY"
+      }
+    },
+    "dfs-mcp": {
+      "command": "npx",
+      "args": ["-y", "dataforseo-mcp-server"],
+      "env": {
+        "DATAFORSEO_USERNAME": "YOUR_DATAFORSEO_USERNAME",
+        "DATAFORSEO_PASSWORD": "YOUR_DATAFORSEO_PASSWORD"
+      }
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["@playwright/mcp@latest"]
+    },
+    "browserbase": {
+      "command": "npx",
+      "args": ["@browserbasehq/mcp-server-browserbase"],
+      "env": {
+        "BROWSERBASE_API_KEY": "YOUR_BROWSERBASE_API_KEY",
+        "BROWSERBASE_PROJECT_ID": "YOUR_BROWSERBASE_PROJECT_ID"
       }
     }
   }
