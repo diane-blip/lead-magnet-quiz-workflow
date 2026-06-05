@@ -1,6 +1,6 @@
 # Lead Magnet Vision Board Builder (Orchestrated)
 
-Generate complete vision board-based lead magnet packages using a multi-agent workflow with real research via MCP tools. Outputs a Vercel-deployable Astro project with builder UI, Glif-generated reveal graphics, email automation, and analytics dashboard.
+Generate complete vision board-based lead magnet packages using a multi-agent workflow with real research via MCP tools. Outputs a deployable site (Astro on Cloudflare Workers) with builder UI, pre-generated reveal graphics composited in-browser, Kit-native lead capture and email automation, and an analytics dashboard.
 
 ## Trigger
 
@@ -61,15 +61,17 @@ This skill acts as a **Project Manager Orchestrator** that spawns specialized ag
                             v
 +-----------------------------------------------------------------+
 |  STAGE 4: VB Build Agent                                         |
-|  Output: Astro project, builder.js, reveal.js, Glif assets,    |
-|  visionboard-submit.js, generate-graphic.js, admin dashboard    |
+|  Output: Astro project, builder.js, reveal.js, pre-generated    |
+|  profile graphics, visionboard-submit.ts, composite.js,         |
+|  admin dashboard                                                |
 +-----------------------------------------------------------------+
                             |
                             v
 +-----------------------------------------------------------------+
 |  STAGE 5: Publish Agent                                          |
-|  Tools: gh CLI, Notion MCP                                       |
-|  Output: GitHub repo, GitHub Pages preview, Notion (23+ pages)  |
+|  Tools: gh CLI, Cloudflare preview deploy                        |
+|  Output: GitHub repo, Cloudflare preview deploy,                |
+|  vault delivery at clients/<client>/                            |
 +-----------------------------------------------------------------+
 ```
 
@@ -90,22 +92,22 @@ When triggered, execute the following steps in order. **Do not skip validation g
 +-- README.md                      # Overview of all folders
 +-- builder-prompt.md              # AI-ready development prompt
 |
-+-- deploy/                        # Vercel-ready Astro project
-|   +-- astro.config.mjs           # Astro config with Vercel adapter
++-- deploy/                        # Deployable Astro project (Cloudflare Workers)
+|   +-- astro.config.mjs           # Astro config with Cloudflare adapter
 |   +-- tsconfig.json              # TypeScript configuration
-|   +-- package.json               # Astro + Supabase dependencies
-|   +-- vercel.json                # Cron config + CORS headers
+|   +-- package.json               # Astro dependencies
+|   +-- wrangler.jsonc             # Worker config, D1 binding, headers, optional cron
 |   +-- .env.example               # Environment variable template
 |   +-- public/
 |   |   +-- images/
 |   |   |   +-- logo.svg
-|   |   |   +-- hero.jpg           # Glif-generated hero image
-|   |   |   +-- style-[id].jpg     # Glif-generated style cards
-|   |   |   +-- profile-[id].jpg   # Glif-generated profile mood boards
+|   |   |   +-- hero.jpg           # Pre-generated hero image (build-time)
+|   |   |   +-- style-[id].jpg     # Pre-generated style cards (build-time)
+|   |   |   +-- profile-[id].jpg   # Pre-generated profile base graphics (build-time)
 |   |   |   +-- portfolio-[n].jpg  # Portfolio images from services.json
 |   |   +-- scripts/
 |   |   |   +-- builder.js         # Builder selection flow + analytics
-|   |   |   +-- reveal.js          # Graphic loading, download, share
+|   |   |   +-- reveal.js          # Composite graphic, download, share
 |   |   |   +-- admin.js           # Analytics dashboard logic
 |   |   +-- styles/
 |   |   |   +-- global.css         # CSS variables from design.md
@@ -113,6 +115,8 @@ When triggered, execute the following steps in order. **Do not skip validation g
 |   +-- src/
 |   |   +-- layouts/
 |   |   |   +-- Layout.astro       # Base HTML shell
+|   |   +-- lib/
+|   |   |   +-- kit.ts             # Kit v4 REST helpers
 |   |   +-- pages/
 |   |       +-- index.astro        # Landing page
 |   |       +-- builder/
@@ -120,19 +124,13 @@ When triggered, execute the following steps in order. **Do not skip validation g
 |   |       +-- reveal/
 |   |       |   +-- index.astro    # Reveal page (graphic + profile)
 |   |       +-- admin/
-|   |           +-- index.astro    # Analytics dashboard
-|   +-- scripts/
-|   |   +-- setup-schema.js        # Creates tables + seeds email templates
-|   +-- supabase/
-|   |   +-- schema.sql             # Schema with {PREFIX} placeholders
-|   +-- api/
-|       +-- visionboard-submit.js  # Saves lead + selections + schedules emails
-|       +-- generate-graphic.js    # Calls Glif API with prompt template
-|       +-- prompt-templates/
-|       |   +-- [vertical].js      # Vertical-specific prompt builder
-|       +-- email-sender.js        # Hourly cron for scheduled emails
-|       +-- analytics-event.js     # POST - logs funnel events
-|       +-- analytics-query.js     # GET - dashboard data queries
+|   |       |   +-- index.astro    # Analytics dashboard
+|   |       +-- api/
+|   |           +-- visionboard-submit.ts  # Registers lead in client's Kit + logs completion
+|   |           +-- analytics-event.ts     # POST - logs funnel events
+|   |           +-- analytics-query.ts     # GET - dashboard data queries
+|   +-- d1/
+|   |   +-- analytics-schema.sql   # Single D1 analytics_events table
 |
 +-- client/                        # Client deliverables
 |   +-- research.md
@@ -150,7 +148,7 @@ When triggered, execute the following steps in order. **Do not skip validation g
 |   +-- email-sequences.html
 |   +-- vision-board-copy-explainer.html
 |
-+-- client-preview/                # GitHub Pages deployable previews
++-- client-preview/                # Cloudflare preview deploy (standalone HTML)
     +-- index.html                 # Navigation page linking to all previews
     +-- research.html              # Copy of client/research.html
     +-- email-sequences.html       # Copy of client/email-sequences.html
@@ -499,7 +497,7 @@ Vision board builders work because they make visitors express their vision:
    - Urgency from timeline tags: hot/warm/cool
    - Budget fit from budget tags: hot/warm/cool
    - Composite formula: urgency * 0.6 + budget_fit * 0.4 (adjust by business model)
-6. **Graphic Prompt Template** - Glif prompt string with {variable} placeholders:
+6. **Graphic Prompt Template** - generation-provider prompt string with {variable} placeholders (used at build time to pre-generate the per-profile base graphics; see `agents/lead-magnet-agents/shared/generation-providers.md`):
    - Lead with format ("Pinterest-style mood board collage")
    - Set vibe from {vibe_label} and {vibe_glif_keywords}
    - Add context line (season, location, scope)
@@ -854,11 +852,11 @@ Pay special attention to:
 
 Also read reference files:
 - agents/lead-magnet-agents/build-agent/references/astro-patterns.md
-- .claude/skills/lead-magnet-vision-board/references/glif-prompt-patterns.md
+- .claude/skills/lead-magnet-vision-board/references/image-prompt-patterns.md
 - .claude/skills/lead-magnet-vision-board/references/vertical-[VERTICAL].json (if used)
 
 ## Your Task
-Create final deliverables organized into deployment and preview folders. This is a vision board builder, NOT a quiz. The builder has selection steps (not questions), a reveal page (not a thank-you page), and generates graphics via Glif (not score displays).
+Create final deliverables organized into deployment and preview folders. This is a vision board builder, NOT a quiz. The builder has selection steps (not questions), a reveal page (not a thank-you page), and shows a personalized vision board graphic (not score displays). Default graphic pipeline: pre-generate one base image per profile at build time, then composite the user's name + selected tags onto the matching base in the browser at runtime (no per-user generative API call). See `agents/lead-magnet-agents/shared/generation-providers.md`.
 
 ## CRITICAL BUILD RULES
 
@@ -882,77 +880,60 @@ Implement all 5 selection type renderers in builder.js:
 
 ### Reveal Page (NOT Thank-You Page)
 The reveal page at `/reveal/` displays:
-1. Loading state with step-by-step messages while graphic generates
+1. Loading state with step-by-step messages while the graphic composites
 2. Profile headline and description (per profile variation from copy)
-3. Generated vision board graphic (from Glif API via /api/generate-graphic)
+3. Personalized vision board graphic (the profile base image composited with the user's name + tags in-browser via canvas)
 4. Download and share buttons
 5. Matched service recommendations
 6. Soft consultation CTA
 
-### Glif API Integration
-The Build Agent must:
-1. **Build-time generation**: Use Glif MCP to pre-generate static images:
+### Graphic Generation (pluggable provider layer)
+Reference: `agents/lead-magnet-agents/shared/generation-providers.md`. Two distinct jobs (do not conflate them).
+
+1. **Build-time generation (SRC's tools, default Higgsfield)**: Pre-generate static images via the build-time provider's MCP:
    - Hero image for landing page
    - Style card images (one per vibe option) for card_selection steps with show_images: true
-   - Profile mood board fallback images (one per profile)
-   Save all to deploy/public/images/
+   - One on-brand base graphic per result profile (these are the canvases the reveal page composites onto, not just fallbacks)
+   Save all to deploy/public/images/. Fill {variable} placeholders from architecture.md graphic_prompt_template when constructing the build-time prompts.
 
-2. **Runtime generation**: Create the `generate-graphic.js` Edge Function that:
-   - Receives user selections and matched profile
-   - Constructs the Glif prompt from the graphic_prompt_template in architecture.md
-   - Calls the Glif API with GLIF_API_TOKEN and GLIF_MODEL_ID
-   - Caches results in graphic_cache table
-   - Returns the generated image URL
+2. **Runtime graphic, DEFAULT (pre-generate + composite, NO runtime generative API call)**: The reveal page composites the user's name + selected tags onto the matching profile base image with canvas/SVG in the browser. Instant, free, deterministic, reliably on-brand, nothing to poll. There is no runtime generation endpoint and no graphic-cache table in the default build.
 
-3. **Prompt template construction**: Create `api/prompt-templates/[vertical].js` that:
-   - Takes user selections (tags, dimension values)
-   - Fills {variable} placeholders from architecture.md graphic_prompt_template
-   - Returns the complete prompt string
+3. **Runtime graphic, OPTIONAL upgrade (live per-user generation)**: Only when the client owns a REST-capable generation provider (e.g. KREA, possibly Magica) and wants fully-bespoke imagery. The Worker submits a generation job to the client's provider with the client's `GEN_API_KEY` secret, polls/awaits the result, and caches it (KV or D1) keyed by a hash of selections. Off by default; the reveal page must show a "creating your board..." state because these APIs are async. Construct the prompt by filling architecture.md's graphic_prompt_template {variable} placeholders from the user's selections.
 
-### Database Schema (7 tables)
-Schema includes these tables (all with {PREFIX} placeholders):
-- `{PREFIX}leads` (id, email, name, profile_id, profile_name, qualification_signal, source, status, created_at, updated_at)
-- `{PREFIX}selections` (id, lead_id, dimension_key, option_ids, option_labels, tags, created_at)
-- `{PREFIX}email_log` (id, lead_id, email_id, email_name, sequence_name, status, scheduled_for, sent_at, error_message, created_at)
-- `{PREFIX}email_templates` (id, email_id, email_name, sequence_name, segment, send_day, subject, body_html, cta_text, sender_name, created_at)
-- `{PREFIX}recommended_services` (id, lead_id, service_id, service_name, service_url, match_reason, position, created_at)
-- `{PREFIX}analytics_events` (id, session_id, event_type, event_data, utm_source, utm_medium, utm_campaign, utm_term, utm_content, page_url, referrer, user_agent, created_at)
-- `{PREFIX}graphic_cache` (id, prompt_hash, prompt_text, image_url, profile_id, created_at)
+### Database Schema (ONE D1 analytics table)
+The ONLY database in the adapted stack is a single Cloudflare D1 table for analytics. Leads, selections, recommended services, and all email state live in the client's Kit account (subscriber + custom fields + tags + sequences), not in a database. Use the canonical schema verbatim from `agents/lead-magnet-agents/build-agent/references/d1-analytics-schema.sql`:
+- `analytics_events` (id, event_type, profile_id, temperature, question_id, answer_id, utm_source, created_at)
 
-### .env.example includes:
+No leads table, no selections table, no email_log/email_templates tables, no recommended_services table, no graphic_cache table (the default composite pipeline caches nothing; the optional live-generation upgrade caches in KV or its own D1 table only when enabled).
+
+### Secrets + vars (set via `wrangler secret put` and wrangler.jsonc vars, mirrored in .env.example):
 ```
-# Supabase
-SUPABASE_URL=https://your-project-ref.supabase.co
-SUPABASE_SERVICE_ROLE_KEY=eyJ...
-SUPABASE_DB_URL=postgresql://postgres.[project-ref]:[password]@aws-0-us-east-1.pooler.supabase.com:6543/postgres
-TABLE_PREFIX=[business-name]_
+# Kit (the CLIENT'S OWN Kit account, never SRC's/Diane's)
+KIT_API_KEY=kit_xxxxxxxxxxxx              # secret; Kit v4 API key for the client's account
+KIT_SEQUENCE_HOT=                         # var; Kit sequence id for hot track
+KIT_SEQUENCE_WARM=                        # var; Kit sequence id for warm track
+KIT_SEQUENCE_COLD=                        # var; Kit sequence id for cold track
+KIT_TAG_PREFIX=visionboard                # var; tag namespace
 
-# Email (Optional)
-RESEND_API_KEY=re_xxxxxxxxxxxx
-EMAIL_FROM=Vision Board <hello@yourdomain.com>
-EMAIL_REPLY_TO=support@yourdomain.com
+# Analytics (single Cloudflare D1 table, bound as ANALYTICS_DB in wrangler.jsonc)
+DATA_RETENTION_ANALYTICS_DAYS=90          # var
 
 # Security
-CRON_SECRET=your-random-secret-string
-ADMIN_PASSWORD=your_secure_admin_password_here
+ADMIN_PASSWORD=your_secure_admin_password_here   # secret; gates /api/analytics-query and /admin
 
-# Glif API (Required for graphic generation)
-GLIF_API_TOKEN=your_glif_api_token
-GLIF_MODEL_ID=your_glif_model_id
-
-# Automation Webhook (Optional)
-GUMLOOP_WEBHOOK_URL=
+# Optional live per-user generation (only when client owns a REST generation provider)
+GEN_API_KEY=                              # secret; the client's generation-provider API key
 ```
 
 ## Output Folders
 - **Root level**: README.md, builder-prompt.md
-- **deploy/**: All Vercel-deployable files (Astro project)
-- **client-preview/**: GitHub Pages-ready preview files
+- **deploy/**: All deployable files (Astro project on Cloudflare Workers)
+- **client-preview/**: standalone preview files for a Cloudflare preview deploy
 
 ## Key File Specifications
 
 ### deploy/astro.config.mjs
-Astro config with @astrojs/vercel/static adapter.
+Astro config with `@astrojs/cloudflare` adapter and `output: 'static'` (pages prerender; API routes opt out per-route with `export const prerender = false`). See `agents/lead-magnet-agents/build-agent/references/cloudflare-kit-patterns.md`.
 
 ### deploy/package.json
 ```json
@@ -966,21 +947,20 @@ Astro config with @astrojs/vercel/static adapter.
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "setup-db": "node scripts/setup-schema.js"
-  },
-  "dependencies": {
-    "@supabase/supabase-js": "^2.39.0",
-    "pg": "^8.11.3"
+    "deploy": "wrangler deploy"
   },
   "devDependencies": {
     "astro": "^4.0.0",
-    "@astrojs/vercel": "^7.0.0"
+    "@astrojs/cloudflare": "^11.0.0",
+    "wrangler": "^3.0.0"
   }
 }
 ```
 
-### deploy/vercel.json
-Cron config for email sender. CORS headers allowing X-Admin-Password. No rewrites (Astro handles routing).
+(Leads and email live in Kit via the Kit v4 REST API. No Supabase/pg client dependency.)
+
+### deploy/wrangler.jsonc
+Worker config: `assets.directory` pointing at `./dist`, the `ANALYTICS_DB` D1 binding, CORS headers allowing X-Admin-Password, and an optional nightly analytics-cleanup cron (Kit owns email retention, so any cron here is analytics-only). Secrets (`KIT_API_KEY`, `ADMIN_PASSWORD`, optional `GEN_API_KEY`) set via `wrangler secret put`; sequence ids and tag prefix as vars. Pattern in `cloudflare-kit-patterns.md`.
 
 ### deploy/src/layouts/Layout.astro
 Base HTML shell with fonts from design.md and global CSS.
@@ -998,7 +978,7 @@ All CSS from design.md including:
 
 ### deploy/src/pages/index.astro (Landing Page)
 Astro landing page with copy from landing-page-copy.md. CTA links to /builder/ (NOT /quiz/).
-Hero image from Glif-generated public/images/hero.jpg.
+Hero image from the build-time-generated public/images/hero.jpg.
 
 ### deploy/src/pages/builder/index.astro (Builder Page)
 Two-column layout: builder panel (left) + live preview sidebar (right, desktop only).
@@ -1020,7 +1000,7 @@ Script: /scripts/builder.js with is:inline.
 ### deploy/src/pages/reveal/index.astro (Reveal Page)
 - Loading state with step-by-step messages
 - Profile headline + description (populated by reveal.js)
-- Graphic container (image loaded from /api/generate-graphic)
+- Graphic container (a canvas the profile base image is composited into in-browser; no generative API call in the default build)
 - Download + Share buttons
 - Service recommendation cards
 - Consultation CTA section
@@ -1028,49 +1008,39 @@ Script: /scripts/builder.js with is:inline.
 
 ### deploy/public/scripts/reveal.js
 - Read sessionStorage for profile data and selections
-- Call /api/generate-graphic with selections and profile
+- Load the matched profile's base image from public/images/profile-[profile-id].jpg, then composite the user's name + selected tags onto it with canvas (default pipeline, no network/generative call). For the optional live-generation upgrade, instead POST to the Worker's generation endpoint and poll until the image is ready.
 - Display loading steps with timed progression
-- On graphic loaded: hide loading, show reveal content
+- On graphic ready: hide loading, show reveal content
 - Populate profile headline, body, key values
 - Render recommendation cards from services data
-- Download button: fetch image, create blob URL, trigger download
+- Download button: export the composited canvas to a blob URL, trigger download
 - Share button: Web Share API with fallback copy-to-clipboard
 - Analytics tracking (reveal_page_viewed, graphic_generated, cta_clicked)
 
-### deploy/api/visionboard-submit.js
-Vercel Edge Function that:
+### deploy/src/pages/api/visionboard-submit.ts
+Astro API route (`export const prerender = false`) that runs on the Worker and registers the lead in the **client's own** Kit account. See `agents/lead-magnet-agents/shared/kit-integration.md` and `cloudflare-kit-patterns.md`. It:
 - Validates required fields (email, name, profileId, profileName, selections, tags)
-- Upserts lead to {PREFIX}leads (with profile_id, profile_name, qualification_signal)
-- Inserts selections to {PREFIX}selections
-- Inserts recommended services to {PREFIX}recommended_services
-- Schedules email sequence based on qualification signal
-- Sends Day 0 welcome email immediately (if RESEND_API_KEY configured)
-- Fires Gumloop webhook (if GUMLOOP_WEBHOOK_URL configured)
-- Returns JSON with leadId, profileId, profileName
+- Resolves email personalization at submit time into final strings (profile_block, answer_callback_1/2) so Kit can merge them via Liquid (no content_blocks DB)
+- Upserts the subscriber + custom fields to Kit (`POST /subscribers`, upsert by email_address): quiz_profile, quiz_temperature (internal only), profile_block, answer_callback_1/2
+- Applies the profile tag and the qualification (temperature) tag (`POST /tags/{id}/subscribers`)
+- Subscribes the lead to the matching Kit sequence by qualification signal (`POST /sequences/{id}/subscribers`). Kit handles all scheduling and sending (no Resend, no email cron, no webhook)
+- Logs one `quiz_completed` row to the D1 analytics_events table
+- Returns JSON with profileId, profileName
 
-### deploy/api/generate-graphic.js
-Vercel Edge Function that:
-- Receives POST with selections, tags, profileId, profileName
-- Checks graphic_cache for existing result (prompt_hash)
-- If cached: return cached image_url
-- If not cached: construct prompt using prompt-templates/[vertical].js
-- Call Glif API with constructed prompt
-- Cache result in graphic_cache table
-- Return image URL
+(No leads/selections/recommended_services tables. That data lives on the Kit subscriber record. Recommended services are computed client-side / from services.json for the reveal page.)
 
-### deploy/api/prompt-templates/[vertical].js
-Exports a function that takes user selections and returns the complete Glif prompt string.
-Fills {variable} placeholders from architecture.md graphic_prompt_template.
+### Graphic generation endpoint
+None in the default build. The reveal page composites the pre-generated profile base image in-browser (see "Graphic Generation" above), so there is no runtime generate-graphic endpoint and no vertical prompt-template module shipped to the Worker. The architecture.md graphic_prompt_template is consumed at build time when pre-generating the per-profile base images. The optional live-generation upgrade adds a Worker endpoint that fills that template from the user's selections and calls the client's REST generation provider. Enable only when the client owns a REST-capable provider.
 
-### deploy/api/email-sender.js
-Hourly cron function that queries email_templates table (not hardcoded), interpolates lead data, sends via Resend API. Same pattern as quiz version.
+### Email sending
+No email-sender function and no email cron. Kit owns email entirely: the lead is subscribed to a Kit sequence at submit time and Kit handles scheduling, personalization (Liquid merge of the custom fields), and delivery. There is no Resend, no email_queue, and no hourly send cron. (Seeding the Kit sequences with the email bodies happens build-time in `/setup-visionboard-kit`.)
 
-### deploy/api/analytics-event.js
-POST endpoint for logging funnel events. Same pattern as quiz version but with vision board event types:
+### deploy/src/pages/api/analytics-event.ts
+Astro API route (`export const prerender = false`) for logging funnel events to the D1 analytics_events table. Vision board event types:
 - page_view, builder_start, step_viewed, selection_made, email_captured, visionboard_completed, reveal_page_viewed, graphic_generated, cta_clicked
 
-### deploy/api/analytics-query.js
-GET endpoint with password protection. Same pattern as quiz version. Aggregates: funnel, qualification, daily, selections, utm, leads.
+### deploy/src/pages/api/analytics-query.ts
+Astro API route (`export const prerender = false`) with ADMIN_PASSWORD protection. Same pattern as quiz version, querying D1. Aggregates: funnel, qualification, daily, selections, utm. (Lead counts come from Kit, not a leads table.)
 
 ### deploy/src/pages/admin/index.astro + deploy/public/scripts/admin.js
 Analytics dashboard. Same structure as quiz version, adapted for:
@@ -1078,23 +1048,23 @@ Analytics dashboard. Same structure as quiz version, adapted for:
 - Qualification distribution (not temperature)
 - Selection distribution per dimension (not answer distribution per question)
 
-### deploy/scripts/setup-schema.js
-Creates all 7 tables with {PREFIX} placeholders. Parses and seeds email-sequences.csv.
+### Database setup
+No setup-schema.js and no Supabase schema. The only database is the single D1 analytics table, created/migrated with `wrangler d1 execute ANALYTICS_DB --file=./d1/analytics-schema.sql`. Email-sequence bodies are seeded into Kit (not a database) build-time by `/setup-visionboard-kit`.
 
-### deploy/supabase/schema.sql
-Complete schema template with all 7 tables, indexes, constraints, triggers, and RLS.
+### deploy/d1/analytics-schema.sql
+The single D1 analytics_events table. Use verbatim from `agents/lead-magnet-agents/build-agent/references/d1-analytics-schema.sql` (no {PREFIX} placeholders; one table, one site).
 
-### deploy/public/images/ (Build-Time Glif Generation)
-Download/generate these images locally:
+### deploy/public/images/ (Build-Time Generation)
+Download/generate these images locally via the build-time provider (default Higgsfield; see generation-providers.md):
 1. logo.svg - from business website
-2. hero.jpg - Glif-generated landing page hero
-3. style-[option-id].jpg - Glif-generated style card images (one per vibe option)
-4. profile-[profile-id].jpg - Glif-generated profile mood board fallbacks
+2. hero.jpg - generated landing page hero
+3. style-[option-id].jpg - generated style card images (one per vibe option)
+4. profile-[profile-id].jpg - generated profile base graphics (one per profile; these are the canvases the reveal page composites onto at runtime)
 5. portfolio-[n].jpg - downloaded from services.json portfolio images
 
 ### builder-prompt.md (Root Level)
 Complete AI-ready development prompt including:
-1. Tech stack (Astro 4.x, vanilla JS, Vercel Edge Functions, Glif API)
+1. Tech stack (Astro 4.x on Cloudflare Workers, vanilla JS, Astro API routes, Kit v4 for leads + email, single D1 analytics table, in-browser canvas compositing for the reveal graphic)
 2. Complete selection flow from architecture
 3. Profile matching logic
 4. All CSS variables from design.md
@@ -1108,17 +1078,21 @@ Package overview with deployment instructions:
 ```bash
 cd deploy
 npm install
-npm run setup-db
+wrangler d1 create [business-name]-vb-analytics      # once; paste id into wrangler.jsonc
+wrangler d1 execute ANALYTICS_DB --file=./d1/analytics-schema.sql
+wrangler secret put KIT_API_KEY                       # the client's own Kit key
+wrangler secret put ADMIN_PASSWORD
 npm run build
-vercel --prod
+wrangler deploy
 ```
+(Kit-side setup, including custom fields, tags, sequences, and seeded emails, runs build-time via `/setup-visionboard-kit` before deploy.)
 
 ### client/research.html
 Standalone HTML presenting research.md with full design system from design.md.
 Same pattern as quiz version (design-mode-specific decorative elements, brand typography, responsive).
 
 ### client-preview/ Folder
-7+ standalone HTML files for GitHub Pages:
+7+ standalone HTML files for the Cloudflare preview deploy:
 - index.html (navigation linking to all previews)
 - research.html (copy of client/research.html)
 - email-sequences.html (copy of client/email-sequences.html)
@@ -1129,28 +1103,27 @@ Same pattern as quiz version (design-mode-specific decorative elements, brand ty
 - ways-to-grow.html (from VB Copy Agent)
 
 ## Validation
-- [ ] deploy/astro.config.mjs exists with Vercel static adapter
-- [ ] deploy/package.json exists with astro, @astrojs/vercel, @supabase/supabase-js, pg
-- [ ] deploy/package.json has scripts: dev, build, preview, setup-db
-- [ ] deploy/vercel.json exists with cron configuration
-- [ ] deploy/.env.example includes GLIF_API_TOKEN and GLIF_MODEL_ID
-- [ ] deploy/scripts/setup-schema.js with email CSV seeding
-- [ ] deploy/supabase/schema.sql includes all 7 tables with {PREFIX}
-- [ ] deploy/public/images/ has logo.svg, hero.jpg, style cards, profile fallbacks
+- [ ] deploy/astro.config.mjs exists with @astrojs/cloudflare adapter and output: 'static'
+- [ ] deploy/package.json exists with astro, @astrojs/cloudflare, wrangler (no Supabase/pg client)
+- [ ] deploy/package.json has scripts: dev, build, preview, deploy
+- [ ] deploy/wrangler.jsonc exists with ANALYTICS_DB binding and optional analytics-only cron
+- [ ] deploy/.env.example includes KIT_API_KEY, KIT_SEQUENCE_HOT/WARM/COLD, ADMIN_PASSWORD (and optional GEN_API_KEY)
+- [ ] deploy/d1/analytics-schema.sql contains the single analytics_events table
+- [ ] deploy/public/images/ has logo.svg, hero.jpg, style cards, per-profile base graphics
 - [ ] deploy/src/layouts/Layout.astro exists
+- [ ] deploy/src/lib/kit.ts exists with Kit v4 helpers
 - [ ] deploy/src/pages/index.astro links to /builder/ (not /quiz/)
 - [ ] deploy/src/pages/builder/index.astro has all screens
 - [ ] deploy/src/pages/reveal/index.astro has loading, graphic, profile, recommendations, CTA
 - [ ] deploy/public/scripts/builder.js has all 5 renderers
 - [ ] deploy/public/scripts/builder.js has profile matching and qualification calculation
-- [ ] deploy/public/scripts/reveal.js calls /api/generate-graphic
+- [ ] deploy/public/scripts/reveal.js composites the profile base image in-browser (no generate-graphic call in default build)
 - [ ] deploy/public/styles/global.css includes builder + reveal specific styles
-- [ ] deploy/api/visionboard-submit.js exists with TABLE_PREFIX support
-- [ ] deploy/api/generate-graphic.js exists with Glif API integration
-- [ ] deploy/api/prompt-templates/[vertical].js exists
-- [ ] deploy/api/email-sender.js queries email_templates table
-- [ ] deploy/api/analytics-event.js exists
-- [ ] deploy/api/analytics-query.js exists with ADMIN_PASSWORD protection
+- [ ] deploy/src/pages/api/visionboard-submit.ts exists, registers the lead in the CLIENT'S Kit (subscriber + custom fields + tags + sequence) and logs to D1
+- [ ] No generate-graphic endpoint and no prompt-templates module in the default build (only added for the optional live-generation upgrade)
+- [ ] No email-sender function and no email cron (Kit owns email)
+- [ ] deploy/src/pages/api/analytics-event.ts exists
+- [ ] deploy/src/pages/api/analytics-query.ts exists with ADMIN_PASSWORD protection
 - [ ] deploy/src/pages/admin/index.astro exists
 - [ ] deploy/public/scripts/admin.js exists
 - [ ] builder-prompt.md (root) is complete
@@ -1158,33 +1131,33 @@ Same pattern as quiz version (design-mode-specific decorative elements, brand ty
 - [ ] client/research.html uses full design system
 - [ ] client-preview/ has 7+ standalone HTML files
 - [ ] No quiz/score/temperature language in user-facing pages
+- [ ] Cloudflare/Workers/D1/Astro/Kit-internal names never appear in client-facing copy or preview pages
 - [ ] No external CDN image URLs in deployable files
 ```
 
 #### Validation Gate 4
 After Build Agent completes, verify:
-- `deploy/package.json` exists with required dependencies
-- `deploy/scripts/setup-schema.js` exists with email CSV seeding
-- `deploy/supabase/schema.sql` includes all 7 tables (leads, selections, email_log, email_templates, recommended_services, analytics_events, graphic_cache)
-- `deploy/public/images/` has logo.svg and Glif-generated images
+- `deploy/package.json` exists with astro + @astrojs/cloudflare + wrangler (no Supabase/pg)
+- `deploy/d1/analytics-schema.sql` contains the single analytics_events table (no leads/selections/email/recommended-services/graphic-cache tables anywhere)
+- `deploy/public/images/` has logo.svg and build-time-generated images (hero, style cards, per-profile base graphics)
 - `deploy/src/pages/index.astro` links to /builder/ (not /quiz/)
 - `deploy/src/pages/builder/index.astro` has 4 screens (intro, builder, email, loading)
 - `deploy/src/pages/reveal/index.astro` has loading state, graphic container, profile section, recommendations, CTA
 - `deploy/public/scripts/builder.js` has all 5 selection type renderers
-- `deploy/public/scripts/reveal.js` calls /api/generate-graphic
-- `deploy/api/visionboard-submit.js` exists with TABLE_PREFIX support
-- `deploy/api/generate-graphic.js` exists with Glif API integration
-- `deploy/api/prompt-templates/[vertical].js` exists
-- `deploy/api/email-sender.js` queries email_templates table
-- `deploy/api/analytics-event.js` and `deploy/api/analytics-query.js` exist
+- `deploy/public/scripts/reveal.js` composites the profile base image in-browser (no generate-graphic call in default build)
+- `deploy/src/pages/api/visionboard-submit.ts` registers the lead in the CLIENT'S Kit (subscriber + custom fields + tags + sequence) and logs to D1
+- No generate-graphic endpoint / prompt-templates module in the default build (only for the optional live-generation upgrade)
+- No email-sender function and no email cron (Kit owns email)
+- `deploy/src/pages/api/analytics-event.ts` and `deploy/src/pages/api/analytics-query.ts` exist
 - `deploy/src/pages/admin/index.astro` and `deploy/public/scripts/admin.js` exist
-- `deploy/.env.example` includes GLIF_API_TOKEN and GLIF_MODEL_ID
+- `deploy/.env.example` includes KIT_API_KEY, KIT_SEQUENCE_HOT/WARM/COLD, ADMIN_PASSWORD (optional GEN_API_KEY)
 - `client/research.html` uses full design system from design.md
 - `client-preview/` has 7+ standalone HTML files
 - `builder-prompt.md` and `README.md` at root level are complete
 - No quiz/score/temperature language in user-facing pages
+- Cloudflare/Workers/D1/Astro never named in client-facing copy or preview pages
 - No external CDN image URLs in deployable files
-- deploy/ folder is ready for `cd deploy && npm install && npm run setup-db && npm run build && vercel --prod`
+- deploy/ folder is ready for `cd deploy && npm install && wrangler d1 execute ... && npm run build && wrangler deploy`
 
 ---
 
@@ -1193,7 +1166,7 @@ After Build Agent completes, verify:
 ```
 Task tool call:
 - subagent_type: "general-purpose"
-- description: "Publish vision board package to GitHub and Notion"
+- description: "Publish vision board package to GitHub, a preview deploy, and the vault"
 - prompt: [See Publish Agent Prompt below]
 ```
 
@@ -1209,9 +1182,9 @@ You are a Publish Agent for distributing the vision board builder package.
 - Output directory: /output/[business-name]/
 - Folder structure:
   - Root: README.md, builder-prompt.md
-  - deploy/: Vercel-ready Astro project
+  - deploy/: deployable Astro project (Cloudflare Workers)
   - client/: Strategy docs (research.md, architecture.md, design.md, copy files, etc.)
-  - client-preview/: GitHub Pages preview files (7+ standalone HTML files)
+  - client-preview/: standalone HTML preview files (7+) for a Cloudflare preview deploy
 
 ## Task 1: GitHub Repository (Private - Full Package)
 
@@ -1228,119 +1201,49 @@ Using the gh CLI via Bash:
 
 3. Capture and save repo URL
 
-## Task 2: GitHub Pages (Public - Client Preview)
+## Task 2: Client Preview (Cloudflare preview deploy)
 
-Create a separate public repo for client preview:
+Deploy the client-preview/ folder as a standalone static site to a Cloudflare preview URL (NOT GitHub Pages):
 
-1. Create temporary directory and copy client-preview files:
-   mkdir -p /tmp/[business-name]-preview
-   cp -r client-preview/* /tmp/[business-name]-preview/
+1. From the client-preview/ folder, deploy the static HTML as its own Worker/preview:
+   cd client-preview
+   wrangler deploy   # or `wrangler pages deploy .` per the project's preview setup
 
-2. Initialize and push to public repo:
-   cd /tmp/[business-name]-preview
-   git init
-   git add .
-   git commit -m "Client preview: [business-name] vision board funnel"
-   gh repo create [business-name]-visionboard-preview --public --source=. --push
+2. Capture the preview URL returned by wrangler (e.g. https://[business-name]-visionboard-preview.<account>.workers.dev/).
 
-3. Enable GitHub Pages:
-   gh repo edit [business-name]-visionboard-preview --enable-pages --pages-branch main
+Never name Cloudflare/Workers/D1/Astro on these preview pages. They are client-facing. Say "your site," "hosting."
 
-4. Capture GitHub Pages URL: https://YOUR_GITHUB_USERNAME.github.io/[business-name]-visionboard-preview/
+## Task 3: Save final deliverables to the vault (Obsidian home-base rule)
 
-## Task 3: Notion Database Entry
+Final client deliverables go to the vault, NOT Notion and NOT "GitHub only".
 
-Using Notion MCP tools with database ID: YOUR_NOTION_DATABASE_ID
-
-1. Create parent page in the database with properties:
-   - Business Name (title): [business-name]
-   - URL: [original business URL]
-   - Created Date: [today]
-   - Funnel Type: Vision Board
-   - Builder Title: [from client/architecture.md]
-   - Step Count: [from client/architecture.md]
-   - Profile Count: [number of profiles]
-   - GitHub Repo URL: [from Task 1]
-   - Preview URL: [from Task 2 - GitHub Pages URL]
-   - Status: "Complete"
-
-2. Add overview content to parent page:
-   - H1: Vision Board Builder Package
-   - Paragraph: Business description from client/research.md
-   - H2: Customer Profiles
-   - Brief summary of each profile
-   - H2: Quick Links
-   - Link to GitHub repo (private)
-   - Link to Client Preview (GitHub Pages)
-
-3. Create child pages organized by section:
-
-   **Strategy & Research (client/ folder):**
-   | Page Title | Source File | Content Format |
-   |------------|-------------|----------------|
-   | 1. Research | client/research.md | Markdown |
-   | 2. Research (Visual) | client/research.html | Code block |
-   | 3. Service Catalog | client/services.json | Code block |
-   | 4. Portfolio | client/portfolio.md | Markdown |
-   | 5. Architecture | client/architecture.md | Markdown |
-   | 6. Selection Flow | client/selection-flow.md | Markdown |
-   | 7. Selection Flow CSV | client/selection-flow.csv | Code block |
-   | 8. Design System | client/design.md | Markdown |
-
-   **Copy & Content (client/ folder):**
-   | Page Title | Source File | Content Format |
-   |------------|-------------|----------------|
-   | 9. Landing Page Copy | client/landing-page-copy.md | Markdown |
-   | 10. Builder Copy | client/builder-copy.md | Markdown |
-   | 11. Copy Explainer | client/vision-board-copy-explainer.html | Code block |
-   | 12. Email Sequences | client/email-sequences.md | Markdown |
-   | 13. Email CSV | client/email-sequences.csv | Code block |
-   | 14. Email Preview | client/email-sequences.html | Code block |
-
-   **Deployment (deploy/ folder):**
-   | Page Title | Source File | Content Format |
-   |------------|-------------|----------------|
-   | 15. Astro Config | deploy/astro.config.mjs | Code block |
-   | 16. Landing Page | deploy/src/pages/index.astro | Code block |
-   | 17. Builder Page | deploy/src/pages/builder/index.astro | Code block |
-   | 18. Reveal Page | deploy/src/pages/reveal/index.astro | Code block |
-   | 19. Global CSS | deploy/public/styles/global.css | Code block |
-   | 20. Builder JavaScript | deploy/public/scripts/builder.js | Code block |
-   | 21. Reveal JavaScript | deploy/public/scripts/reveal.js | Code block |
-   | 22. Graphic Generator | deploy/api/generate-graphic.js | Code block |
-
-   **Root Level:**
-   | Page Title | Source File | Content Format |
-   |------------|-------------|----------------|
-   | 23. Builder Prompt | builder-prompt.md | Markdown |
-   | 24. README | README.md | Markdown |
+1. Copy the client/ and client-preview/ deliverables into the vault at `clients/<client>/` (per `client_delivery_directory` in workflow-config.json). Create the client subfolder if it does not exist.
+2. Record the deliverable: business name, URL, funnel type (Vision Board), builder title + step count + profile count (from client/architecture.md), the private GitHub repo URL, and the Cloudflare preview URL.
+3. The working build stays in ./output/[business-name]; the vault copy is the durable record. Do not create a Notion database entry. Notion is dropped from this workflow.
 
 ## Output
 Report back with:
-- GitHub repo URL (private): https://github.com/YOUR_GITHUB_USERNAME/[business-name]-visionboard-funnel
-- GitHub Pages URL (public preview): https://YOUR_GITHUB_USERNAME.github.io/[business-name]-visionboard-preview/
-- Notion page URL: [link to parent page]
-- Confirmation: "Published successfully with 24 child pages"
+- GitHub repo URL (private): https://github.com/diane-blip/[business-name]-visionboard-funnel
+- Cloudflare preview URL (client preview): [from Task 2]
+- Vault delivery path: clients/<client>/
+- Confirmation: "Published: private repo + preview deploy + saved to vault."
 
 ## Validation
 - [ ] Private GitHub repo created and accessible
 - [ ] All files pushed to GitHub (deploy/, client/, client-preview/ folders)
-- [ ] Public preview repo created with GitHub Pages enabled
-- [ ] GitHub Pages URL is accessible
-- [ ] Notion parent page created with Funnel Type = "Vision Board"
-- [ ] All 24 child pages created in Notion (organized by section)
-- [ ] Content renders correctly in Notion
+- [ ] Client preview deployed to a Cloudflare preview URL (not GitHub Pages) and accessible
+- [ ] Final deliverables saved to the vault at clients/<client>/ (not Notion, not GitHub-only)
+- [ ] No Cloudflare/Workers/D1/Astro names on client-facing preview pages
 ```
 
 #### Validation Gate 5
 After Publish Agent completes, verify:
 - Private GitHub repo URL is valid and accessible
 - Repo named `[business-name]-visionboard-funnel` (not quiz-funnel)
-- Public GitHub Pages preview URL is live and accessible
-- Notion page URL is valid with Funnel Type = "Vision Board"
-- 24 child pages exist in Notion (organized by section)
+- Cloudflare preview URL is live and accessible (not GitHub Pages)
+- Final deliverables saved to the vault at clients/<client>/ (not Notion)
 - All content is readable
-- Preview URL property populated in Notion
+- No Cloudflare/Workers/D1/Astro names on client-facing preview pages
 
 ---
 
@@ -1352,9 +1255,9 @@ After all stages complete, confirm to user:
 Vision board builder package complete!
 
 ## Published To:
-- GitHub (private): https://github.com/YOUR_GITHUB_USERNAME/[business-name]-visionboard-funnel
-- GitHub Pages (client preview): https://YOUR_GITHUB_USERNAME.github.io/[business-name]-visionboard-preview/
-- Notion: [link to parent page with 24 child pages]
+- GitHub (private): https://github.com/diane-blip/[business-name]-visionboard-funnel
+- Cloudflare preview (client preview): [preview URL]
+- Vault delivery: clients/<client>/
 
 ## Local Files:
 Output: /output/[business-name]/
@@ -1379,32 +1282,29 @@ Output: /output/[business-name]/
 15. client/email-sequences.csv - Import-ready email data
 16. client/email-sequences.html - Visual email preview
 
-### deploy/ (Vercel-Ready Astro Project)
-17. deploy/astro.config.mjs - Astro config with Vercel adapter
+### deploy/ (Astro Project on Cloudflare Workers)
+17. deploy/astro.config.mjs - Astro config with Cloudflare adapter
 18. deploy/tsconfig.json - TypeScript config
-19. deploy/package.json - Astro + Supabase dependencies
-20. deploy/vercel.json - Cron config + CORS headers
-21. deploy/.env.example - Environment variable template (inc. GLIF_API_TOKEN)
-22. deploy/public/images/ - Local images (logo, hero, style cards, profiles, portfolio)
+19. deploy/package.json - Astro + Cloudflare/wrangler dependencies
+20. deploy/wrangler.jsonc - Worker config, D1 binding, headers, optional cron
+21. deploy/.env.example - Environment variable template (Kit + analytics + admin)
+22. deploy/public/images/ - Local images (logo, hero, style cards, profile base graphics, portfolio)
 23. deploy/public/styles/global.css - CSS variables and styles
 24. deploy/public/scripts/builder.js - Builder selection flow logic
-25. deploy/public/scripts/reveal.js - Graphic loading, download, share
+25. deploy/public/scripts/reveal.js - In-browser graphic compositing, download, share
 26. deploy/public/scripts/admin.js - Dashboard logic
 27. deploy/src/layouts/Layout.astro - Base HTML layout
-28. deploy/src/pages/index.astro - Landing page
-29. deploy/src/pages/builder/index.astro - Builder page
-30. deploy/src/pages/reveal/index.astro - Reveal page
-31. deploy/src/pages/admin/index.astro - Analytics dashboard
-32. deploy/scripts/setup-schema.js - Database setup + email seeding
-33. deploy/supabase/schema.sql - 7-table schema
-34. deploy/api/visionboard-submit.js - Lead submission Edge Function
-35. deploy/api/generate-graphic.js - Glif graphic generation
-36. deploy/api/prompt-templates/[vertical].js - Prompt construction
-37. deploy/api/email-sender.js - Email Cron Function
-38. deploy/api/analytics-event.js - Analytics tracking
-39. deploy/api/analytics-query.js - Dashboard queries
+28. deploy/src/lib/kit.ts - Kit v4 REST helpers
+29. deploy/src/pages/index.astro - Landing page
+30. deploy/src/pages/builder/index.astro - Builder page
+31. deploy/src/pages/reveal/index.astro - Reveal page
+32. deploy/src/pages/admin/index.astro - Analytics dashboard
+33. deploy/d1/analytics-schema.sql - Single D1 analytics_events table
+34. deploy/src/pages/api/visionboard-submit.ts - Registers lead in the client's Kit + logs to D1
+35. deploy/src/pages/api/analytics-event.ts - Analytics tracking
+36. deploy/src/pages/api/analytics-query.ts - Dashboard queries
 
-### client-preview/ (GitHub Pages)
+### client-preview/ (Cloudflare preview deploy)
 40. client-preview/index.html - Navigation page
 41. client-preview/research.html - Research preview
 42. client-preview/email-sequences.html - Email preview
@@ -1418,33 +1318,34 @@ Output: /output/[business-name]/
 ```bash
 cd /output/[business-name]/deploy/
 
-# 1. Set environment variables
-export SUPABASE_DB_URL="postgresql://..."
-export TABLE_PREFIX="[business-name]_"
-
-# 2. Install and setup database
+# 1. Install
 npm install
-npm run setup-db
 
-# 3. Build and deploy
+# 2. Create + migrate the single D1 analytics table
+wrangler d1 create [business-name]-vb-analytics      # once; paste id into wrangler.jsonc
+wrangler d1 execute ANALYTICS_DB --file=./d1/analytics-schema.sql
+
+# 3. Set secrets (the client's own Kit key)
+wrangler secret put KIT_API_KEY
+wrangler secret put ADMIN_PASSWORD
+
+# 4. Build and deploy
 npm run build
-vercel --prod
+wrangler deploy
 ```
 
-Required Vercel environment variables:
-- SUPABASE_URL
-- SUPABASE_SERVICE_ROLE_KEY
-- TABLE_PREFIX
-- ADMIN_PASSWORD
-- GLIF_API_TOKEN
-- GLIF_MODEL_ID
-- CRON_SECRET
-- RESEND_API_KEY (optional)
+Required secrets + vars (Kit-side setup runs build-time via /setup-visionboard-kit before deploy):
+- KIT_API_KEY (secret; the client's own Kit account)
+- KIT_SEQUENCE_HOT / KIT_SEQUENCE_WARM / KIT_SEQUENCE_COLD (vars)
+- KIT_TAG_PREFIX (var)
+- ADMIN_PASSWORD (secret)
+- DATA_RETENTION_ANALYTICS_DAYS (var, default 90)
+- GEN_API_KEY (secret, optional; only for the live per-user generation upgrade)
 ```
 
 ---
 
-## Next Step: Database Setup
+## Next Step: Kit + Analytics Setup
 
 **IMPORTANT: After all files are generated, ALWAYS output this prompt to the user:**
 
@@ -1453,12 +1354,12 @@ Vision board funnel generated!
 
 Output: output/[business-name]/
 
-Next step: Run /setup-visionboard-db [business-name] to:
-- Connect Supabase database
-- Create 7 tables and seed email templates
+Next step: Run /setup-visionboard-kit [business-name] to:
+- Set up the client's own Kit account (custom fields, tags, sequences, seeded emails)
+- Create + migrate the single D1 analytics table
 - Configure admin dashboard
-- Set up Glif API integration
-- Set up Gumloop webhook (optional)
+- Confirm the build-time generation provider (default Higgsfield) for the profile base graphics
+- (Optional) Configure a client REST generation provider for live per-user graphics
 
 This will guide you through the setup process.
 ```
@@ -1504,19 +1405,18 @@ This will guide you through the setup process.
 | `mcp__browserbase__browserbase_screenshot` | Capture visual screenshot |
 | `mcp__browserbase__browserbase_session_close` | Close cloud browser session |
 
-### Build Stage (Glif Generation)
+### Build Stage (Image Generation, build-time)
 | Tool | Purpose |
 |------|---------|
-| Glif MCP | Generate hero image, style card images, profile mood board fallbacks |
+| Build-time generation provider MCP (default Higgsfield) | Generate hero image, style card images, per-profile base graphics. See `agents/lead-magnet-agents/shared/generation-providers.md`. |
 
 ### Publish Stage
 | Tool | Purpose |
 |------|---------|
-| `gh repo create` (Bash) | Create GitHub repository |
+| `gh repo create` (Bash) | Create private GitHub repository |
 | `gh repo view` (Bash) | Get repository URL |
-| Notion MCP `create_page` | Create parent page in database |
-| Notion MCP `append_block_children` | Add content blocks to pages |
-| Notion MCP `create_page` (nested) | Create child pages under parent |
+| `wrangler deploy` (Bash) | Deploy the client-preview as a Cloudflare preview |
+| Filesystem (Write/copy) | Save final deliverables to the vault at clients/<client>/ |
 
 ---
 
@@ -1539,11 +1439,11 @@ This will guide you through the setup process.
 4. If no data available, use vertical template defaults with warning
 5. Full fallback chain: Playwright → BrowserBase → WebFetch → Manual → Defaults
 
-### If Glif MCP fails during build:
+### If the build-time generation provider fails:
 1. Log the error and which image failed to generate
 2. Use placeholder images (solid color cards with text overlays)
-3. Note in README.md that Glif images need regeneration
-4. The runtime generate-graphic.js endpoint handles its own errors with fallback profile images
+3. Note in README.md that the generated images need regeneration
+4. The reveal page degrades gracefully: if a profile base image is missing, it composites onto a branded solid-color background instead
 
 ### If context file provided instead of URL:
 1. Skip Playwright/BrowserBase website scraping

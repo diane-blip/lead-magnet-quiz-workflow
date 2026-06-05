@@ -1,14 +1,44 @@
 {
-  "github_username": "YOUR_GITHUB_USERNAME",
-  "notion_database_id": "YOUR_NOTION_DATABASE_ID",
+  "github_username": "diane-blip",
+  "deploy": {
+    "platform": "cloudflare-workers",
+    "preview_platform": "cloudflare-workers"
+  },
+  "email": {
+    "platform": "kit",
+    "api_version": "v4",
+    "owner": "client",
+    "_owner_rule": "ALWAYS the client's own Kit account. Never Diane's. Firm rule, 2026-06-04."
+  },
+  "data": {
+    "analytics_store": "cloudflare-d1"
+  },
+  "generation": {
+    "_doc": "Pluggable image/video providers. See agents/lead-magnet-agents/shared/generation-providers.md. Build-time = SRC's tools; runtime = client's tools (parallels client-owns-Kit).",
+    "build_time_provider": "higgsfield",
+    "runtime_mode": "pregenerated_composite",
+    "runtime_provider": null,
+    "providers": {
+      "higgsfield": { "mcp": "https://mcp.higgsfield.ai/mcp", "runtime_rest": false },
+      "krea": { "cli": "@krea-ai/cli", "runtime_rest": true, "api_base": "https://api.krea.ai" },
+      "magica": { "mcp": "unconfirmed", "runtime_rest": "unconfirmed" }
+    }
+  },
+  "video": {
+    "_doc": "RESOLVED 2026-06-04: Remotion dropped entirely. Social ad is optional, off by default; when on, generate an atmospheric promo via the AI video provider. The remotion/ workspace is removed in the rewrite phase.",
+    "mode": "optional",
+    "default_on": false,
+    "provider": "ai-generation"
+  },
   "paths": {
     "output_directory": "./output",
-    "remotion_workspace": "./remotion"
+    "client_delivery_directory": "../../clients"
   },
   "pricing": {
-    "quiz_build": 3497,
-    "vision_board_build": 2997,
-    "bundle": 5497,
+    "_note": "APPROVED by Diane 2026-06-04. (Original repo shipped 3497/2997/5497; replaced to align with the SRC app-dev band for a full funnel + 26-email engine + dashboard.)",
+    "quiz_build": 2500,
+    "vision_board_build": 1995,
+    "bundle": 3995,
     "currency": "USD"
   }
 }

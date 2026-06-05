@@ -16,7 +16,7 @@
       "display_config": {
         "card_size": "large",
         "show_images": true,
-        "image_source": "glif_generated",
+        "image_source": "pregenerated_base",
         "columns": 2
       },
       "options": [
@@ -25,7 +25,7 @@
           "label": "Rustic Barn",
           "icon": "barn",
           "tags": ["rustic", "barn", "country", "natural"],
-          "glif_prompt_keywords": "rustic barn wedding, wooden beams, fairy lights, wildflowers, natural textures",
+          "base_image_keywords": "rustic barn wedding, wooden beams, fairy lights, wildflowers, natural textures",
           "graphic_elements": {
             "palette": "warm-earth",
             "mood": "cozy and authentic"
@@ -36,7 +36,7 @@
           "label": "Elegant Ballroom",
           "icon": "crown",
           "tags": ["elegant", "ballroom", "formal", "classic"],
-          "glif_prompt_keywords": "elegant ballroom wedding, crystal chandeliers, white florals, gold accents, formal table settings",
+          "base_image_keywords": "elegant ballroom wedding, crystal chandeliers, white florals, gold accents, formal table settings",
           "graphic_elements": {
             "palette": "ivory-gold",
             "mood": "timeless and refined"
@@ -47,7 +47,7 @@
           "label": "Beach Sunset",
           "icon": "sunset",
           "tags": ["beach", "sunset", "coastal", "relaxed"],
-          "glif_prompt_keywords": "beach sunset wedding, ocean backdrop, flowing fabrics, tropical flowers, golden hour light",
+          "base_image_keywords": "beach sunset wedding, ocean backdrop, flowing fabrics, tropical flowers, golden hour light",
           "graphic_elements": {
             "palette": "ocean-sunset",
             "mood": "dreamy and free"
@@ -58,7 +58,7 @@
           "label": "Garden Romance",
           "icon": "flower",
           "tags": ["garden", "romantic", "floral", "outdoor"],
-          "glif_prompt_keywords": "romantic garden wedding, lush greenery, arched trellis, soft florals, dappled sunlight",
+          "base_image_keywords": "romantic garden wedding, lush greenery, arched trellis, soft florals, dappled sunlight",
           "graphic_elements": {
             "palette": "sage-blush",
             "mood": "romantic and lush"
@@ -69,7 +69,7 @@
           "label": "Modern Industrial",
           "icon": "building",
           "tags": ["modern", "industrial", "urban", "minimalist"],
-          "glif_prompt_keywords": "modern industrial wedding, exposed brick, geometric decor, dramatic lighting, monochrome palette",
+          "base_image_keywords": "modern industrial wedding, exposed brick, geometric decor, dramatic lighting, monochrome palette",
           "graphic_elements": {
             "palette": "charcoal-copper",
             "mood": "bold and contemporary"
@@ -80,7 +80,7 @@
           "label": "Intimate Backyard",
           "icon": "home",
           "tags": ["intimate", "backyard", "casual", "personal"],
-          "glif_prompt_keywords": "intimate backyard wedding, string lights, mismatched chairs, personal touches, warm candlelight",
+          "base_image_keywords": "intimate backyard wedding, string lights, mismatched chairs, personal touches, warm candlelight",
           "graphic_elements": {
             "palette": "warm-neutral",
             "mood": "personal and heartfelt"
@@ -306,7 +306,7 @@
     "composite_formula": "urgency * 0.6 + budget_fit * 0.4"
   },
 
-  "graphic_prompt_template": "Pinterest-style wedding mood board collage, editorial quality.\nStyle: {vibe_label} aesthetic, {vibe_glif_keywords}.\nSeason: {season_label} palette with {season_colors}.\nKey visual elements: {must_haves_visual_descriptions}.\n{guest_count_atmosphere} reception space.\nRomantic, aspirational, shareable. Magazine quality editorial layout.\nWarm {season_lighting}.\nNo text overlays, purely visual mood board.\nUltra-detailed, professional wedding photography quality, 8K.",
+  "graphic_prompt_template": "Pinterest-style wedding mood board collage, editorial quality.\nStyle: {vibe_label} aesthetic, {vibe_base_image_keywords}.\nSeason: {season_label} palette with {season_colors}.\nKey visual elements: {must_haves_visual_descriptions}.\n{guest_count_atmosphere} reception space.\nRomantic, aspirational, shareable. Magazine quality editorial layout.\nWarm {season_lighting}.\nNo text overlays, purely visual mood board.\nUltra-detailed, professional wedding photography quality, 8K.",
 
   "email_sequence_angle": {
     "welcome": "Deliver vision board graphic + introduce planner's portfolio matches",

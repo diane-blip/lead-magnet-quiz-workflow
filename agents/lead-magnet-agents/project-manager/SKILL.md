@@ -249,25 +249,25 @@ Update status.json and proceed to packaging.
 **Create two final deliverables:**
 
 1. **README.md** - Project summary and implementation checklist
-2. **REPLIT-PROMPT.md** - Copy-paste prompt for Replit Agent
+2. **builder-prompt.md** - Copy-paste prompt for the build agent
 
 ```
 output/[business-name]/README.md
-output/[business-name]/REPLIT-PROMPT.md
+output/[business-name]/builder-prompt.md
 ```
 
 ---
 
-#### REPLIT-PROMPT.md Template
+#### builder-prompt.md Template
 
-This file must be generated from architecture and design outputs. It gives the Replit agent everything needed to build the quiz in a single prompt.
+This file must be generated from architecture and design outputs. It gives the build agent everything needed to build the quiz in a single prompt.
 
 **Required sections:**
 
 ```markdown
-# Replit Agent Prompt: [Business Name] Quiz
+# Builder Prompt: [Business Name] Quiz
 
-Copy everything below the line and paste into Replit Agent.
+Copy everything below the line and paste into the build agent.
 
 ---
 
@@ -376,11 +376,11 @@ Contents:
 - Typography: `4-design/typography.md`
 - CSS: `4-design/components.css`
 
-### 4. Replit Build
-**Use `REPLIT-PROMPT.md`** - Copy everything below the `---` line and paste directly into Replit Agent. It contains all questions, scoring logic, CSS, and specs needed to build the quiz.
+### 4. Build
+**Use `builder-prompt.md`** - Copy everything below the `---` line and paste directly into the build agent. It contains all questions, scoring logic, CSS, and specs needed to build the quiz.
 
 ### 5. Implementation Checklist
-- [ ] Paste REPLIT-PROMPT.md into Replit Agent
+- [ ] Paste builder-prompt.md into the build agent
 - [ ] Review generated quiz
 - [ ] Connect to email platform
 - [ ] Set up 5 email sequences
@@ -391,7 +391,7 @@ Contents:
 
 ### Root Files
 - `README.md` - Project summary and implementation checklist
-- `REPLIT-PROMPT.md` - Copy-paste prompt for Replit Agent
+- `builder-prompt.md` - Copy-paste prompt for the build agent
 - `project-config.json` - Project configuration
 - `status.json` - Pipeline status tracker
 
@@ -434,7 +434,7 @@ Update `status.json` to show project complete.
 >
 > Start with `DELIVERABLES.md` for the full index and implementation checklist.
 >
-> Ready to code in Replit."
+> Ready for the build agent."
 
 ## Status Tracking
 
@@ -517,7 +517,7 @@ Be direct. Tell them exactly what to do and what they'll get.
 - All 4 agent outputs validated
 - All files exist in expected locations
 - README.md created with full index
-- REPLIT-PROMPT.md created with complete prompt (questions, scoring, CSS)
+- builder-prompt.md created with complete prompt (questions, scoring, CSS)
 - Status.json shows all steps complete
 
 **Red flags to check:**

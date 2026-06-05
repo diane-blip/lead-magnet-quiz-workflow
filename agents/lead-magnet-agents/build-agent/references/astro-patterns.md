@@ -1,5 +1,7 @@
 # Astro Patterns Reference
 
+> **Plumbing note:** `cloudflare-kit-patterns.md` is the canonical reference for deploy/runtime plumbing (config, API routes, data, email, deployment). The integration sections in this file have been updated to match it; if anything here conflicts, that file wins.
+
 Reference patterns for generating Astro components in the lead-magnet-quiz workflow.
 
 ## Component Syntax
@@ -545,11 +547,10 @@ deploy/
 ├── astro.config.mjs
 ├── tsconfig.json
 ├── package.json
-├── vercel.json
+├── wrangler.jsonc
 ├── .env.example
-├── api/                          # Unchanged - Vercel Edge Functions
-├── scripts/setup-schema.js       # Unchanged
-├── supabase/schema.sql           # Unchanged
+├── d1/
+│   └── analytics-schema.sql      # The single analytics table (D1)
 ├── public/
 │   ├── images/
 │   │   ├── logo.svg
@@ -563,13 +564,18 @@ deploy/
 └── src/
     ├── layouts/
     │   └── Layout.astro
+    ├── lib/                       # kit.ts, content-blocks.ts
     └── pages/
         ├── index.astro
         ├── quiz/
         │   ├── index.astro
         │   └── thank-you.astro
-        └── admin/
-            └── index.astro
+        ├── admin/
+        │   └── index.astro
+        └── api/                   # Astro API routes (prerender = false)
+            ├── quiz-submit.ts     # Quiz submission -> Kit subscriber + analytics row
+            ├── analytics-event.ts # POST - logs funnel events to D1
+            └── analytics-query.ts # GET - dashboard data (password protected)
 ```
 
 ## Configuration Files
@@ -578,17 +584,19 @@ deploy/
 
 ```javascript
 import { defineConfig } from 'astro/config';
-import vercel from '@astrojs/vercel/static';
+import cloudflare from '@astrojs/cloudflare';
 
 export default defineConfig({
-  site: 'https://your-domain.com',
-  output: 'static',
-  adapter: vercel(),
+  site: 'https://quiz.clientdomain.com',
+  output: 'static',          // pages prerender; API routes opt out per-route
+  adapter: cloudflare(),
   build: {
     inlineStylesheets: 'auto'
   }
 });
 ```
+
+Pages are static by default. API routes under `src/pages/api/` set `export const prerender = false` so they run on the Worker at request time. There is no `vercel.json`. Routing is file-based, and headers, cron, and bindings (the single D1 analytics database) live in `wrangler.jsonc`. See `cloudflare-kit-patterns.md` for the `wrangler.jsonc`, bindings table, and API-route code.
 
 ### tsconfig.json
 
@@ -606,9 +614,9 @@ export default defineConfig({
 | Aspect | Plain HTML | Astro |
 |--------|-----------|-------|
 | File extension | `.html` | `.astro` |
-| Routing | Manual (vercel.json rewrites) | Automatic (file-based) |
+| Routing | Manual (rewrite rules) | Automatic (file-based) |
 | Scripts | `<script src="...">` | `<script src="..." is:inline>` |
 | Styles | External CSS file | Scoped `<style>` or global CSS |
 | Images | `images/logo.svg` | `/images/logo.svg` (from public/) |
 | Build | None (static files) | `npm run build` creates dist/ |
-| Deploy | `vercel --prod` | `npm run build && vercel --prod` |
+| Deploy | Manual upload | `npm run build && wrangler deploy` |

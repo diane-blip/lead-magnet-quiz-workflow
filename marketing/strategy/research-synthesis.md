@@ -152,10 +152,9 @@ The quiz funnel market is fragmented between DIY tools ($27-600/mo) and full-ser
 | Brand-matched design | ❌ | ❌ | ❌ | ✅ | ✅ |
 | Landing page copy | ❌ | ❌ | ❌ | ✅ | ✅ |
 | Email sequences | ❌ | ❌ | ❌ | Sometimes | ✅ (14 emails) |
-| Email automation | ❌ | ❌ | ❌ | ❌ | ✅ (Supabase + cron) |
+| Email automation | ❌ | ❌ | ❌ | ❌ | ✅ (Kit sequences) |
 | Analytics dashboard | Basic | Basic | Basic | ❌ | ✅ (Full dashboard) |
-| Deployment | ❌ | ❌ | ❌ | ✅ | ✅ (Vercel-ready) |
-| Video assets | ❌ | ❌ | ❌ | ❌ | ✅ (Remotion) |
+| Deployment | ❌ | ❌ | ❌ | ✅ | ✅ (deploy-ready) |
 | Time to deploy | Hours | Hours | Hours | 3-6 weeks | **7 days** |
 | Cost | $27-125/mo | $14-600/mo | $25-70/mo | $5K-15K | **TBD** |
 
@@ -186,10 +185,9 @@ The quiz funnel market is fragmented between DIY tools ($27-600/mo) and full-ser
 - ✅ Brand-matched design
 - ✅ Landing + quiz + results pages
 - ✅ 14 email sequences
-- ✅ Email automation (Supabase + cron)
+- ✅ Email automation (Kit sequences)
 - ✅ Analytics dashboard
-- ✅ Vercel-ready deployment
-- ✅ Video assets (Remotion)
+- ✅ Deploy-ready handoff
 - ✅ **7 days delivery**
 
 ---
@@ -268,7 +266,7 @@ Based on market research:
 3. **Per-Quiz**: $497-997 per quiz generated (usage-based)
 4. **Hybrid**: $497 one-time + $47/mo for updates (low barrier + recurring)
 
-**Recommendation**: Test with $2,497 one-time (middle of agency range, 7-day delivery, complete system).
+**Recommendation**: Test with $2,500 one-time (middle of agency range, 7-day delivery, complete system).
 
 ---
 
@@ -367,7 +365,7 @@ Total hidden cost: $2,500-7,800 + $80-300/mo. We include all of that."
 ---
 
 ### Objection 5: "Can I customize it after?"
-**Response**: "Yes. All code is yours, fully editable, and deployed to your Vercel account. Want to change copy? Edit the HTML. Want different questions? Regenerate in 7 days with new inputs. You own everything."
+**Response**: "Yes. All code is yours, fully editable, and deployed to your own site. Want to change copy? Edit the HTML. Want different questions? Regenerate in 7 days with new inputs. You own everything."
 
 ---
 
@@ -383,9 +381,9 @@ Total hidden cost: $2,500-7,800 + $80-300/mo. We include all of that."
 ### Demo Flow
 1. Show Madi's On A Roll example (live quiz)
 2. Walk through admin dashboard (analytics)
-3. Show email sequences in Supabase (automation)
+3. Show email sequences in Kit (automation)
 4. Show GitHub repos (code ownership)
-5. Show video assets (Remotion components)
+5. Show optional social ad (produced via the AI video provider when a client wants one)
 6. Explain 15-minute generation process
 7. Compare to Interact/Outgrow/agencies
 8. Close with pricing
@@ -415,7 +413,7 @@ Total hidden cost: $2,500-7,800 + $80-300/mo. We include all of that."
 2. ✅ Positioning angles updated with market data
 3. **Next**: Create internal-strategy.html with all 5 angles + competitive analysis + objection handling
 4. **Then**: Create customer-facing landing page using primary angle (#3)
-5. **Finally**: Deploy to GitHub Pages (customer-facing files only)
+5. **Finally**: Publish a client preview deploy (customer-facing files only)
 
 ---
 

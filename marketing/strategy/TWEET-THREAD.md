@@ -8,24 +8,23 @@ Run one command, get a complete quiz funnel that:
 - Scores them automatically
 - Nurtures via email sequences
 - Tracks analytics
-- Includes video assets
 
 Here's everything included in `/lead-magnet-quiz`:
 
 **Tweet 2 - Production-Ready Code:**
-✅ Vercel-ready deployment folder
+✅ Deploy-ready site
 ✅ Landing page (fully designed HTML/CSS)
 ✅ Quiz app (6-12 questions, scoring logic)
 ✅ Thank you pages (3 variants: hot/warm/cold)
 ✅ Admin analytics dashboard
-✅ 4 Vercel Edge Functions (API endpoints)
+✅ 3 API routes (endpoints)
 
-**Tweet 3 - Database & Backend:**
-✅ Complete Supabase schema (6 tables)
-✅ Auto-setup script (one command: `npm run setup-db`)
-✅ Email queue system with hourly cron
+**Tweet 3 - Data & Backend:**
+✅ Leads and email live in the client's own Kit account
+✅ One analytics table, auto-set-up (one command)
+✅ Email sequences triggered automatically by score
 ✅ Analytics event tracking (8 event types)
-✅ Multi-tenant support with table prefixes
+✅ Custom fields for per-lead personalization
 
 **Tweet 4 - Email Automation:**
 ✅ 14 pre-written emails across 5 sequences:
@@ -35,7 +34,7 @@ Here's everything included in `/lead-magnet-quiz`:
   - Hot Path (2 emails)
   - Win-back (2 emails)
 
-All stored in database, triggered automatically by score
+All in the client's Kit account, triggered automatically by score
 
 **Tweet 5 - Design System:**
 ✅ Custom color palette (brand-matched)
@@ -45,11 +44,10 @@ All stored in database, triggered automatically by score
 ✅ Animations & micro-interactions
 ✅ Component library
 
-**Tweet 6 - Video Assets (Remotion):**
-✅ Quiz intro teaser (TSX component)
-✅ 3 result reveal videos (hot/warm/cold)
-✅ Social ad template (Instagram/TikTok)
-✅ Ready to render: `npx remotion render`
+**Tweet 6 - Optional Social Ad:**
+✅ Optional, off by default
+✅ Atmospheric promo for Instagram/TikTok
+✅ Produced via the AI video provider when you want one
 
 **Tweet 7 - Analytics Dashboard:**
 ✅ Real-time KPI cards
@@ -72,7 +70,7 @@ All stored in database, triggered automatically by score
 ✅ Quiz copy (all questions + progress messages)
 ✅ Email sequences (CSV + HTML preview)
 ✅ Questions & answers (CSV export)
-✅ GitHub Pages preview site for client review
+✅ Hosted preview site for client review
 
 **Tweet 10 - Developer Tools:**
 ✅ README with deployment steps
@@ -86,12 +84,11 @@ One-command deployment:
 ```bash
 cd deploy
 npm install
-npm run setup-db
-vercel --prod
+npm run deploy
 ```
 
 Done. Your quiz funnel is live with:
-- Database ✅
+- Leads in your Kit account ✅
 - Email automation ✅
 - Analytics ✅
 
@@ -123,7 +120,7 @@ Let's break down EXACTLY what you get in the `/lead-magnet-quiz` output folder.
 3 main directories:
 📁 deploy/ (production code)
 📁 client/ (strategy docs)
-📁 client-preview/ (GitHub Pages)
+📁 client-preview/ (hosted preview)
 
 Starting with deploy/ →
 
@@ -131,7 +128,7 @@ Starting with deploy/ →
 ```
 deploy/
 ├── index.html          # Landing page
-├── vercel.json         # Config + cron jobs
+├── wrangler.jsonc      # Config
 ├── package.json        # Dependencies
 └── .env.example        # Environment template
 ```
@@ -143,16 +140,15 @@ Landing page includes:
 - Quiz CTA
 - Mobile-responsive
 
-**Tweet 3 - deploy/api/ (Edge Functions):**
+**Tweet 3 - src/pages/api/ (API routes):**
 ```
-api/
-├── quiz-submit.js      # POST - Saves quiz + scores lead
-├── email-sender.js     # CRON - Sends scheduled emails
-├── analytics-event.js  # POST - Tracks funnel events
-└── analytics-query.js  # GET - Dashboard data (auth)
+src/pages/api/
+├── quiz-submit.ts      # POST - Scores lead + writes to Kit
+├── analytics-event.ts  # POST - Tracks funnel events
+└── analytics-query.ts  # GET - Dashboard data (auth)
 ```
 
-All serverless, auto-scaling
+All serverless, auto-scaling. Email sequencing runs in your Kit account, no cron to babysit.
 
 **Tweet 4 - deploy/quiz/ (Quiz App):**
 ```
@@ -185,32 +181,17 @@ Dashboard shows:
 - UTM sources
 - Answer distribution
 
-**Tweet 6 - deploy/supabase/ (Database):**
+**Tweet 6 - Data:**
 ```
-supabase/
-└── schema.sql  # Complete schema with:
-    ├── leads table
-    ├── quiz_responses table
-    ├── recommended_products table
-    ├── email_log table
-    ├── email_templates table
-    └── analytics_events table
+Leads + email      → the client's own Kit account
+                     (subscriber, custom fields, tags, sequences)
+analytics_events   → one lightweight analytics table
 ```
 
-Multi-tenant support with `{PREFIX}_` naming
+Leads and email live in Kit, so the client owns their list. The only database is one small analytics table.
 
-**Tweet 7 - deploy/videos/ (Remotion):**
-```
-videos/
-├── README.md
-├── quiz-intro/QuizIntro.tsx
-├── result-reveal-hot/ResultRevealHot.tsx
-├── result-reveal-warm/ResultRevealWarm.tsx
-├── result-reveal-cold/ResultRevealCold.tsx
-└── social-ad/SocialAd.tsx
-```
-
-All TSX components, ready to render
+**Tweet 7 - Optional Social Ad:**
+Off by default. When a client wants one, an atmospheric promo for Instagram/TikTok is produced via the AI video provider.
 
 **Tweet 8 - deploy/images/:**
 ```
@@ -235,7 +216,7 @@ client/
 └── questions-answers.csv/md   # Quiz Q&A
 ```
 
-**Tweet 10 - client-preview/ (GitHub Pages):**
+**Tweet 10 - client-preview/ (preview deploy):**
 ```
 client-preview/
 ├── index.html                 # Navigation hub
@@ -260,10 +241,10 @@ Everything needed to deploy, maintain, or rebuild
 Total output structure:
 - 50+ files
 - 3 main directories
-- 4 API endpoints
-- 6 database tables
+- 3 API routes
+- Leads + email in the client's Kit account
+- One analytics table
 - 14 email templates
-- 5 video components
 - 10+ strategy documents
 
 All generated from one command.
@@ -332,10 +313,9 @@ Matches brand voice from research
 **Tweet 6 - Stage 4: Build Agent:**
 Generates:
 - HTML/CSS/JS for all pages
-- Vercel Edge Functions
-- Database schema
+- API routes
+- Kit setup + one analytics table
 - Setup scripts
-- Remotion video components
 - Environment config
 
 Production-ready, not prototypes
@@ -343,8 +323,8 @@ Production-ready, not prototypes
 **Tweet 7 - Stage 5: Publish Agent:**
 Creates:
 - Private GitHub repo (full codebase)
-- Public GitHub Pages repo (client preview)
-- Notion database entry (project tracking)
+- Client preview deploy
+- Final deliverables saved to the client folder
 
 Returns URLs for immediate access
 
@@ -381,7 +361,7 @@ No subscriptions, no credits, no API costs (except MCP tools).
 
 Want to build your own multi-agent workflows?
 
-Check out: github.com/[your-repo]
+Check out: github.com/diane-blip/lead-magnet-quiz-workflow
 
 ---
 
@@ -505,9 +485,8 @@ What you get from `/lead-magnet-quiz`:
 ✅ 3 result pages (hot/warm/cold)
 ✅ 14 email sequences (auto-triggered)
 ✅ Analytics dashboard
-✅ 4 API endpoints
-✅ Complete database schema
-✅ 5 video components (Remotion)
+✅ 3 API routes
+✅ Leads + email in your Kit account
 ✅ Strategy docs + copy breakdowns
 ✅ One-command deployment
 
@@ -520,7 +499,6 @@ Built a quiz funnel builder that generates:
 - Brand-matched design system
 - 14 pre-written email sequences
 - Analytics dashboard
-- Video assets
 
 In 7 days. From one command.
 
@@ -535,14 +513,13 @@ Frontend:
 - Analytics event tracking
 
 Backend:
-- 4 Vercel Edge Functions
-- 6 Supabase tables
-- Email queue system
+- 3 serverless API routes
+- Leads + email in the client's Kit account
+- One lightweight analytics table
 
 Infra:
 - One-command deployment
 - Auto-scaling
-- Cron jobs
 
 All custom, not templates.
 
@@ -564,10 +541,9 @@ This is what AI agents are for.
 Ran `/lead-magnet-quiz "Madi's On A Roll"`
 
 7 days later:
-- ✅ Live quiz at madisonaroll.vercel.app
-- ✅ 14 email sequences in database
+- ✅ Live quiz at madisonaroll.com
+- ✅ 14 email sequences in the client's Kit account
 - ✅ Analytics dashboard running
-- ✅ 5 video components ready to render
 - ✅ Client preview site published
 
 Zero manual coding. All production-ready.
@@ -598,7 +574,7 @@ Zero manual coding. All production-ready.
 5. **Screenshot**: Quiz interface on mobile + desktop
 6. **Comparison**: Manual build (80 hours) vs. AI workflow (15 min)
 7. **Before/After**: Empty folder → Complete project structure
-8. **Screenshot**: Vercel deployment success screen
+8. **Screenshot**: Deployment success screen
 
 ---
 

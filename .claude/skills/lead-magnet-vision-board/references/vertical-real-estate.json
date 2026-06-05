@@ -16,7 +16,7 @@
       "display_config": {
         "card_size": "large",
         "show_images": true,
-        "image_source": "glif_generated",
+        "image_source": "pregenerated_base",
         "columns": 2
       },
       "options": [
@@ -25,7 +25,7 @@
           "label": "Modern Luxury",
           "icon": "building",
           "tags": ["modern", "luxury", "clean-lines", "contemporary"],
-          "glif_prompt_keywords": "modern luxury home, clean architectural lines, floor-to-ceiling windows, sleek finishes, open concept",
+          "base_image_keywords": "modern luxury home, clean architectural lines, floor-to-ceiling windows, sleek finishes, open concept",
           "graphic_elements": {
             "palette": "monochrome-warm",
             "mood": "sleek and sophisticated"
@@ -36,7 +36,7 @@
           "label": "Classic Family Home",
           "icon": "home",
           "tags": ["suburban", "family", "traditional", "spacious"],
-          "glif_prompt_keywords": "classic family home, large yard, front porch, traditional architecture, warm brick or siding",
+          "base_image_keywords": "classic family home, large yard, front porch, traditional architecture, warm brick or siding",
           "graphic_elements": {
             "palette": "warm-neutral",
             "mood": "warm and welcoming"
@@ -47,7 +47,7 @@
           "label": "Historic Charm",
           "icon": "landmark",
           "tags": ["historic", "character", "charm", "vintage"],
-          "glif_prompt_keywords": "historic home with character, original details, crown molding, hardwood floors, period architecture",
+          "base_image_keywords": "historic home with character, original details, crown molding, hardwood floors, period architecture",
           "graphic_elements": {
             "palette": "rich-heritage",
             "mood": "storied and elegant"
@@ -58,7 +58,7 @@
           "label": "Urban Loft",
           "icon": "layout",
           "tags": ["urban", "loft", "industrial", "city"],
-          "glif_prompt_keywords": "urban loft space, exposed brick, high ceilings, industrial windows, open floor plan, city views",
+          "base_image_keywords": "urban loft space, exposed brick, high ceilings, industrial windows, open floor plan, city views",
           "graphic_elements": {
             "palette": "charcoal-warm",
             "mood": "edgy and creative"
@@ -69,7 +69,7 @@
           "label": "Waterfront Living",
           "icon": "waves",
           "tags": ["waterfront", "coastal", "lakefront", "scenic"],
-          "glif_prompt_keywords": "waterfront property, panoramic water views, dock or deck, natural light, coastal architecture",
+          "base_image_keywords": "waterfront property, panoramic water views, dock or deck, natural light, coastal architecture",
           "graphic_elements": {
             "palette": "coastal-blue",
             "mood": "serene and expansive"
@@ -80,7 +80,7 @@
           "label": "New Construction",
           "icon": "hammer",
           "tags": ["new-build", "modern", "smart-home", "energy-efficient"],
-          "glif_prompt_keywords": "new construction home, modern finishes, smart home features, energy-efficient design, clean landscaping",
+          "base_image_keywords": "new construction home, modern finishes, smart home features, energy-efficient design, clean landscaping",
           "graphic_elements": {
             "palette": "fresh-neutral",
             "mood": "fresh and polished"
@@ -302,7 +302,7 @@
     "composite_formula": "urgency * 0.6 + budget_fit * 0.4"
   },
 
-  "graphic_prompt_template": "Pinterest-style dream home mood board collage, editorial interior photography.\nStyle: {style_label} home aesthetic, {style_glif_keywords}.\nLocation vibe: {location_vibe_description}.\nMust-have features visualized: {must_haves_visual_descriptions}.\n{bedrooms_atmosphere} with {bedrooms_label}.\nAspirational, shareable, real estate magazine quality.\nWarm natural lighting, inviting atmosphere.\nNo text overlays, purely visual.\nUltra-detailed, architectural photography, 8K.",
+  "graphic_prompt_template": "Pinterest-style dream home mood board collage, editorial interior photography.\nStyle: {style_label} home aesthetic, {style_base_image_keywords}.\nLocation vibe: {location_vibe_description}.\nMust-have features visualized: {must_haves_visual_descriptions}.\n{bedrooms_atmosphere} with {bedrooms_label}.\nAspirational, shareable, real estate magazine quality.\nWarm natural lighting, inviting atmosphere.\nNo text overlays, purely visual.\nUltra-detailed, architectural photography, 8K.",
 
   "email_sequence_angle": {
     "welcome": "Deliver wishlist graphic + introduce agent's portfolio matches",

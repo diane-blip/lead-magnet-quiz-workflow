@@ -1,32 +1,12 @@
 {
+  "_comment": "SRC-adapted MCP set. DROPPED from the original: notion, glif, supabase. Kit (email) and image generation are connected at the ACCOUNT level in Diane's Claude environment, not as project-local npx servers, so they are not listed here. The servers below are the build-time research/scrape tools. Runtime never uses MCP — the deployed Cloudflare Worker talks to Kit via REST API v4.",
   "mcpServers": {
-    "notion": {
-      "command": "npx",
-      "args": ["-y", "@notionhq/notion-mcp-server"],
-      "env": {
-        "OPENAPI_MCP_HEADERS": "{\"Authorization\": \"Bearer YOUR_NOTION_API_TOKEN\", \"Notion-Version\": \"2022-06-28\" }"
-      }
-    },
     "memory": {
       "type": "stdio",
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-memory"],
       "env": {
         "MEMORY_FILE_PATH": "./.claude/memory.json"
-      }
-    },
-    "glif": {
-      "command": "npx",
-      "args": ["-y", "@glifxyz/glif-mcp-server@latest"],
-      "env": {
-        "GLIF_API_TOKEN": "YOUR_GLIF_API_TOKEN"
-      }
-    },
-    "supabase": {
-      "command": "npx",
-      "args": ["-y", "@supabase/mcp-server-supabase@latest"],
-      "env": {
-        "SUPABASE_ACCESS_TOKEN": "YOUR_SUPABASE_ACCESS_TOKEN"
       }
     },
     "tavily": {

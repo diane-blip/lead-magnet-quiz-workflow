@@ -9,7 +9,7 @@ Generate complete quiz-based lead magnet packages using a multi-agent workflow w
 /lead-magnet-quiz [path-to-context-file.md]
 ```
 
-**Social Ad Video**: The Build Agent always generates a 20-second Remotion social ad video (`deploy/videos/SocialAd.tsx`) and renders it to MP4 for client delivery.
+**Social Ad Video (optional, off by default)**: A short social ad video is NOT produced by default. When a client wants one, it is generated via the AI video provider (see `agents/lead-magnet-agents/shared/generation-providers.md`), not rendered from a code template.
 
 ---
 
@@ -61,8 +61,8 @@ This skill acts as a **Project Manager Orchestrator** that spawns specialized ag
                               ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │  STAGE 5: Publish Agent                                         │
-│  Tools: gh CLI, Notion MCP                                      │
-│  Output: GitHub repo URL, Notion page URL (with 16 child pages)│
+│  Tools: gh CLI, Cloudflare preview deploy                       │
+│  Output: GitHub repo URL, Cloudflare preview URL, vault copy   │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -82,11 +82,11 @@ When triggered, execute the following steps in order. **Do not skip validation g
 ├── README.md                      # Overview of both folders
 ├── builder-prompt.md              # AI-ready development prompt
 │
-├── deploy/                        # Vercel-ready Astro project - run `npm run build && vercel --prod`
-│   ├── astro.config.mjs           # Astro configuration with Vercel adapter
+├── deploy/                        # Astro project for your hosting - run `npm run build && wrangler deploy`
+│   ├── astro.config.mjs           # Astro configuration with the Cloudflare adapter
 │   ├── tsconfig.json              # TypeScript configuration
-│   ├── package.json               # Astro + Supabase dependencies
-│   ├── vercel.json                # Cron config + CORS headers (routing handled by Astro)
+│   ├── package.json               # Astro dependencies (Kit via REST, no DB client)
+│   ├── wrangler.jsonc             # Worker config: D1 binding, analytics cleanup cron, env vars
 │   ├── .env.example               # Environment variable template
 │   ├── public/                    # Static assets (copied as-is to build output)
 │   │   ├── images/                # Local images for reliable deployment
@@ -101,25 +101,25 @@ When triggered, execute the following steps in order. **Do not skip validation g
 │   ├── src/                       # Astro source files
 │   │   ├── layouts/
 │   │   │   └── Layout.astro       # Base HTML shell with meta, fonts
+│   │   ├── lib/                   # Shared runtime helpers
+│   │   │   ├── kit.ts             # Kit v4 REST helpers (subscriber, tags, sequences)
+│   │   │   ├── content-blocks.ts  # Resolves profile_block + answer_callback_N at submit time
+│   │   │   └── kit-ids.ts         # Generated tag-id / sequence-id map from /setup-quiz-kit
+│   │   ├── data/
+│   │   │   └── content-blocks.json # content-blocks.csv bundled into the build
 │   │   └── pages/
 │   │       ├── index.astro        # Landing page
 │   │       ├── quiz/
 │   │       │   ├── index.astro    # Quiz page
 │   │       │   └── thank-you.astro # Results page
-│   │       └── admin/
-│   │           └── index.astro    # Analytics dashboard
-│   ├── scripts/                   # Node.js setup scripts
-│   │   └── setup-schema.js        # Creates prefixed tables in Supabase
-│   ├── supabase/                  # Database schema
-│   │   └── schema.sql             # Schema template with {PREFIX} placeholders
-│   ├── api/                       # Vercel Edge Functions (outside Astro build)
-│   │   ├── quiz-submit.js         # Saves leads to Supabase
-│   │   ├── email-sender.js        # Sends scheduled emails (hourly cron)
-│   │   ├── analytics-event.js     # Tracks funnel events
-│   │   └── analytics-query.js     # Dashboard data queries
-│   └── videos/                    # Remotion social ad video
-│       ├── SocialAd.tsx           # Source component (20 sec, 1080x1080)
-│       └── SocialAd.mp4          # Rendered video for client delivery
+│   │       ├── admin/
+│   │       │   └── index.astro    # Analytics dashboard
+│   │       └── api/               # Astro API routes (prerender = false; run on the Worker)
+│   │           ├── quiz-submit.ts    # Registers the lead in Kit + logs one analytics row
+│   │           ├── analytics-event.ts # Tracks funnel events to D1
+│   │           └── analytics-query.ts # Dashboard data queries (password-gated)
+│   └── d1/                        # Analytics database schema
+│       └── analytics-schema.sql   # The single D1 analytics_events table
 │
 ├── client/                        # Client deliverables
 │   ├── research.md
@@ -139,7 +139,7 @@ When triggered, execute the following steps in order. **Do not skip validation g
 │   ├── content-blocks.csv
 │   └── email-sequences.html
 │
-└── client-preview/                # GitHub Pages deployable previews
+└── client-preview/                # Standalone preview pages (Cloudflare preview deploy)
     ├── index.html                 # Navigation page linking to all previews
     ├── walkthrough.html           # Quiz funnel walkthrough and usage guide
     ├── research.html              # Copy of client/research.html
@@ -947,7 +947,7 @@ Structure with collapsible sections:
 
 6. **Customer Segments Explained**
    - Table of all profile segments with:
-     - Segment ID (stored in database)
+     - Segment ID (stored on the subscriber in your email platform as a custom field + tag)
      - Profile name (shown to customer)
      - Key characteristics and behaviors
      - Best product/service recommendations for this segment
@@ -973,7 +973,7 @@ Structure with collapsible sections:
 
 4. **Which Emails Use What** - Matrix tables per sequence showing every email ID and whether it has profile_block, answer_callback_1, and/or answer_callback_2. Use colored tags for yes/no.
 
-5. **How It Works** - Step-by-step data flow: CSV file > database seeding > email scheduling > content block resolution > variable replacement > personalized email sent. Client-friendly, non-technical.
+5. **How It Works** - Step-by-step data flow: quiz answers > content blocks resolved at submit time into the subscriber's record in your email platform (Kit) > your email sequences merge those fields > personalized email sent. Client-friendly, non-technical. Do not name the host.
 
 6. **The Math** - Block counts (profiles x emails, answers x emails). Total unique combinations calculation (temperatures x profiles x Q1 answers x Q5 answers). Per-sequence variant counts.
 
@@ -1194,7 +1194,7 @@ Styled HTML page showcasing included features and growth opportunities. Write en
 |---------|-------------|
 | Lead Form Integration | Connect quiz to existing website forms |
 | Custom Domain Hosting | Quiz lives at quiz.yourdomain.com |
-| Lead Intelligence Agent | Query leads database conversationally, unlimited usage |
+| Lead Intelligence Agent | Query your leads conversationally (from your Kit list), unlimited usage |
 
 **Growth Add-Ons Content**:
 | Add-On | Price | Description (write in brand voice) |
@@ -1554,8 +1554,8 @@ actionPlan: ['Priority fix 1 ranked by impact', 'Priority fix 2', 'Priority fix 
 
 ## Output Folders
 - **Root level**: README.md, builder-prompt.md
-- **deploy/**: All Vercel-deployable files
-- **client-preview/**: GitHub Pages-ready preview files
+- **deploy/**: All files for the client's hosting (Astro project deployed via `wrangler deploy`)
+- **client-preview/**: Standalone preview files (served via a Cloudflare preview deploy)
 
 ## Output Requirements
 
@@ -1623,33 +1623,27 @@ const content = {
 - All image src attributes use paths from public/: /images/logo.svg, /images/[name].png
 - No external CDN image URLs
 
-### deploy/vercel.json
-Vercel configuration for cron jobs and CORS headers (Astro handles routing automatically):
-```json
+### deploy/wrangler.jsonc
+Worker configuration: D1 binding, the nightly analytics-cleanup cron, and env vars. There is no email cron (Kit owns email scheduling). CORS headers are set per-route inside the Astro API routes.
+```jsonc
 {
-  "crons": [
-    {
-      "path": "/api/email-sender",
-      "schedule": "0 * * * *"
-    },
-    {
-      "path": "/api/data-cleanup",
-      "schedule": "0 3 * * *"
-    }
+  "name": "[business-name]-quiz",
+  "compatibility_date": "2026-01-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": { "directory": "./dist" },
+  "d1_databases": [
+    { "binding": "ANALYTICS_DB", "database_name": "[business-name]-quiz-analytics", "database_id": "<from wrangler d1 create>" }
   ],
-  "headers": [
-    {
-      "source": "/api/(.*)",
-      "headers": [
-        { "key": "Access-Control-Allow-Origin", "value": "*" },
-        { "key": "Access-Control-Allow-Methods", "value": "GET, POST, OPTIONS" },
-        { "key": "Access-Control-Allow-Headers", "value": "Content-Type, Authorization" }
-      ]
-    }
-  ]
+  "triggers": {
+    // Analytics-only nightly cleanup. Kit owns email retention, so there is no email cron.
+    "crons": ["0 3 * * *"]
+  }
+  // Secrets (wrangler secret put): KIT_API_KEY, ADMIN_PASSWORD
+  // Vars: KIT_SEQUENCE_HOT, KIT_SEQUENCE_WARM, KIT_SEQUENCE_COLD,
+  //       KIT_TAG_PREFIX, DATA_RETENTION_ANALYTICS_DAYS
 }
 ```
-**Note**: No `rewrites` needed - Astro's file-based routing handles all page routes automatically.
+**Note**: No `rewrites` or page routes needed - Astro's file-based routing handles all page routes automatically. See `agents/lead-magnet-agents/build-agent/references/cloudflare-kit-patterns.md`.
 
 ### deploy/package.json
 Astro project configuration with dependencies and scripts:
@@ -1663,30 +1657,29 @@ Astro project configuration with dependencies and scripts:
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview",
-    "setup-db": "node scripts/setup-schema.js"
+    "preview": "wrangler dev",
+    "deploy": "wrangler deploy"
   },
-  "dependencies": {
-    "@supabase/supabase-js": "^2.39.0",
-    "pg": "^8.11.3"
-  },
+  "dependencies": {},
   "devDependencies": {
     "astro": "^4.0.0",
-    "@astrojs/vercel": "^7.0.0"
+    "@astrojs/cloudflare": "^12.0.0",
+    "wrangler": "^3.0.0"
   }
 }
 ```
+Leads and email live in Kit (called over plain `fetch` from the Worker), so there is no database client dependency. The only database is the D1 analytics table, reached through the `ANALYTICS_DB` binding.
 
 ### deploy/astro.config.mjs
-Astro configuration with Vercel static adapter:
+Astro configuration with the Cloudflare adapter. Pages prerender; API routes opt out per-route with `export const prerender = false`:
 ```javascript
 import { defineConfig } from 'astro/config';
-import vercel from '@astrojs/vercel/static';
+import cloudflare from '@astrojs/cloudflare';
 
 export default defineConfig({
   site: 'https://[business-domain].com',
-  output: 'static',
-  adapter: vercel(),
+  output: 'static',          // pages prerender; API routes opt out per-route
+  adapter: cloudflare(),
   build: {
     inlineStylesheets: 'auto'
   }
@@ -1755,124 +1748,76 @@ Global CSS with all variables from design.md. This file contains:
 - `/agents/lead-magnet-agents/design-strategy-agent/references/decorative-elements.md`
 
 ### deploy/.env.example
-Environment variable template for deployment:
+Environment variable template. Secrets go in via `wrangler secret put`; the rest are `vars` in `wrangler.jsonc`. This file documents them for local `.dev.vars` and onboarding.
 ```
 # ==================================
-# Supabase Configuration (Required)
+# Kit (Required) — the CLIENT'S OWN Kit account, never SRC's
 # ==================================
-# Get these from: https://supabase.com/dashboard/project/YOUR_PROJECT/settings/api
+# Kit v4 API key for the client's account. Set as a Worker secret:
+#   wrangler secret put KIT_API_KEY
+# Leads and email both live in Kit. The client owns their list.
 
-SUPABASE_URL=https://your-project-ref.supabase.co
-SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-
-# ==================================
-# Schema Automation (For setup-db script)
-# ==================================
-# Get DB URL from: Supabase Dashboard > Settings > Database > Connection string > URI
-# TABLE_PREFIX isolates this client's tables (e.g., "williamburke_leads")
-
-SUPABASE_DB_URL=postgresql://postgres.[project-ref]:[password]@aws-0-us-east-1.pooler.supabase.com:6543/postgres
-TABLE_PREFIX=[business-name]_
+KIT_API_KEY=kit_xxxxxxxxxxxx
 
 # ==================================
-# Email Configuration (Optional)
+# Kit Sequences + Tags (Required)
 # ==================================
-# Get API key from: https://resend.com/api-keys
-# Without this, emails are scheduled but not sent
+# Sequence IDs for the 3 temperature tracks. Created by /setup-quiz-kit and
+# written here + into wrangler.jsonc vars. Prefix namespaces this quiz's tags.
 
-RESEND_API_KEY=re_xxxxxxxxxxxx
-EMAIL_FROM=Quiz Results <hello@yourdomain.com>
-EMAIL_REPLY_TO=support@yourdomain.com
-
-# ==================================
-# Security (Required for cron)
-# ==================================
-# Generate a random string: openssl rand -hex 32
-
-CRON_SECRET=your-random-secret-string
+KIT_SEQUENCE_HOT=
+KIT_SEQUENCE_WARM=
+KIT_SEQUENCE_COLD=
+KIT_TAG_PREFIX=quiz
 
 # ==================================
-# Automation Webhook (Optional)
+# Analytics Database (Cloudflare D1) — bound in wrangler.jsonc
 # ==================================
-# Gumloop or other automation webhook
-# Receives full quiz data on completion (leadId, email, score, temperature, profileId, responses)
-# Leave blank if not using automation
+# The ONLY database. No leads here, no PII — leads live in Kit.
+# Binding name in wrangler.jsonc: ANALYTICS_DB
+# Retention for the nightly cleanup cron (days):
 
-GUMLOOP_WEBHOOK_URL=
+DATA_RETENTION_ANALYTICS_DAYS=90
 
 # ==================================
 # Admin Dashboard (Required for /admin)
 # ==================================
 # Generate a secure random password: openssl rand -hex 32
+# Set as a Worker secret: wrangler secret put ADMIN_PASSWORD
 
 ADMIN_PASSWORD=your_secure_admin_password_here
 
 # ==================================
 # ROI Tracking (Optional)
 # ==================================
-# Average value of a closed deal (or average order value for e-commerce)
-# Used to calculate pipeline value and ROI on the admin dashboard
-# Leave blank to hide Revenue Impact section
+# Average value of a closed deal (or average order value for e-commerce).
+# Used to calculate pipeline value and ROI on the admin dashboard.
+# Leave blank to hide Revenue Impact section.
 
 DEAL_VALUE=
 CLOSE_RATE=
 ```
 
-### deploy/scripts/ folder (Multi-Tenant Schema Automation)
+### Build-time Kit setup (the `/setup-quiz-kit` skill)
 
-#### deploy/scripts/setup-schema.js
-Automated database setup script that:
-- Reads supabase/schema.sql template
-- Replaces `{PREFIX}` placeholder with TABLE_PREFIX env var
-- Connects directly to PostgreSQL via SUPABASE_DB_URL
-- Creates all tables with client-specific prefixes (including email_templates)
-- **Parses ../client/email-sequences.csv and seeds email_templates table**
-- Enables multi-tenant architecture (multiple clients share one Supabase project)
+There is no runtime database-setup script. Email and leads live in **Kit** — always the client's own Kit account, never SRC's. All email content, sequences, tags, and custom fields are set up at build time in Kit by the `/setup-quiz-kit` skill (which replaces the old Supabase `/setup-quiz-db`). Full reference: `agents/lead-magnet-agents/shared/kit-integration.md`.
 
-**IMPORTANT: The `parseCSV` function must preserve quote characters in its first pass so the second pass (`parseCSVLine`) can correctly handle commas inside quoted fields (like multi-line email bodies). See the function definition below.**
+`/setup-quiz-kit` reads `client/email-sequences.csv` and `client/content-blocks.csv` and, via the Kit MCP:
+- Creates custom fields: `quiz_profile`, `quiz_temperature`, `quiz_score`, `profile_block`, `answer_callback_1`, `answer_callback_2`.
+- Creates tags: `quiz:profile:<id>` (one per profile) and `quiz:temp:hot|warm|cold`.
+- Creates the 3 temperature sequences plus a Re-Engagement track, and seeds every email body, mapping the original send-day offsets to Kit sequence delays.
+- Authors each Kit email with Liquid merge tags where the body contains `{{profile_block}}` / `{{answer_callback_N}}`:
+  ```liquid
+  {{ subscriber.custom_fields.profile_block }}
+  {{ subscriber.custom_fields.answer_callback_1 }}
+  ```
+  Every email must still read cleanly when a field is empty — keep the generic fallback sentence at each insert point.
+- Emits a tag-id / sequence-id map into `deploy/wrangler.jsonc` vars and a generated `deploy/src/lib/kit-ids.ts`.
+- Creates and migrates the D1 analytics DB, then runs `wrangler deploy`.
 
-**Email seeding logic:**
-```javascript
-// After schema creation, seed email templates from CSV
-const csvPath = path.join(__dirname, '..', '..', 'client', 'email-sequences.csv');
-const csvContent = fs.readFileSync(csvPath, 'utf-8');
-const rows = parseCSV(csvContent); // Skip header row
+**Content blocks are resolved at submit time, not seeded into a DB.** `content-blocks.csv` is bundled into the build as `src/data/content-blocks.json`. On quiz submission the Worker resolves the matching `profile_block` and `answer_callback_1/2` strings and writes the finished text into the subscriber's Kit custom fields. Kit needs no resolution logic — it just merges the fields. This is simpler than the original DB-side engine.
 
-for (const row of rows) {
-  await client.query(`
-    INSERT INTO ${TABLE_PREFIX}email_templates
-    (email_id, email_name, sequence_name, segment, send_day, subject, body_html, cta_text, sender_name)
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-    ON CONFLICT (email_id) DO UPDATE SET
-      subject = EXCLUDED.subject,
-      body_html = EXCLUDED.body_html,
-      cta_text = EXCLUDED.cta_text
-  `, [row.email_id, row.email_name, row.sequence_name, row.segment,
-      parseInt(row.send_day), row.subject, row.body_html, row.cta_text, row.sender_name]);
-}
-console.log(`Seeded ${rows.length} email templates`);
-
-// After email templates, seed content blocks from CSV
-const cbPath = path.join(__dirname, '..', '..', 'client', 'content-blocks.csv');
-if (fs.existsSync(cbPath)) {
-  const cbContent = fs.readFileSync(cbPath, 'utf-8');
-  const cbRows = parseCSV(cbContent);
-
-  for (const row of cbRows) {
-    await client.query(`
-      INSERT INTO ${TABLE_PREFIX}content_blocks
-      (email_id, block_type, block_key, block_value, content)
-      VALUES ($1, $2, $3, $4, $5)
-      ON CONFLICT (email_id, block_type, block_key, block_value) DO UPDATE SET
-        content = EXCLUDED.content
-    `, [row.email_id, row.block_type, row.block_key,
-        row.block_value || null, row.content]);
-  }
-  console.log(`Seeded ${cbRows.length} content blocks`);
-}
-```
-
-**Required `parseCSV` and `parseCSVLine` functions (include in setup-schema.js):**
+**CSV parsing for the build step.** `/setup-quiz-kit` parses the two CSVs with a parser that preserves quote characters in its first pass so the second pass can handle commas and newlines inside quoted fields (email bodies contain both):
 ```javascript
 // CSV parser that handles quoted fields with commas and newlines.
 // CRITICAL: parseCSV must preserve quote characters in output so parseCSVLine
@@ -1945,424 +1890,163 @@ function parseCSVLine(line) {
 }
 ```
 
-**`send_day` type handling note:** The `send_day` column is TEXT (to support "+N" values for re-engagement emails). In `quiz-submit.js`, use `==` (loose equality) or explicit string comparison for Day 0 checks, and `Number()` coercion for numeric comparisons. Do NOT use `=== 0` which fails for the string `"0"`.
+**`send_day` handling note:** Original send-day values (including "+N" offsets for re-engagement) map to Kit sequence email delays at build time. There is no runtime Day-0 send — Kit's sequence scheduling handles all timing once the subscriber is added.
 
-Usage:
-```bash
-export SUPABASE_DB_URL="postgresql://..."
-export TABLE_PREFIX="clientname_"
-npm run setup-db   # Creates tables AND seeds email templates
-```
+### deploy/d1/ folder (the only database)
 
-### deploy/supabase/ folder
-Database setup for lead storage and email scheduling:
+The single database is **one Cloudflare D1 table for analytics**. There are no leads, quiz_responses, email_log, email_templates, content_blocks, or recommended_products tables — that data lives in Kit (subscribers + custom fields + sequences) or is resolved at submit time. No PII is stored here: email and quiz answers live on the Kit subscriber record.
 
-#### deploy/supabase/schema.sql
-Complete SQL schema template with `{PREFIX}` placeholders for multi-tenant support.
-
-Use `{PREFIX}` before all table names, indexes, constraints, and triggers:
-- `{PREFIX}leads` table (id, email, name, segment, quiz_score, temperature, profile_id, profile_name, source, status, created_at, updated_at) - **segment stores customer profile for easy filtering**
-- `{PREFIX}quiz_responses` table (id, lead_id, question_id, question_text, answer_id, answer_text, score, tags, created_at)
-- `{PREFIX}email_log` table (id, lead_id, email_id, email_name, sequence_name, status, scheduled_for, sent_at, error_message, created_at)
-- `{PREFIX}email_templates` table (id, email_id, email_name, sequence_name, segment, send_day, subject, body_html, cta_text, sender_name, created_at) - **stores email content from CSV**
-- `{PREFIX}content_blocks` table (id, email_id, block_type, block_key, block_value, content, created_at) - **profile-specific and answer-aware email content**
-- `{PREFIX}recommended_products` table (id, lead_id, product_id, product_name, product_url, price, position, created_at)
-- `{PREFIX}analytics_events` table (id, session_id, event_type, event_data, utm_source, utm_medium, utm_campaign, utm_term, utm_content, page_url, referrer, user_agent, created_at) - **tracks funnel analytics**
-- `{PREFIX}idx_*` indexes for common queries
-- `{PREFIX}unique_*` constraints
-- `{PREFIX}update_*` triggers
-- Auto-update trigger for updated_at
-- Row Level Security enabled
-
-**email_templates table schema:**
+#### deploy/d1/analytics-schema.sql
+Use the canonical schema from `agents/lead-magnet-agents/build-agent/references/d1-analytics-schema.sql`. It is plain SQLite (no `{PREFIX}`, no UUIDs, no RLS — each client has their own D1 database):
 ```sql
-CREATE TABLE IF NOT EXISTS {PREFIX}email_templates (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  email_id TEXT UNIQUE NOT NULL,        -- "1.1", "2.3", etc.
-  email_name TEXT NOT NULL,             -- "Quiz Result Delivery"
-  sequence_name TEXT NOT NULL,          -- "Welcome Sequence"
-  segment TEXT NOT NULL,                -- "All", "Cold", "Warm", "Hot"
-  send_day INTEGER NOT NULL,            -- Days after quiz completion
-  subject TEXT NOT NULL,                -- Email subject line
-  body_html TEXT NOT NULL,              -- Full email body (HTML)
-  cta_text TEXT,                        -- CTA button text
-  sender_name TEXT,                     -- Display name for FROM
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
-CREATE INDEX IF NOT EXISTS {PREFIX}idx_email_templates_id ON {PREFIX}email_templates(email_id);
-```
-
-**content_blocks table schema (for personalized email content):**
-```sql
-CREATE TABLE IF NOT EXISTS {PREFIX}content_blocks (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  email_id TEXT NOT NULL,
-  block_type TEXT NOT NULL,
-  block_key TEXT NOT NULL,
-  block_value TEXT,
-  content TEXT NOT NULL,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  CONSTRAINT {PREFIX}unique_content_block UNIQUE(email_id, block_type, block_key, block_value)
-);
-CREATE INDEX IF NOT EXISTS {PREFIX}idx_content_blocks_email ON {PREFIX}content_blocks(email_id);
-CREATE INDEX IF NOT EXISTS {PREFIX}idx_content_blocks_lookup ON {PREFIX}content_blocks(email_id, block_type, block_key);
-```
-
-- `block_type`: `profile` (profile-specific paragraph) or `answer_callback` (answer-aware snippet)
-- `block_key`: profile_id (for profile blocks) or question_id (for answer callbacks)
-- `block_value`: NULL (for profile blocks) or answer_id (for answer callbacks)
-- `content`: The actual text to inject into the email template
-
-**analytics_events table schema:**
-```sql
-CREATE TABLE IF NOT EXISTS {PREFIX}analytics_events (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  session_id UUID NOT NULL,
-  event_type TEXT NOT NULL CHECK (event_type IN (
-    'page_view', 'quiz_start', 'question_viewed', 'answer_selected',
-    'email_captured', 'quiz_completed', 'result_page_viewed', 'cta_clicked'
-  )),
-  event_data JSONB DEFAULT '{}',
-  utm_source TEXT,
-  utm_medium TEXT,
-  utm_campaign TEXT,
-  utm_term TEXT,
-  utm_content TEXT,
-  page_url TEXT,
-  referrer TEXT,
-  user_agent TEXT,
-  created_at TIMESTAMPTZ DEFAULT NOW()
+CREATE TABLE IF NOT EXISTS analytics_events (
+  id            INTEGER PRIMARY KEY AUTOINCREMENT,
+  -- one of: page_view, quiz_start, question_viewed, answer_selected,
+  --         email_captured, quiz_completed, result_page_viewed, cta_clicked
+  event_type    TEXT NOT NULL,
+  profile_id    TEXT,            -- result profile, when known
+  temperature   TEXT,            -- hot | warm | cold (internal only)
+  question_id   TEXT,            -- for question_viewed / answer_selected
+  answer_id     TEXT,            -- for answer_selected
+  utm_source    TEXT,
+  created_at    TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
-CREATE INDEX IF NOT EXISTS {PREFIX}idx_analytics_session ON {PREFIX}analytics_events(session_id);
-CREATE INDEX IF NOT EXISTS {PREFIX}idx_analytics_event_type ON {PREFIX}analytics_events(event_type);
-CREATE INDEX IF NOT EXISTS {PREFIX}idx_analytics_created ON {PREFIX}analytics_events(created_at DESC);
-CREATE INDEX IF NOT EXISTS {PREFIX}idx_analytics_funnel ON {PREFIX}analytics_events(event_type, created_at DESC);
-
--- Data retention indexes
-CREATE INDEX IF NOT EXISTS {PREFIX}idx_email_log_status_sent ON {PREFIX}email_log(status, sent_at) WHERE status = 'sent';
+CREATE INDEX IF NOT EXISTS idx_events_type    ON analytics_events (event_type);
+CREATE INDEX IF NOT EXISTS idx_events_created ON analytics_events (created_at);
+CREATE INDEX IF NOT EXISTS idx_events_profile ON analytics_events (profile_id);
 ```
 
-Example:
-```sql
-CREATE TABLE IF NOT EXISTS {PREFIX}leads (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  email TEXT NOT NULL,
-  -- ...
-  CONSTRAINT {PREFIX}unique_email_per_source UNIQUE (email, source)
-);
-CREATE INDEX IF NOT EXISTS {PREFIX}idx_leads_email ON {PREFIX}leads(email);
-```
+The 8 tracked event types are unchanged: `page_view, quiz_start, question_viewed, answer_selected, email_captured, quiz_completed, result_page_viewed, cta_clicked`. The dashboard's answer-analysis charts read from `answer_selected` rows. The nightly cron deletes rows older than `DATA_RETENTION_ANALYTICS_DAYS` (default 90). Kit handles email retention, so there is no email-log cleanup here.
 
-### deploy/api/ folder (Vercel Edge Functions)
-Server-side functions for secure Supabase writes. Both files must support TABLE_PREFIX for multi-tenant:
+### deploy/src/pages/api/ folder (Astro API routes)
 
-```javascript
-// At top of both files:
-const TABLE_PREFIX = process.env.TABLE_PREFIX || '';
-const table = (name) => `${TABLE_PREFIX}${name}`;
+Server-side routes that run on the Worker at request time. Each route sets `export const prerender = false`. There is no `TABLE_PREFIX` (each client has their own Kit account and their own D1 database) and no Supabase client — the routes call Kit over `fetch` and write to D1 through the `ANALYTICS_DB` binding (`locals.runtime.env`). Full patterns: `agents/lead-magnet-agents/build-agent/references/cloudflare-kit-patterns.md`.
 
-// Usage:
-await supabase.from(table('leads')).upsert({...});
-```
+#### deploy/src/pages/api/quiz-submit.ts
+Astro API route (`export const prerender = false`) that runs on quiz completion. It registers the lead in the **client's Kit account** and logs one analytics row to D1. There is no leads/responses/email DB write, no Resend send, no Gumloop webhook, no `TABLE_PREFIX`.
 
-#### deploy/api/quiz-submit.js
-Vercel Edge Function that:
-- Reads TABLE_PREFIX from environment for multi-tenant support
-- Uses `table()` helper for all Supabase table references
-- Receives POST with quiz payload
-- Validates required fields (email, score, temperature, profile, source)
-- Upserts lead to Supabase (handles re-takes)
-- **Stores segment (profileId) in leads table** for easy customer filtering
-- Inserts quiz responses
-- Inserts product recommendations
-- Schedules email sequence based on temperature
-- **Sends Day 0 welcome email immediately** (if RESEND_API_KEY configured):
-  - Fetches the welcome template from `email_templates` table by email_id
-  - Interpolates `{{variable}}` placeholders using helper functions
-  - Sends via Resend API with verified `from` domain
-  - Updates `email_log` status to `'sent'` or `'failed'` with `error_message`
-  - Wrapped in try/catch so failures don't break the quiz submission response
-  - **CRITICAL**: The following helper functions MUST be defined in quiz-submit.js (not just email-sender.js):
-    - `interpolate(template, vars)` -- replaces `{{key}}` placeholders
-    - `getBlindspotText(profileName)` -- profile-specific blindspot copy
-    - `getProfileTip(profileName)` -- profile-specific tip copy
-    - `getTemperatureCTA(temperature)` -- hot/warm/cold CTA HTML buttons
-    - `wrapEmailHtml(bodyHtml)` -- wraps body in styled HTML email template
-  - These are the same functions used in `email-sender.js`. They must be duplicated because Vercel Edge Functions are independently bundled (no shared modules).
-  ```javascript
-  // After scheduleEmails() call:
-  const RESEND_API_KEY = process.env.RESEND_API_KEY;
-  if (RESEND_API_KEY) {
-    try {
-      const { data: template } = await supabase
-        .from(table('email_templates'))
-        .select('subject, body_html, sender_name')
-        .eq('email_id', 'WELCOME-01') // matches email_id from CSV
-        .single();
+What it does, in order:
+- Receives POST with the quiz payload (email, profileId, temperature, score, answers, utm).
+- **Resolves content blocks at submit time.** `content-blocks.csv` is bundled into the build as `src/data/content-blocks.json`. The route resolves the subscriber's final `profile_block` and `answer_callback_1/2` strings from that bundle (helpers in `src/lib/content-blocks.ts`).
+- **Upserts the subscriber + custom fields in Kit** (Kit v4 upserts by `email_address`, so a re-taken quiz updates the same subscriber). Custom fields: `quiz_profile`, `quiz_temperature` (internal only, never shown to the taker), `quiz_score`, `profile_block`, `answer_callback_1`, `answer_callback_2`.
+- **Applies tags and subscribes to the temperature sequence:** `quiz:profile:<id>` and `quiz:temp:<t>` tags, then the `KIT_SEQUENCE_<TEMPERATURE>` sequence. Kit's native sequence scheduling delivers Welcome + the temperature track + Re-Engagement — there is no immediate Day-0 send and no re-engagement scheduling in code (those are Kit sequence delays set at build time by `/setup-quiz-kit`).
+- **Logs one `quiz_completed` analytics row to D1.** No PII — the lead lives in Kit.
 
-      if (template) {
-        const firstName = name?.split(' ')[0] || 'there';
-        const subject = interpolate(template.subject, { first_name: firstName, profile_name: profileName });
-        const bodyHtml = interpolate(template.body_html, {
-          first_name: firstName, profile_name: profileName, quiz_score: score,
-          blindspot_revealed: getBlindspotText(profileName),
-          profile_specific_tip: getProfileTip(profileName),
-          cta_based_on_temperature: getTemperatureCTA(temperature),
-          // ... plus any hardcoded URLs from architecture
-        });
+```ts
+export const prerender = false;
+import type { APIRoute } from 'astro';
+import { resolveProfileBlock, resolveAnswerCallbacks } from '../../lib/content-blocks';
+import { kit, kitTag, kitSequence } from '../../lib/kit';
 
-        const resendResponse = await fetch('https://api.resend.com/emails', {
-          method: 'POST',
-          headers: { 'Authorization': `Bearer ${RESEND_API_KEY}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            from: `${template.sender_name || businessName} <${process.env.EMAIL_FROM || 'verified@domain.com'}>`,
-            to: [email],
-            subject,
-            html: wrapEmailHtml(bodyHtml),
-          }),
-        });
+export const POST: APIRoute = async ({ request, locals }) => {
+  const env = locals.runtime.env;
+  const { email, profileId, temperature, score, answers, utm } = await request.json();
 
-        const emailStatus = resendResponse.ok ? 'sent' : 'failed';
-        await supabase.from(table('email_log'))
-          .update({ status: emailStatus, sent_at: emailStatus === 'sent' ? new Date().toISOString() : null })
-          .eq('lead_id', lead.id).eq('email_id', 'WELCOME-01');
-      }
-    } catch (emailSendError) {
-      console.error('Immediate email send error:', emailSendError);
-      await supabase.from(table('email_log'))
-        .update({ status: 'failed', error_message: emailSendError.message })
-        .eq('lead_id', lead.id).eq('email_id', 'WELCOME-01');
+  // 1. Resolve content blocks at submit time -> final strings stored on the subscriber.
+  const profile_block = resolveProfileBlock(profileId);
+  const { answer_callback_1, answer_callback_2 } = resolveAnswerCallbacks(answers);
+
+  // 2. Upsert subscriber + custom fields (Kit v4 upserts by email_address).
+  await kit(env, 'POST', '/subscribers', {
+    email_address: email,
+    fields: {
+      quiz_profile: profileId,
+      quiz_temperature: temperature,   // internal only, never shown to the taker
+      quiz_score: String(score),
+      profile_block, answer_callback_1, answer_callback_2
     }
-  }
-  ```
-- **Fires Gumloop webhook** (if GUMLOOP_WEBHOOK_URL configured):
-  ```javascript
-  // Non-blocking webhook call after successful lead insertion
-  const GUMLOOP_WEBHOOK_URL = process.env.GUMLOOP_WEBHOOK_URL;
-  if (GUMLOOP_WEBHOOK_URL) {
-    fetch(GUMLOOP_WEBHOOK_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        event: 'quiz_completed',
-        leadId: lead.id,
-        email,
-        name,
-        score,
-        temperature,
-        profileId,
-        profileName,
-        responses,
-        completedAt: new Date().toISOString()
-      })
-    }).catch(err => console.error('Gumloop webhook error:', err));
-  }
-  ```
-- **Tracks quiz_responses INSERT errors** for diagnostics (silent failures are hard to debug in Vercel Edge)
-- Returns JSON with leadId and `_debug` field:
-  ```javascript
-  // Track responses insert error (don't fail the whole request)
-  let responsesInsertError = null;
-  let responsesPath = 'none'; // 'detailed', 'fallback', or 'none'
-
-  // ... insert responses code ...
-  if (responsesError) {
-    responsesInsertError = responsesError.message || JSON.stringify(responsesError);
-  }
-
-  return new Response(JSON.stringify({
-    success: true,
-    lead_id: lead.id,
-    segment, temperature,
-    products: productRecommendations,
-    _debug: {
-      responsesPath,           // which code branch ran
-      responsesError: responsesInsertError,  // null if successful
-      tablePrefix: prefix,     // confirms TABLE_PREFIX being used
-    },
-  }));
-  ```
-
-#### deploy/api/email-sender.js
-Vercel Cron Function that:
-- Reads TABLE_PREFIX from environment for multi-tenant support
-- Uses `table()` helper for all Supabase table references
-- **Queries email content from email_templates table** (not hardcoded)
-- **Pre-fetches all content blocks once per cron run** for profile and answer-callback resolution
-- **Fetches quiz responses per lead** to resolve answer callbacks
-- Handles foreign key joins with dynamic table names:
-  ```javascript
-  const leadsTable = table('leads');
-  const { data } = await supabase
-    .from(table('email_log'))
-    .select(`*, ${leadsTable} (id, email, name, profile_id, profile_name, quiz_score, temperature)`)
-  // Access joined data: const lead = emailRecord[leadsTable];
-  ```
-- Runs hourly via Vercel Cron
-- Queries pending emails from email_log where scheduled_for <= now
-- Fetches email content from email_templates table by email_id
-- **Resolves content blocks** (profile blocks + answer callbacks) before interpolation
-- Interpolates all data (lead data + content blocks) into template
-- Sends via Resend API (if configured)
-- Updates status to 'sent' or 'failed'
-- Returns processing summary
-
-**Content block resolution (MANDATORY - add to email-sender.js):**
-```javascript
-// Pre-fetch all content blocks once per cron run (small table, ~80 rows)
-const { data: contentBlocks } = await supabase
-  .from(table('content_blocks'))
-  .select('*');
-
-// Index for fast lookup
-const blockIndex = {};
-(contentBlocks || []).forEach(block => {
-  const key = `${block.email_id}|${block.block_type}|${block.block_key}|${block.block_value || ''}`;
-  blockIndex[key] = block.content;
-});
-
-// Diagnostic question IDs (from architecture - hardcoded per quiz)
-const DIAGNOSTIC_QUESTIONS = ['q3', 'q6']; // Replace with actual IDs from architecture
-
-// For each pending email, after fetching lead data:
-// 1. Resolve profile block
-const profileBlockKey = `${templateEmailId}|profile|${lead.profile_id}|`;
-vars.profile_block = blockIndex[profileBlockKey] || '';
-
-// 2. Resolve answer callbacks
-const { data: responses } = await supabase
-  .from(table('quiz_responses'))
-  .select('question_id, answer_id')
-  .eq('lead_id', lead.id);
-
-DIAGNOSTIC_QUESTIONS.forEach((qId, idx) => {
-  const response = (responses || []).find(r => r.question_id === qId);
-  if (response) {
-    const cbKey = `${templateEmailId}|answer_callback|${qId}|${response.answer_id}`;
-    vars[`answer_callback_${idx + 1}`] = blockIndex[cbKey] || '';
-  } else {
-    vars[`answer_callback_${idx + 1}`] = '';
-  }
-});
-```
-
-**Template interpolation helper (updated with new variables):**
-```javascript
-function interpolate(template, data) {
-  return template.replace(/\{\{(\w+)\}\}/g, function(match, key) {
-    return data.hasOwnProperty(key) ? data[key] : match;
   });
-}
-// Variables available: first_name, quiz_score, profile_name, temperature,
-// blindspot_revealed, profile_specific_tip, cta_based_on_temperature,
-// profile_block, answer_callback_1, answer_callback_2
+
+  // 3. Tags (profile + temperature) and the temperature sequence.
+  const tagPrefix = env.KIT_TAG_PREFIX ?? 'quiz';
+  await kitTag(env, `${tagPrefix}:profile:${profileId}`, email);
+  await kitTag(env, `${tagPrefix}:temp:${temperature}`, email);
+  await kitSequence(env, env[`KIT_SEQUENCE_${temperature.toUpperCase()}`], email);
+
+  // 4. One analytics row. No leads table -- the lead lives in Kit.
+  await env.ANALYTICS_DB.prepare(
+    `INSERT INTO analytics_events (event_type, profile_id, temperature, utm_source, created_at)
+     VALUES ('quiz_completed', ?, ?, ?, datetime('now'))`
+  ).bind(profileId, temperature, utm?.source ?? null).run();
+
+  return new Response(JSON.stringify({ ok: true }), { status: 200 });
+};
 ```
 
-**Re-Engagement email scheduling (in quiz-submit.js):**
-```javascript
-// Schedule re-engagement emails relative to sequence end
-const sequenceEndDay = { hot: 9, warm: 15, cold: 23 };
-const reengageOffsets = [3, 10, 17]; // Days after sequence ends
-const endDay = sequenceEndDay[temperature];
-reengageOffsets.forEach((offset, idx) => {
-  const sendDay = endDay + offset;
-  // Schedule REENGAGE-0{idx+1} for this lead at sendDay
-});
-```
+The Kit v4 helpers (`src/lib/kit.ts`) and content-block resolver (`src/lib/content-blocks.ts`) follow `agents/lead-magnet-agents/build-agent/references/cloudflare-kit-patterns.md`. Verify exact Kit v4 field names against current Kit docs at build time. Tag IDs and sequence IDs come from `/setup-quiz-kit` (written into `wrangler.jsonc` vars + `src/lib/kit-ids.ts`).
 
-#### deploy/api/analytics-event.js
-Vercel Edge Function for logging analytics events:
-- Reads TABLE_PREFIX from environment
-- Uses `table()` helper for Supabase table references
-- Receives POST with event payload:
+**Email + re-engagement = Kit sequences, no email cron.** Every email body (Welcome, temperature tracks, Re-Engagement) is seeded into Kit at build time with Liquid merge tags for `{{ subscriber.custom_fields.profile_block }}` and the answer-callback fields. Kit merges those custom fields and handles all timing. The diagnostic-question mapping (`answer_callback_1` = `current_situation`, `answer_callback_2` = `desired_outcome`) is applied inside `resolveAnswerCallbacks` at submit time. See `agents/lead-magnet-agents/shared/kit-integration.md`.
+
+#### deploy/src/pages/api/analytics-event.ts
+Astro API route (`export const prerender = false`) for logging analytics events:
+- Writes to D1 via the `ANALYTICS_DB` binding (`locals.runtime.env`)
+- Receives POST with event payload (matching the D1 columns — no PII):
   ```javascript
   {
-    session_id: 'uuid',
     event_type: 'page_view|quiz_start|question_viewed|answer_selected|email_captured|quiz_completed|result_page_viewed|cta_clicked',
-    event_data: { /* varies by event type */ },
-    utm_source: 'optional',
-    utm_medium: 'optional',
-    utm_campaign: 'optional',
-    page_url: 'current page URL',
-    referrer: 'document.referrer'
+    profile_id: 'optional',     // when known
+    temperature: 'optional',    // hot | warm | cold (internal only)
+    question_id: 'optional',    // for question_viewed / answer_selected
+    answer_id: 'optional',      // for answer_selected
+    utm: { source: 'optional' }
   }
   ```
 - Validates event_type against allowed list
-- Inserts into analytics_events table
-- Returns `{ success: true }` on success
+- Inserts into the D1 `analytics_events` table
+- Returns 204 on success
 - Fire-and-forget pattern (client doesn't wait for response)
 
-```javascript
-// POST /api/analytics-event
-export const config = { runtime: 'edge' };
+```ts
+export const prerender = false;
+export const POST = async ({ request, locals }) => {
+  const { event_type, profile_id, temperature, question_id, answer_id, utm } = await request.json();
 
-const TABLE_PREFIX = process.env.TABLE_PREFIX || '';
-const table = (name) => `${TABLE_PREFIX}${name}`;
-
-export default async function handler(req) {
-  if (req.method === 'OPTIONS') {
-    return new Response(null, { status: 200 });
-  }
-  if (req.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405 });
-  }
-
-  const payload = await req.json();
   const validEventTypes = [
     'page_view', 'quiz_start', 'question_viewed', 'answer_selected',
     'email_captured', 'quiz_completed', 'result_page_viewed', 'cta_clicked'
   ];
-
-  if (!validEventTypes.includes(payload.event_type)) {
+  if (!validEventTypes.includes(event_type)) {
     return new Response(JSON.stringify({ error: 'Invalid event_type' }), { status: 400 });
   }
 
-  const { error } = await supabase.from(table('analytics_events')).insert({
-    session_id: payload.session_id,
-    event_type: payload.event_type,
-    event_data: payload.event_data || {},
-    utm_source: payload.utm_source,
-    utm_medium: payload.utm_medium,
-    utm_campaign: payload.utm_campaign,
-    utm_term: payload.utm_term,
-    utm_content: payload.utm_content,
-    page_url: payload.page_url,
-    referrer: payload.referrer,
-    user_agent: payload.user_agent
-  });
+  await locals.runtime.env.ANALYTICS_DB.prepare(
+    `INSERT INTO analytics_events (event_type, profile_id, temperature, question_id, answer_id, utm_source, created_at)
+     VALUES (?, ?, ?, ?, ?, ?, datetime('now'))`
+  ).bind(event_type, profile_id ?? null, temperature ?? null, question_id ?? null, answer_id ?? null, utm?.source ?? null).run();
 
-  return new Response(JSON.stringify({ success: !error }), { status: error ? 500 : 200 });
-}
+  return new Response(null, { status: 204 });
+};
 ```
 
-#### deploy/api/analytics-query.js
-Vercel Edge Function for dashboard data queries (password protected):
-- Reads TABLE_PREFIX and ADMIN_PASSWORD from environment
+#### deploy/src/pages/api/analytics-query.ts
+Astro API route (`export const prerender = false`) for dashboard data queries (password protected):
+- Reads `ADMIN_PASSWORD` from `locals.runtime.env`; runs aggregate queries against D1 via `ANALYTICS_DB`
 - **Uses `X-Admin-Password` custom HTTP header** for authentication (NOT URL params -- passwords in URLs break with special characters and get logged)
 - CORS must allow `X-Admin-Password` in `Access-Control-Allow-Headers`
 - Returns 401 if password invalid
 - Accepts `?days=30` query param (default 30)
-- **All responses MUST include `Cache-Control: no-store, no-cache, must-revalidate`** (Vercel Edge Functions cache by default)
+- **All responses MUST include `Cache-Control: no-store, no-cache, must-revalidate`**
 - Aggregates and returns (via `?action=` query param):
   - `funnel`: page_views, quiz_starts, email_captures, cta_clicks
-  - `temperature`: { hot, warm, cold } counts
+  - `temperature`: { hot, warm, cold } counts (from the `temperature` column on completed-quiz rows)
   - `daily`: Daily stats over time period
   - `answers`: Answer distribution from `analytics_events` (captures ALL users including abandoned) - **MUST include `questionLabels` object mapping question_id to question_text**
   - `utm`: UTM source tracking
-  - `leads`: List of leads with name, email, score, segment, temperature (for leads table view)
   - `roi`: Revenue impact metrics (conditional on DEAL_VALUE being set) - hot_lead_count, pipeline_value, estimated_revenue, roi_multiplier, break_even_status
 
-**CRITICAL - Answer Distribution from analytics_events (NOT quiz_responses):**
-The `answers` action MUST query `analytics_events` where `event_type = 'answer_selected'`, NOT `quiz_responses`. This captures answers from ALL users, including those who abandoned the quiz before submitting. Deduplicate by session_id + question_id to handle users who changed answers.
+**Lead counts come from D1 analytics, not a leads table.** There is no leads list view and no `leads` action — the lead's name and email live in the client's Kit account, never in this database. Hot/warm/cold counts are derived from `quiz_completed` rows by `temperature`. To see the people behind the numbers, the client opens their Kit account (segmented by the `quiz:temp:*` and `quiz:profile:*` tags).
 
-```javascript
-// GET /api/analytics-query
-export const config = { runtime: 'edge' };
+**CRITICAL - Answer Distribution from analytics_events:**
+The `answers` action queries `analytics_events` where `event_type = 'answer_selected'`. This captures answers from ALL users, including those who abandoned the quiz before submitting.
 
-export default async function handler(req) {
+```ts
+export const prerender = false;
+export const GET = async ({ request, locals }) => {
+  const env = locals.runtime.env;
+
   // CORS - must allow X-Admin-Password header
-  if (req.method === 'OPTIONS') {
+  if (request.method === 'OPTIONS') {
     return new Response(null, {
       status: 200,
       headers: {
@@ -2373,16 +2057,16 @@ export default async function handler(req) {
     });
   }
 
-  const url = new URL(req.url);
+  const url = new URL(request.url);
   // Read password from X-Admin-Password header (NOT URL params)
-  const password = req.headers.get('X-Admin-Password');
-  const adminPassword = process.env.ADMIN_PASSWORD;
+  const password = request.headers.get('X-Admin-Password');
+  const adminPassword = env.ADMIN_PASSWORD;
 
-  // IMPORTANT: Always check if env var is set first with clear error message
+  // IMPORTANT: Always check if the secret is set first with a clear error message
   if (!adminPassword) {
     return new Response(JSON.stringify({
       error: 'ADMIN_PASSWORD not configured',
-      debug: 'Environment variable is not set in Vercel. Add ADMIN_PASSWORD in Settings > Environment Variables, then redeploy.'
+      debug: 'Secret is not set. Run: wrangler secret put ADMIN_PASSWORD, then redeploy.'
     }), { status: 500 });
   }
 
@@ -2390,32 +2074,36 @@ export default async function handler(req) {
     return new Response(JSON.stringify({ error: 'Invalid password' }), { status: 401 });
   }
 
-  const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
-  const prefix = process.env.TABLE_PREFIX || '';
+  const db = env.ANALYTICS_DB;   // queries run against D1 via bound prepared statements
   const daysBack = parseInt(url.searchParams.get('days') || '30');
   const action = url.searchParams.get('action') || 'funnel';
   const startDate = new Date();
   startDate.setDate(startDate.getDate() - daysBack);
 
-  // ... switch(action) for funnel, temperature, daily, answers, utm, leads, roi ...
+  // ... switch(action) for funnel, temperature, daily, answers, utm, roi (all read D1) ...
 
-  // ROI action implementation:
+  // ROI action implementation (D1, lead counts derived from quiz_completed rows):
   // case 'roi': {
-  //   const dealValue = parseFloat(process.env.DEAL_VALUE) || 0;
-  //   const closeRate = parseFloat(process.env.CLOSE_RATE) || 0;
+  //   const dealValue = parseFloat(env.DEAL_VALUE) || 0;
+  //   const closeRate = parseFloat(env.CLOSE_RATE) || 0;
   //   if (dealValue === 0) { result = { configured: false }; break; }
-  //   const { count: hotLeadCount } = await supabase
-  //     .from(`${prefix}leads`).select('*', { count: 'exact', head: true })
-  //     .eq('temperature', 'hot').gte('created_at', startDate.toISOString());
-  //   const { count: totalLeadCount } = await supabase
-  //     .from(`${prefix}leads`).select('*', { count: 'exact', head: true })
-  //     .gte('created_at', startDate.toISOString());
-  //   const pipelineValue = (hotLeadCount || 0) * dealValue;
+  //   const since = startDate.toISOString();
+  //   const { results: hotRows } = await db.prepare(
+  //     `SELECT COUNT(*) AS n FROM analytics_events
+  //      WHERE event_type = 'quiz_completed' AND temperature = 'hot' AND created_at >= ?`
+  //   ).bind(since).all();
+  //   const { results: totalRows } = await db.prepare(
+  //     `SELECT COUNT(*) AS n FROM analytics_events
+  //      WHERE event_type = 'quiz_completed' AND created_at >= ?`
+  //   ).bind(since).all();
+  //   const hotLeadCount = hotRows?.[0]?.n || 0;
+  //   const totalLeadCount = totalRows?.[0]?.n || 0;
+  //   const pipelineValue = hotLeadCount * dealValue;
   //   const estimatedRevenue = pipelineValue * closeRate;
-  //   const systemCost = 3497;
+  //   const systemCost = 2500;
   //   const roiMultiplier = estimatedRevenue / systemCost;
   //   const breakEvenStatus = estimatedRevenue >= systemCost ? 'achieved' : `$${(systemCost - estimatedRevenue).toFixed(0)} remaining`;
-  //   result = { configured: true, hot_lead_count: hotLeadCount || 0, total_lead_count: totalLeadCount || 0,
+  //   result = { configured: true, hot_lead_count: hotLeadCount, total_lead_count: totalLeadCount,
   //     pipeline_value: pipelineValue, estimated_revenue: estimatedRevenue,
   //     roi_multiplier: roiMultiplier, break_even_status: breakEvenStatus,
   //     system_cost: systemCost, deal_value: dealValue, close_rate: closeRate };
@@ -2431,131 +2119,53 @@ export default async function handler(req) {
       'Cache-Control': 'no-store, no-cache, must-revalidate',
     },
   });
-}
+};
 
-// Answer distribution - queries analytics_events to capture ALL users (including abandoned)
-async function getAnswerDistribution(supabase, prefix, startDate) {
-  const { data: events, error } = await supabase
-    .from(`${prefix}analytics_events`)
-    .select('session_id, event_data')
-    .eq('event_type', 'answer_selected')
-    .gte('created_at', startDate);
-
-  if (error) return { answers: [], questionLabels: {} };
-
-  // Deduplicate: keep last answer per session per question
-  // (handles users who changed their answer before moving on)
-  const sessionAnswers = {};
-  events.forEach(event => {
-    const d = event.event_data;
-    if (!d || !d.question_id) return;
-    const key = `${event.session_id}-${d.question_id}`;
-    sessionAnswers[key] = d; // last one wins
-  });
+// Answer distribution - queries D1 analytics_events to capture ALL users (including abandoned)
+async function getAnswerDistribution(db, startDate) {
+  const { results: events } = await db.prepare(
+    `SELECT question_id, answer_id FROM analytics_events
+     WHERE event_type = 'answer_selected' AND created_at >= ?`
+  ).bind(startDate.toISOString()).all();
 
   // Aggregate by question + answer
   const grouped = {};
-  const questionLabels = {};
-
-  Object.values(sessionAnswers).forEach(d => {
-    const qId = d.question_id;
-    const aKey = d.answer_id || String(d.answer_value);
-    const groupKey = `${qId}-${aKey}`;
-
+  (events || []).forEach(row => {
+    if (!row.question_id) return;
+    const groupKey = `${row.question_id}-${row.answer_id}`;
     if (!grouped[groupKey]) {
       grouped[groupKey] = {
-        question_id: qId,
-        answer_id: d.answer_id || null,
-        answer_text: d.answer_text || d.answer_id || String(d.answer_value),
-        answer_value: d.answer_value || null,
+        question_id: row.question_id,
+        answer_id: row.answer_id || null,
         count: 0,
       };
     }
     grouped[groupKey].count++;
-
-    if (d.question_text && !questionLabels[qId]) {
-      questionLabels[qId] = d.question_text;
-    }
   });
 
+  // Map question_id -> question_text using the quiz definition bundled at build time
+  // (the D1 row stores only ids — labels come from the quiz config, not PII).
+  const questionLabels = {}; // populated from src/data/quiz-config.json question text
+
   return {
-    answers: Object.values(grouped).sort((a, b) => a.question_id - b.question_id),
+    answers: Object.values(grouped).sort((a, b) => String(a.question_id).localeCompare(String(b.question_id))),
     questionLabels
   };
 }
 ```
 
-#### deploy/api/data-cleanup.js
-Vercel Cron Function that runs daily at 3 AM for data retention:
-- Reads TABLE_PREFIX from environment for multi-tenant support
-- Uses `table()` helper for all Supabase table references
-- Reads `DATA_RETENTION_ANALYTICS_DAYS` (default 90) and `DATA_RETENTION_EMAIL_DAYS` (default 365) from environment
-- Deletes `analytics_events` records older than analytics retention period
-- Deletes `email_log` records where `status = 'sent'` older than email retention period
-- Returns JSON cleanup summary: `{ analytics_deleted, emails_deleted, retention, ran_at }`
-- **Does NOT delete leads, quiz_responses, email_templates, or content_blocks**
+The Worker `scheduled` handler (not an API route) runs the nightly D1 cleanup — analytics only, since Kit owns email retention:
 
-```javascript
-// GET /api/data-cleanup (Vercel Cron - daily at 3 AM)
-import { createClient } from '@supabase/supabase-js';
-
-export const config = { runtime: 'edge' };
-
-const TABLE_PREFIX = process.env.TABLE_PREFIX || '';
-const table = (name) => `${TABLE_PREFIX}${name}`;
-
-export default async function handler(req) {
-  if (req.method === 'OPTIONS') {
-    return new Response(null, { status: 200 });
-  }
-
-  try {
-    const supabase = createClient(
-      process.env.SUPABASE_URL,
-      process.env.SUPABASE_SERVICE_ROLE_KEY
-    );
-
-    const now = new Date();
-    const retentionAnalytics = parseInt(process.env.DATA_RETENTION_ANALYTICS_DAYS) || 90;
-    const retentionEmails = parseInt(process.env.DATA_RETENTION_EMAIL_DAYS) || 365;
-
-    // Analytics: delete events older than retention period
-    const analyticsCutoff = new Date(now);
-    analyticsCutoff.setDate(analyticsCutoff.getDate() - retentionAnalytics);
-
-    const { count: analyticsDeleted } = await supabase
-      .from(table('analytics_events'))
-      .delete({ count: 'exact' })
-      .lt('created_at', analyticsCutoff.toISOString());
-
-    // Email log: delete sent records older than retention period
-    const emailCutoff = new Date(now);
-    emailCutoff.setDate(emailCutoff.getDate() - retentionEmails);
-
-    const { count: emailsDeleted } = await supabase
-      .from(table('email_log'))
-      .delete({ count: 'exact' })
-      .eq('status', 'sent')
-      .lt('sent_at', emailCutoff.toISOString());
-
-    const result = {
-      analytics_deleted: analyticsDeleted || 0,
-      emails_deleted: emailsDeleted || 0,
-      retention: { analytics_days: retentionAnalytics, email_days: retentionEmails },
-      ran_at: now.toISOString()
-    };
-
-    console.log('Data cleanup:', result);
-    return new Response(JSON.stringify(result), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' }
-    });
-  } catch (error) {
-    console.error('Data cleanup error:', error);
-    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
-  }
+```ts
+// Triggered by the wrangler cron (0 3 * * *). Analytics-only.
+async scheduled(event, env) {
+  await env.ANALYTICS_DB.prepare(
+    `DELETE FROM analytics_events WHERE created_at < datetime('now', '-' || ? || ' days')`
+  ).bind(env.DATA_RETENTION_ANALYTICS_DAYS ?? 90).run();
 }
 ```
+
+There is no separate `data-cleanup` route, no `email_log` cleanup, and no `DATA_RETENTION_EMAIL_DAYS` — Kit handles email retention on the client's account.
 
 ### deploy/src/pages/admin/index.astro (Analytics Dashboard)
 Password-protected admin dashboard with **two tabs**: Analytics and ROI Calculator.
@@ -2563,8 +2173,8 @@ Password-protected admin dashboard with **two tabs**: Analytics and ROI Calculat
 **Structure:**
 - Login screen (password input → API validation → dashboard reveal)
 - Tab bar at top: "Analytics" | "ROI Calculator" toggle
-- Analytics tab: KPI cards, charts, UTM table, leads table
-- ROI Calculator tab: lead breakdown, editable inputs, calculated results, formula explainer
+- Analytics tab: KPI cards, charts, UTM table (no leads table — lead names/emails live in the client's Kit account, not in analytics)
+- ROI Calculator tab: lead-count breakdown (derived from quiz completions by temperature), editable inputs, calculated results, formula explainer
 
 ```astro
 ---
@@ -2601,14 +2211,14 @@ import Layout from '../../layouts/Layout.astro';
           <div class="kpi-card"><div class="kpi-value" id="kpi-completions">--</div><div class="kpi-label">Completions</div></div>
           <div class="kpi-card"><div class="kpi-value" id="kpi-rate">--</div><div class="kpi-label">Completion Rate</div></div>
         </div>
-        <!-- Charts: tempChart (doughnut), dailyChart (line), eraChart (bar), UTM table, leads table -->
+        <!-- Charts: tempChart (doughnut), dailyChart (line), eraChart (bar), UTM table -->
         <div class="chart-grid">
           <div class="chart-card"><h3>Temperature Distribution</h3><canvas id="tempChart" height="250"></canvas></div>
           <div class="chart-card"><h3>Daily Activity</h3><canvas id="dailyChart" height="250"></canvas></div>
           <div class="chart-card"><h3>Profile Distribution</h3><canvas id="eraChart" height="250"></canvas></div>
           <div class="chart-card"><h3>UTM Sources</h3><div id="utm-table" style="overflow-x: auto;"></div></div>
         </div>
-        <div class="chart-card" style="margin-top: var(--space-xl);"><h3>Recent Leads</h3><div id="leads-table" style="overflow-x: auto;"></div></div>
+        <div class="chart-card" style="margin-top: var(--space-xl);"><h3>Your Subscribers</h3><p style="color: var(--color-text-muted);">Lead names and emails live in your Kit account, segmented by the quiz profile and temperature tags. Open Kit to see and message the people behind these numbers.</p></div>
       </div>
 
       <!-- ROI Calculator Tab -->
@@ -2656,8 +2266,8 @@ import Layout from '../../layouts/Layout.astro';
             <div class="roi-formula"><span class="roi-formula-label">Pipeline Value</span> <span class="roi-formula-eq">=</span> Hot Leads x Deal Value</div>
             <div class="roi-formula"><span class="roi-formula-label">Est. Conversions</span> <span class="roi-formula-eq">=</span> Hot Leads x Close Rate</div>
             <div class="roi-formula"><span class="roi-formula-label">Est. Revenue</span> <span class="roi-formula-eq">=</span> Est. Conversions x Deal Value</div>
-            <div class="roi-formula"><span class="roi-formula-label">ROI Multiplier</span> <span class="roi-formula-eq">=</span> Est. Revenue / $3,497 (system cost)</div>
-            <div class="roi-formula"><span class="roi-formula-label">Break-Even</span> <span class="roi-formula-eq">=</span> $3,497 - Est. Revenue (if not yet achieved)</div>
+            <div class="roi-formula"><span class="roi-formula-label">ROI Multiplier</span> <span class="roi-formula-eq">=</span> Est. Revenue / $2,500 (system cost)</div>
+            <div class="roi-formula"><span class="roi-formula-label">Break-Even</span> <span class="roi-formula-eq">=</span> $2,500 - Est. Revenue (if not yet achieved)</div>
             <div class="roi-explainer-note">
               <strong>How leads are scored:</strong> Hot = quiz score 80+, Warm = 50-79, Cold = below 50.
               Close Rate is your estimated percentage of hot leads that become paying clients.
@@ -2682,7 +2292,7 @@ Dashboard features:
   - Daily activity chart (line, Chart.js)
   - Profile distribution chart (bar, Chart.js) - uses profile display names not internal IDs
   - UTM sources table
-  - Recent leads table (name, email, profile, temperature, date)
+  - Subscribers note: lead names and emails live in the client's Kit account (segmented by tags), not in analytics
 - **ROI Calculator tab**:
   - Lead breakdown (4 cards): Total, Hot, Warm, Cold - with temperature color accents
   - Editable inputs: Deal Value ($) and Close Rate (%) with Recalculate button
@@ -2698,7 +2308,7 @@ Dashboard logic with **tab navigation** and **ROI calculator**:
 - Login handler (validates password via API, shows dashboard)
 - **Uses `X-Admin-Password` HTTP header for authentication** (NOT URL query params)
 - `switchTab(tab)` - toggles between Analytics and ROI Calculator views
-- `loadDashboard()` - fetches analytics data (6 parallel API calls: funnel, temperature, daily, answers, utm, leads)
+- `loadDashboard()` - fetches analytics data (5 parallel API calls: funnel, temperature, daily, answers, utm)
 - `loadROIPage()` - fetches ROI data on first ROI tab visit, populates lead counts and input defaults
 - `recalculateROI()` - client-side calculation from editable inputs, saves to localStorage
 - `toggleExplainer()` - expands/collapses formula explainer section
@@ -2766,7 +2376,7 @@ window.recalculateROI = function() {
   var pipeline = roiLeadCounts.hot * dealValue;
   var conversions = Math.round(roiLeadCounts.hot * closeRate);
   var revenue = conversions * dealValue;
-  var systemCost = 3497;
+  var systemCost = 2500;
   var roiMultiplier = systemCost > 0 ? revenue / systemCost : 0;
 
   document.getElementById('roi-pipeline').textContent = '$' + pipeline.toLocaleString();
@@ -2822,7 +2432,7 @@ window.recalculateROI = function() {
 Complete prompt for AI coding tools (Cursor, Replit, etc.) to extend the quiz app.
 
 Include:
-1. Tech stack (Astro 4.x, vanilla JS, Vercel Edge Functions)
+1. Tech stack (Astro 4.x, vanilla JS, Astro API routes running on the client's hosting; Kit for leads + email; one analytics table). Do NOT name the host in any copy delivered to the client.
 2. Complete questions array from architecture
 3. Scoring logic with factor weights
 4. Temperature routing function
@@ -2857,34 +2467,36 @@ Package overview with:
 5. Scoring thresholds
 6. Email platform setup notes
 7. Product catalog summary
-8. **Deployment instructions**:
+8. **Deployment instructions** (Kit-side setup happens first via `/setup-quiz-kit`):
    ```bash
    cd deploy
    npm install
-   npm run setup-db    # Creates Supabase tables + seeds emails
+   wrangler d1 create [business-name]-quiz-analytics      # once; paste id into wrangler.jsonc
+   wrangler d1 execute ANALYTICS_DB --file=./d1/analytics-schema.sql
+   wrangler secret put KIT_API_KEY                        # the client's own Kit key
+   wrangler secret put ADMIN_PASSWORD
    npm run build       # Builds Astro project
-   vercel --prod       # Deploys to Vercel
+   wrangler deploy     # Deploys to the client's hosting
    ```
 9. **Local development**: `npm run dev` starts Astro dev server
-10. **Client Preview instructions** (GitHub Pages setup for client-preview/)
+10. **Client Preview instructions** (Cloudflare preview deploy for client-preview/)
 
 ### POST-COMPLETION-GUIDE.md (Root Level)
 Detailed step-by-step guide for deploying the quiz after files are generated. Include:
 
-1. **Supabase Setup** - How to create project, find credentials (Project URL, Service Role Key, Database URL)
-2. **Environment Configuration** - Copy .env.example, explanation of each variable
-3. **Database Setup** - Run `npm run setup-db`, verify tables in Supabase dashboard
+1. **Kit Setup** - Run `/setup-quiz-kit [business-name]` to create custom fields, tags, the 3 sequences + Re-Engagement, and seed all emails in the **client's own Kit account** (never SRC's). It also writes the tag/sequence id map into the deploy config.
+2. **Environment Configuration** - Copy .env.example, explanation of each variable (KIT_API_KEY, KIT_SEQUENCE_*, ADMIN_PASSWORD, retention)
+3. **Analytics Database Setup** - `wrangler d1 create`, then `wrangler d1 execute ANALYTICS_DB --file=./d1/analytics-schema.sql`; paste the database id into wrangler.jsonc
 4. **Build Astro Project** - Run `npm run build`, verify dist/ folder created
-5. **Deploy to Vercel** - `vercel --prod`, add environment variables in dashboard
-   - **CRITICAL**: After adding environment variables in Vercel, you MUST redeploy for them to take effect
-   - Either add env vars first via CLI (`vercel env add ADMIN_PASSWORD production`) then `vercel --prod`
-   - Or add in dashboard, then run `vercel --prod` again to redeploy
-6. **Post-Deploy Testing** - Test quiz flow, verify data in Supabase, test admin dashboard
-   - **Admin Dashboard Troubleshooting**: If login fails with "Invalid password", verify ADMIN_PASSWORD is set in Vercel and redeploy
-   - **ROI Dashboard**: If DEAL_VALUE and CLOSE_RATE are configured in Vercel env vars, verify the Revenue Impact section appears on /admin after at least one hot lead exists. If not configured, the section stays hidden (expected behavior).
-7. **Email Setup (Optional)** - Create Resend account, verify domain, add API key
-8. **Video Rendering (If Enabled)** - Copy .tsx files, register components, render commands
-9. **Client Handoff** - Share preview URL, review Notion
+5. **Deploy** - `wrangler deploy`, set secrets with `wrangler secret put`
+   - **CRITICAL**: Set `KIT_API_KEY` and `ADMIN_PASSWORD` as secrets (`wrangler secret put NAME`) before or right after first deploy; non-secret vars live in wrangler.jsonc
+   - Re-deploy after changing vars in wrangler.jsonc
+6. **Post-Deploy Testing** - Test quiz flow, verify the subscriber appears in the client's Kit account, confirm the analytics row landed in D1, test admin dashboard
+   - **Admin Dashboard Troubleshooting**: If login fails with "Invalid password", verify the ADMIN_PASSWORD secret is set and redeploy
+   - **ROI Dashboard**: If DEAL_VALUE and CLOSE_RATE are set, verify the Revenue Impact section appears on /admin after at least one hot completion exists. If not configured, the section stays hidden (expected behavior).
+7. **Email** - Email is already live: Kit sequences seeded by `/setup-quiz-kit` send automatically once a subscriber is added. No separate email service to configure.
+8. **Social Ad Video (optional)** - Off by default. If the client wants one, generate it via the AI video provider (see generation-providers.md).
+9. **Client Handoff** - Share the preview URL; save final deliverables to `clients/<client>/` in the vault (the Obsidian home-base rule).
 10. **Customer Segments Reference** - Table of segment IDs, names, and characteristics
 11. **Troubleshooting** - Common errors and solutions (include "ADMIN_PASSWORD not configured" error)
 
@@ -3709,81 +3321,44 @@ async function hashEmail(email) {
 // SUBMISSION CONFIGURATION
 // ====================================
 const QUIZ_CONFIG = {
-  // Mode: 'supabase' (default), 'webhook', or 'both'
-  mode: 'supabase',
-
-  // Vercel Edge Function endpoint
+  // Single submit endpoint (Astro API route on the Worker -> registers the lead in Kit)
   apiEndpoint: '/api/quiz-submit',
 
-  // Legacy webhook (Gumloop, Zapier)
-  webhookUrl: '[GUMLOOP_WEBHOOK_PLACEHOLDER]',
-
-  // Quiz identifier for database
+  // Quiz identifier (used for tagging / analytics context)
   source: '[QUIZ_NAME]-quiz',
 
   // Debug mode
   debugMode: false
 };
 
-// Submission function - handles both Supabase and webhook
+// Submission function - posts to the quiz-submit route, which registers the lead in Kit.
 async function submitQuizResults(email, name, results) {
   const payload = {
     email,
-    name,
+    profileId: results.profileId,
+    temperature: results.temperature,   // internal only; never rendered to the taker
     score: results.score,
-    temperature: results.temperature,
-    profile: results.profileId,
-    profileName: profiles[results.profileId].name,
     answers: results.answers.map(a => ({
       questionId: a.questionId,
-      questionText: questions.find(q => q.id === a.questionId)?.text || '',
       answerId: a.answerId,
-      answerText: a.text,
       score: a.score,
       tags: a.tags
     })),
-    recommendedProducts: profiles[results.profileId].products.map(p => ({
-      id: p.id,
-      name: p.name,
-      url: p.url,
-      price: p.price
-    })),
-    submittedAt: new Date().toISOString(),
+    utm: getStoredUtmParams(),
     source: QUIZ_CONFIG.source
   };
 
-  const submissions = [];
-
-  // Submit to Supabase via API
-  if (QUIZ_CONFIG.mode === 'supabase' || QUIZ_CONFIG.mode === 'both') {
-    submissions.push(
-      fetch(QUIZ_CONFIG.apiEndpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      })
-      .then(res => res.json())
-      .then(data => ({ target: 'supabase', success: !data.error }))
-      .catch(() => ({ target: 'supabase', success: false }))
-    );
+  try {
+    const res = await fetch(QUIZ_CONFIG.apiEndpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json().catch(() => ({}));
+    return res.ok && data.ok !== false;
+  } catch (e) {
+    return false;
   }
-
-  // Submit to webhook
-  if ((QUIZ_CONFIG.mode === 'webhook' || QUIZ_CONFIG.mode === 'both') &&
-      QUIZ_CONFIG.webhookUrl !== '[GUMLOOP_WEBHOOK_PLACEHOLDER]') {
-    submissions.push(
-      fetch(QUIZ_CONFIG.webhookUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      })
-      .then(() => ({ target: 'webhook', success: true }))
-      .catch(() => ({ target: 'webhook', success: false }))
-    );
-  }
-
-  const results_arr = await Promise.all(submissions);
-  return results_arr.some(r => r.success);
 }
 
 // ====================================
@@ -3958,71 +3533,18 @@ import Layout from '../../layouts/Layout.astro';
 - **Soft CTA Section** with link to main business site
 - Analytics tracking (result_page_viewed event)
 
-### deploy/videos/SocialAd.tsx (Social Ad Video - Always Generated)
+### Social Ad Video (Optional, OFF by default)
 
-Generate a 20-second (600 frames @ 30fps) social ad video as a Remotion component. This is always created for every quiz funnel.
+There is no Remotion video stage. The Build Agent does NOT generate a social ad by default and produces no `SocialAd.tsx`, no render script, and no `deploy/videos/` folder.
 
-#### Read Reference Template
-Read the template file first:
-- /.claude/skills/lead-magnet-quiz/references/video-templates.md
+When a client specifically wants a social ad, produce a short atmospheric promo via the AI video provider (see `agents/lead-magnet-agents/shared/generation-providers.md`), not from a code template. The conversion arc below is a content guide for that case — adapt copy from the client files, never name the generation tool in client-facing copy:
 
-Also read Remotion animation rules:
-- /.claude/skills/remotion/rules/animations.md
-- /.claude/skills/remotion/rules/text-animations.md
-- /.claude/skills/remotion/rules/timing.md
+- **Hook** — a curiosity-gap headline (from `client/landing-page-copy.md`).
+- **Social proof** — a trust beat (from `client/research.md`).
+- **Profile tease** — show ALL quiz profile names (from `client/architecture.md`), never a subset.
+- **CTA** — the quiz CTA (from `client/landing-page-copy.md`), low friction.
 
-#### Video Structure (4 scenes, 20 seconds total)
-
-**Goal**: Drive quiz conversions. Every scene builds toward the viewer taking the quiz.
-
-The social ad follows a fixed 4-scene conversion arc. Customize content from client files:
-
-| Scene | Frames | Duration | Conversion Role | Content Source |
-|-------|--------|----------|-----------------|----------------|
-| 1. Hook | 0-180 | 6 sec | Create curiosity gap with bold statement + question | client/landing-page-copy.md headline |
-| 2. Social Proof | 180-330 | 5 sec | Build trust with animated counter + trust badge | client/research.md social proof data |
-| 3. Profile Tease | 330-480 | 5 sec | Trigger self-identification with ALL profile cards | client/architecture.md ALL profile names |
-| 4. CTA | 480-600 | 4 sec | Low-friction conversion with button + shimmer | client/landing-page-copy.md CTA |
-
-#### Customization Rules
-
-Pull these from client files:
-- **Colors**: `COLOR_PRIMARY`, `COLOR_PRIMARY_LIGHT`, `COLOR_BACKGROUND`, `COLOR_SURFACE`, `COLOR_TEXT`, `COLOR_MUTED` from design.md palette
-- **Fonts**: `fontFamily` values from design.md typography (heading + body)
-- **Hook text**: Adapt the quiz headline into a 2-line curiosity gap + follow-up question
-- **Social proof**: Use `SOCIAL_PROOF_STAT` + `SOCIAL_PROOF_LABEL` + `SOCIAL_PROOF_LINE_2` from research.md
-- **Profile names**: Use ALL quiz profile names from architecture.md (typically 5). NEVER subset to 3.
-- **Profile count heading**: Must match the actual PROFILES_PREVIEW array length (e.g. "5 Fitness Eras")
-- **CTA text**: Use the quiz CTA from landing-page-copy.md (include time or "free" for low friction)
-- **Brand name**: Business name
-- **Watermark**: Business website URL at bottom
-
-#### Component Requirements
-The .tsx file must:
-- Import from "remotion": `AbsoluteFill, useCurrentFrame, useVideoConfig, interpolate, spring, Easing, Sequence`
-- Export component as: `export const SocialAd: React.FC = () => { ... };`
-- Export default: `export default SocialAd;`
-- Use `spring()` for entrances, `interpolate()` for fades and counters
-- Use `Easing.out(Easing.quad)` for counter animations
-- Define all colors as UPPER_SNAKE_CASE constants at top
-- Define all text as UPPER_SNAKE_CASE constants at top
-- NO CSS transitions or animations (forbidden in Remotion)
-- Return JSX with `<AbsoluteFill>` wrapper
-- Include background glow effect (radial gradient with pulsing opacity)
-- Include shimmer effect on CTA button
-- Include persistent brand watermark at bottom
-- Scene 3 layout: heading `top: -240`, cards `top: -160` with `gap: 10`, card `padding: "10px 36px"` + `fontSize: 24` + `whiteSpace: "nowrap"`, card stagger `i * 10` frames, "Which one are you?" at `top: 160`
-
-#### Rendering
-
-After generating `deploy/videos/SocialAd.tsx`, render it to MP4 using the render script:
-
-```bash
-cd ./remotion
-./render-quiz-videos.sh "[OUTPUT_DIR]/deploy/videos"
-```
-
-This produces `deploy/videos/rendered/SocialAd.mp4` (1080x1080, h264). Copy the rendered MP4 to `deploy/videos/SocialAd.mp4` for client delivery, then remove the `rendered/` subfolder.
+Brand colors and fonts come from `client/design.md`. Deliver the finished video file alongside the other client deliverables.
 
 ### client/research.html (Design-System Styled Research Presentation)
 
@@ -4155,7 +3677,7 @@ Generate a standalone HTML document that presents the research.md content using 
 
 ### client-preview/ Folder
 
-Create a GitHub Pages-deployable folder with standalone HTML previews for client review.
+Create a folder of standalone HTML previews for client review, served via a Cloudflare preview deploy.
 
 #### client-preview/index.html
 Navigation page linking to all 9 preview pages:
@@ -4177,25 +3699,24 @@ Copy of client/quiz-copy-explainer.html
 #### client-preview/content-blocks-explainer.html
 Copy of client/content-blocks-explainer.html
 
-All files must be standalone (no external CSS/JS dependencies) for GitHub Pages hosting.
+All files must be standalone (no external CSS/JS dependencies) for the preview deploy.
 
 ## Validation
-- [ ] deploy/astro.config.mjs exists with Vercel static adapter
+- [ ] deploy/astro.config.mjs exists with the Cloudflare adapter
 - [ ] deploy/tsconfig.json exists with Astro config
-- [ ] deploy/package.json exists with astro, @astrojs/vercel, @supabase/supabase-js, and pg dependencies
-- [ ] deploy/package.json has scripts: dev, build, preview, setup-db
-- [ ] deploy/scripts/setup-schema.js exists with PostgreSQL connection, {PREFIX} replacement, email CSV seeding, AND content blocks CSV seeding
-- [ ] deploy/supabase/schema.sql includes {PREFIX}email_templates table definition
-- [ ] deploy/supabase/schema.sql includes {PREFIX}content_blocks table definition
-- [ ] deploy/api/email-sender.js queries email_templates table (not hardcoded templates)
-- [ ] deploy/api/email-sender.js pre-fetches content_blocks and resolves {{profile_block}} and {{answer_callback_N}} variables
-- [ ] client/email-sequences.csv exists and will be parsed by setup-schema.js
-- [ ] client/content-blocks.csv exists and will be parsed by setup-schema.js
+- [ ] deploy/package.json exists with astro, @astrojs/cloudflare, and wrangler (no DB client dependency)
+- [ ] deploy/package.json has scripts: dev, build, preview, deploy
+- [ ] /setup-quiz-kit seeds the client's Kit account (custom fields, tags, 3 sequences + Re-Engagement) and emits the tag/sequence id map
+- [ ] deploy/d1/analytics-schema.sql includes the single analytics_events table
+- [ ] deploy/src/data/content-blocks.json is bundled from content-blocks.csv (resolved at submit time, not seeded into a DB)
+- [ ] Kit sequence emails use Liquid merge tags for {{ subscriber.custom_fields.profile_block }} and answer_callback fields, with generic fallbacks
+- [ ] client/email-sequences.csv exists and will be seeded into Kit by /setup-quiz-kit
+- [ ] client/content-blocks.csv exists and is bundled into the build
 - [ ] deploy/public/images/ folder exists with logo.svg and product images
 - [ ] All images downloaded locally (no external CDN dependencies in deployable files)
 - [ ] deploy/src/layouts/Layout.astro exists with base HTML shell
 - [ ] deploy/src/pages/index.astro (landing page) renders correctly with /images/ paths
-- [ ] deploy/vercel.json exists with cron configuration (no rewrites needed)
+- [ ] deploy/wrangler.jsonc exists with the D1 binding and the analytics-only cleanup cron (no email cron)
 - [ ] builder-prompt.md (root) has no blank fields
 - [ ] builder-prompt.md includes complete JS code blocks
 - [ ] builder-prompt.md includes product objects with real URLs and image URLs
@@ -4207,7 +3728,7 @@ All files must be standalone (no external CSS/JS dependencies) for GitHub Pages 
 - [ ] deploy/public/styles/global.css includes micro-interaction CSS (hover effects, selection animations)
 - [ ] deploy/src/pages/quiz/index.astro includes quiz-background-layer div with mode-specific elements (using Astro conditional syntax)
 - [ ] deploy/public/scripts/quiz.js includes micro-interaction functions (createRipple, animateScore, staggeredEntrance)
-- [ ] deploy/public/scripts/quiz.js includes QUIZ_CONFIG with mode='supabase'
+- [ ] deploy/public/scripts/quiz.js includes QUIZ_CONFIG posting to /api/quiz-submit
 - [ ] deploy/public/scripts/quiz.js includes all questions and scoring logic
 - [ ] deploy/public/scripts/quiz.js includes renderTagCloud, renderEmojiScale, renderStarRating functions
 - [ ] deploy/public/scripts/quiz.js includes calculateCategoryScores() for radar chart data
@@ -4233,14 +3754,14 @@ All files must be standalone (no external CSS/JS dependencies) for GitHub Pages 
   - archetype_reveal: dramatic name reveal, character card with trait badges, identity narrative, trait grid, famous matches, hidden trait toggle, share block
   - diagnostic: score ring (small), profile reveal, horizontal comparison bars (color-coded), priority callout, strengths card, action plan (3 items), hidden opportunity toggle
 - [ ] No dollar amounts, plan names with prices, or pricing links anywhere in quiz or results pages
-- [ ] deploy/api/quiz-submit.js exists with TABLE_PREFIX support and Supabase integration
-- [ ] deploy/api/quiz-submit.js stores segment (profileId) in leads table
-- [ ] deploy/api/email-sender.js exists with TABLE_PREFIX support and Resend integration
-- [ ] deploy/supabase/schema.sql exists with {PREFIX} placeholders in all table/index/constraint names
-- [ ] deploy/supabase/schema.sql includes segment column in {PREFIX}leads table
-- [ ] deploy/.env.example exists with SUPABASE_DB_URL and TABLE_PREFIX documented
+- [ ] deploy/src/pages/api/quiz-submit.ts exists with prerender=false and registers the lead in the client's Kit account
+- [ ] deploy/src/pages/api/quiz-submit.ts resolves content blocks at submit time and writes profile_block + answer_callback_1/2 to Kit custom fields
+- [ ] deploy/src/pages/api/quiz-submit.ts subscribes the lead to the temperature sequence and applies profile + temp tags (no Resend, no DB leads write)
+- [ ] deploy/d1/analytics-schema.sql exists with the single analytics_events table
+- [ ] deploy/src/lib/kit.ts exists with Kit v4 helpers (subscriber, tag, sequence)
+- [ ] deploy/.env.example exists with KIT_API_KEY, KIT_SEQUENCE_*, and admin/retention vars documented
 - [ ] All files are mobile responsive (640px breakpoint)
-- [ ] README.md (root) lists all files with automated setup-db instructions
+- [ ] README.md (root) lists all files with /setup-quiz-kit + wrangler deploy instructions
 - [ ] No external CDN image URLs in any Astro pages or public/scripts/quiz.js
 - [ ] client/ folder contains all strategy docs (research.md, architecture.md, design.md, etc.)
 - [ ] client/research.html exists with full design system from design.md (not basic brand colors)
@@ -4251,74 +3772,73 @@ All files must be standalone (no external CSS/JS dependencies) for GitHub Pages 
 - [ ] client/research.html has no external CSS/JS dependencies (standalone)
 - [ ] client/quiz-copy-explainer.html exists with full copy breakdown
 - [ ] client/content-blocks-explainer.html exists with full personalization system explainer
-- [ ] client-preview/ folder contains 10 standalone HTML files for GitHub Pages (index, walkthrough, research, email-sequences, quiz-copy-explainer, content-blocks-explainer, ways-to-grow, ad-strategy, social-content, sales-scripts)
+- [ ] client-preview/ folder contains 10 standalone HTML files (index, walkthrough, research, email-sequences, quiz-copy-explainer, content-blocks-explainer, ways-to-grow, ad-strategy, social-content, sales-scripts)
 - [ ] POST-COMPLETION-GUIDE.md exists at root level with deployment instructions
-- [ ] deploy/supabase/schema.sql includes {PREFIX}analytics_events table definition
-- [ ] deploy/api/analytics-event.js exists with TABLE_PREFIX support
-- [ ] deploy/api/analytics-query.js exists with ADMIN_PASSWORD protection
+- [ ] deploy/d1/analytics-schema.sql includes the analytics_events table definition
+- [ ] deploy/src/pages/api/analytics-event.ts exists with prerender=false, writes to ANALYTICS_DB
+- [ ] deploy/src/pages/api/analytics-query.ts exists with ADMIN_PASSWORD protection
 - [ ] deploy/public/scripts/quiz.js includes ANALYTICS_CONFIG object
 - [ ] deploy/public/scripts/quiz.js includes trackEvent() function and event tracking calls
 - [ ] deploy/src/pages/admin/index.astro exists with login screen and dashboard
 - [ ] deploy/public/scripts/admin.js exists with Chart.js integration
 - [ ] deploy/.env.example includes ADMIN_PASSWORD variable
 - [ ] deploy/.env.example includes DEAL_VALUE and CLOSE_RATE variables (optional, for ROI tracking)
-- [ ] deploy/.env.example includes DATA_RETENTION_ANALYTICS_DAYS and DATA_RETENTION_EMAIL_DAYS variables (optional)
-- [ ] deploy/api/data-cleanup.js exists with TABLE_PREFIX support and configurable retention periods
-- [ ] deploy/vercel.json includes data-cleanup cron at 3 AM daily
-- [ ] deploy/api/analytics-query.js includes `roi` action with DEAL_VALUE and CLOSE_RATE reads
+- [ ] deploy/.env.example includes DATA_RETENTION_ANALYTICS_DAYS variable (optional)
+- [ ] Worker scheduled handler performs the nightly analytics cleanup (no separate data-cleanup route, no email-log cleanup)
+- [ ] deploy/wrangler.jsonc includes the analytics cleanup cron at 3 AM daily
+- [ ] deploy/src/pages/api/analytics-query.ts includes `roi` action with DEAL_VALUE and CLOSE_RATE reads
 - [ ] deploy/public/scripts/admin.js includes loadROIData() function that conditionally shows Revenue Impact section
 ```
 
 #### Validation Gate 4
 After Build Agent completes, verify:
-- `deploy/package.json` exists with @supabase/supabase-js and pg dependencies
-- `deploy/package.json` has setup-db script pointing to scripts/setup-schema.js
-- `deploy/scripts/setup-schema.js` exists with PostgreSQL connection, {PREFIX} replacement, AND email CSV seeding logic
-- `deploy/supabase/schema.sql` includes {PREFIX}email_templates table with all required columns
-- `deploy/api/email-sender.js` queries email_templates table dynamically (no hardcoded template objects)
+- `deploy/package.json` exists with @astrojs/cloudflare and wrangler (no DB client dependency)
+- `deploy/package.json` has a `deploy` script running `wrangler deploy`
+- `/setup-quiz-kit` seeds the client's Kit account and emits the tag/sequence id map (replaces the old setup-schema.js)
+- Kit sequences (Welcome, the 3 temperature tracks, Re-Engagement) are seeded from email-sequences.csv with Liquid merge tags
 - `client/email-sequences.csv` exists with all 26 emails in correct format
 - `client/research.html` uses full design system from design.md (design_mode, typography, shadow scale, decorative elements)
 - `deploy/public/images/` folder exists with logo.svg and product images downloaded locally
 - `deploy/src/pages/index.astro` (landing page) renders correctly with /images/ paths
-- `deploy/vercel.json` exists with cron configuration (no rewrites needed for Astro)
+- `deploy/wrangler.jsonc` exists with the D1 binding and the analytics cleanup cron (no rewrites needed for Astro)
 - `builder-prompt.md` (root) is complete (no placeholders)
 - `builder-prompt.md` includes product objects with real image URLs
 - `deploy/src/pages/quiz/index.astro` renders and quiz is interactive, uses /images/ for logo
 - `deploy/public/styles/global.css` matches design.md colors
-- `deploy/public/scripts/quiz.js` includes QUIZ_CONFIG with mode='supabase' and source set
+- `deploy/public/scripts/quiz.js` includes QUIZ_CONFIG posting to /api/quiz-submit with source set
 - `deploy/public/scripts/quiz.js` uses /images/ paths for all product images (no external CDN URLs)
 - `deploy/src/pages/quiz/thank-you.astro` displays results correctly with /images/ paths
 - `deploy/src/pages/quiz/thank-you.astro` includes all sections matching the selected `results_archetype` (see archetype-specific checklist in Validation Gate 3)
 - `deploy/src/pages/quiz/thank-you.astro` does NOT contain plan cards, pricing, or dollar amounts
-- `deploy/api/quiz-submit.js` exists with TABLE_PREFIX support and Supabase integration
-- `deploy/api/email-sender.js` exists with TABLE_PREFIX support and Resend integration
-- `deploy/supabase/schema.sql` exists with {PREFIX} placeholders in all table names
-- `deploy/.env.example` exists with SUPABASE_DB_URL, TABLE_PREFIX, DEAL_VALUE, CLOSE_RATE, and other vars documented
-- `README.md` (root) lists all files with automated npm run setup-db and npm run build instructions
+- `deploy/src/pages/api/quiz-submit.ts` exists with prerender=false and Kit integration (subscriber + custom fields + tags + sequence)
+- `deploy/src/lib/kit.ts` exists with Kit v4 helpers; `deploy/src/lib/content-blocks.ts` resolves blocks at submit time
+- `deploy/d1/analytics-schema.sql` exists with the single analytics_events table
+- `deploy/.env.example` exists with KIT_API_KEY, KIT_SEQUENCE_*, ADMIN_PASSWORD, DEAL_VALUE, CLOSE_RATE, and retention vars documented
+- `README.md` (root) lists all files with /setup-quiz-kit + `npm run build` + `wrangler deploy` instructions
 - No external CDN image URLs in any Astro pages or public/scripts/ files
 - No dollar amounts, plan names with prices, or pricing links in quiz questions or results
+- The site and its preview/strategy docs never name the host (Cloudflare/Workers/D1) in client-facing copy
 - `client/` folder contains all strategy and copy documents
 - `client/quiz-copy-explainer.html` exists with full breakdown of copy decisions
 - `client-preview/` folder contains 10 standalone HTML files (index, walkthrough, research, email-sequences, quiz-copy-explainer, content-blocks-explainer, ways-to-grow, ad-strategy, social-content, sales-scripts)
-- `deploy/` folder is ready for `cd deploy && npm install && npm run setup-db && npm run build && vercel --prod` deployment
+- `deploy/` folder is ready for `cd deploy && npm install && wrangler d1 create ... && npm run build && wrangler deploy` (Kit setup via /setup-quiz-kit first)
 - `POST-COMPLETION-GUIDE.md` exists at root with step-by-step deployment instructions
 - `deploy/src/pages/quiz/thank-you.astro` does NOT display temperature labels to customers (internal use only)
 - Quiz flow: quiz starts on Q1 immediately (no email gate), email capture after last question, branded loading, redirect to thank-you
 - `deploy/public/scripts/quiz.js` includes all 9 renderer types (including tag_cloud, emoji_scale, star_rating)
 - `deploy/public/scripts/quiz.js` includes archetype-appropriate calculation function (calculateCategoryScores, calculateSpectrumScores, or determineStagePosition) and stores results + archetype in localStorage
 - `deploy/public/styles/global.css` includes CSS for tag-cloud, emoji-scale, star-rating, loading-steps
-- `deploy/supabase/schema.sql` includes `segment` column in leads table
-- `deploy/api/quiz-submit.js` stores segment (profileId) in leads table
+- `deploy/src/pages/api/quiz-submit.ts` writes the profile (profileId) to the Kit `quiz_profile` custom field and the `quiz:profile:<id>` tag
 
 **Data Retention Validation:**
-- `deploy/api/data-cleanup.js` exists with configurable retention periods (DATA_RETENTION_ANALYTICS_DAYS, DATA_RETENTION_EMAIL_DAYS)
-- `deploy/vercel.json` includes data-cleanup cron scheduled daily
-- `deploy/.env.example` includes DATA_RETENTION_ANALYTICS_DAYS and DATA_RETENTION_EMAIL_DAYS variables
+- The Worker scheduled handler runs the nightly analytics cleanup (DATA_RETENTION_ANALYTICS_DAYS, default 90)
+- `deploy/wrangler.jsonc` includes the analytics cleanup cron scheduled daily
+- `deploy/.env.example` includes DATA_RETENTION_ANALYTICS_DAYS variable (no email-log cleanup — Kit owns email retention)
 
 **Analytics Validation:**
-- `deploy/supabase/schema.sql` includes `{PREFIX}analytics_events` table with session_id, event_type, event_data columns
-- `deploy/api/analytics-event.js` exists with TABLE_PREFIX support and event validation
-- `deploy/api/analytics-query.js` exists with ADMIN_PASSWORD protection and aggregation queries
+- `deploy/d1/analytics-schema.sql` includes the `analytics_events` table with event_type, profile_id, temperature, question_id, answer_id, utm_source columns
+- `deploy/src/pages/api/analytics-event.ts` exists with prerender=false and event validation
+- `deploy/src/pages/api/analytics-query.ts` exists with ADMIN_PASSWORD protection and aggregation queries against D1
 - `deploy/public/scripts/quiz.js` includes ANALYTICS_CONFIG object with endpoint='/api/analytics-event'
 - `deploy/public/scripts/quiz.js` includes trackEvent() function with session management
 - `deploy/public/scripts/quiz.js` includes captureUtmParams() function
@@ -4326,14 +3846,10 @@ After Build Agent completes, verify:
 - `deploy/src/pages/admin/index.astro` exists with login screen and dashboard sections
 - `deploy/public/scripts/admin.js` exists with Chart.js chart rendering
 - `deploy/.env.example` includes ADMIN_PASSWORD variable
-- `deploy/vercel.json` includes GET in Access-Control-Allow-Methods and Authorization in Access-Control-Allow-Headers
+- The analytics API routes set CORS headers per-route allowing GET, OPTIONS and the X-Admin-Password header
 
-**Social Ad Video Validation (Soft - warn but do not block):**
-- `deploy/videos/SocialAd.tsx` exists and contains `useCurrentFrame()`
-- `deploy/videos/SocialAd.mp4` exists (rendered output)
-- No CSS transitions in SocialAd.tsx (forbidden in Remotion)
-
-**If video validation fails:** Log warning and proceed to Publish Agent. Video rendering can be retried manually with `cd ./remotion && ./render-quiz-videos.sh "[OUTPUT_DIR]/deploy/videos"`.
+**Social Ad Video Validation:**
+- No Remotion artifacts exist (no `deploy/videos/`, no SocialAd.tsx, no render script). The social ad is optional and off by default; if a client opts in, it is produced via the AI video provider.
 
 ---
 
@@ -4342,7 +3858,7 @@ After Build Agent completes, verify:
 ```
 Task tool call:
 - subagent_type: "general-purpose"
-- description: "Publish quiz package to GitHub and Notion"
+- description: "Publish quiz package to GitHub + Cloudflare preview, save to vault"
 - prompt: [See Publish Agent Prompt below]
 ```
 
@@ -4357,9 +3873,9 @@ You are a Publish Agent for distributing the lead magnet quiz package.
 - Output directory: /output/[business-name]/
 - Folder structure:
   - Root: README.md, builder-prompt.md
-  - deploy/: Vercel-ready Astro project (astro.config.mjs, src/pages/, public/, api/, etc.)
+  - deploy/: Astro project for the client's hosting (astro.config.mjs, src/pages/ incl. src/pages/api/, public/, d1/, wrangler.jsonc, etc.)
   - client/: Strategy docs (research.md, architecture.md, design.md, copy files, etc.)
-  - client-preview/: GitHub Pages preview files (9 standalone HTML files including walkthrough)
+  - client-preview/: standalone HTML preview files (9 files including walkthrough)
 
 ## Task 1: GitHub Repository (Private - Full Package)
 
@@ -4376,118 +3892,63 @@ Using the gh CLI via Bash:
 
 3. Capture and save repo URL
 
-## Task 2: GitHub Pages (Public - Client Preview)
+## Task 2: Client Preview (Cloudflare preview deploy)
 
-Create a separate public repo for client preview:
+Deploy the client-preview/ folder as a small static site on a Cloudflare preview URL (not GitHub Pages):
 
-1. Create temporary directory and copy client-preview files:
-   mkdir -p /tmp/[business-name]-preview
-   cp -r client-preview/* /tmp/[business-name]-preview/
+1. From the preview folder, deploy the standalone HTML files:
+   cd [output-directory]/client-preview
+   wrangler pages deploy . --project-name [business-name]-quiz-preview
 
-2. Initialize and push to public repo:
-   cd /tmp/[business-name]-preview
-   git init
-   git add .
-   git commit -m "Client preview: [business-name] quiz funnel"
-   gh repo create [business-name]-quiz-preview --public --source=. --push
+2. Capture the preview URL returned by wrangler (e.g. https://[business-name]-quiz-preview.pages.dev/).
 
-3. Enable GitHub Pages:
-   gh repo edit [business-name]-quiz-preview --enable-pages --pages-branch main
+## Task 3: Save deliverables to the vault (Obsidian home-base rule)
 
-4. Capture GitHub Pages URL: https://YOUR_GITHUB_USERNAME.github.io/[business-name]-quiz-preview/
+Do NOT use Notion. Final client deliverables live in the vault at `clients/<client>/`, never "GitHub only" and never Notion.
 
-## Task 3: Notion Database Entry
+1. Copy the finished package into the client's vault folder:
+   - Create `clients/[business-name]/` if it does not exist.
+   - Copy the `client/` strategy docs, the `client-preview/` HTML, and a short index/README into that folder.
 
-Using Notion MCP tools with database ID: YOUR_NOTION_DATABASE_ID
+2. Record in `clients/[business-name]/` (a simple markdown index is fine):
+   - Business name, URL, date, quiz title, question count (from client/architecture.md)
+   - Private GitHub repo URL (from Task 1)
+   - Cloudflare preview URL (from Task 2)
+   - A one-paragraph business description from client/research.md
+   - Brief Hot/Warm/Cold segment summary
+   - Links to each strategy/copy doc in the folder
 
-1. Create parent page in the database with properties:
-   - Business Name (title): [business-name]
-   - URL: [original business URL]
-   - Created Date: [today]
-   - Quiz Title: [from client/architecture.md]
-   - Questions Count: [from client/architecture.md]
-   - GitHub Repo URL: [from Task 1]
-   - Preview URL: [from Task 2 - GitHub Pages URL]
-   - Status: "Complete"
+3. Files to include in the vault copy (by section):
 
-2. Add overview content to parent page:
-   - H1: Quiz Funnel Package
-   - Paragraph: Business description from client/research.md
-   - H2: Customer Segments
-   - Brief summary of Hot/Warm/Cold segments
-   - H2: Quick Links
-   - Link to GitHub repo (private)
-   - Link to Client Preview (GitHub Pages)
+   **Strategy & Research (client/ folder):** research.md, research.html, products.json, products.md, architecture.md, questions-answers.md, questions-answers.csv, design.md
 
-3. Create child pages organized by section:
+   **Copy & Content (client/ folder):** landing-page-copy.md, quiz-copy.md, quiz-copy-explainer.html, content-blocks-explainer.html, email-sequences.md, email-sequences.csv, email-sequences.html
 
-   **Strategy & Research (client/ folder):**
-   | Page Title | Source File | Content Format |
-   |------------|-------------|----------------|
-   | 1. Research | client/research.md | Markdown |
-   | 2. Research (Visual) | client/research.html | Code block |
-   | 3. Product Catalog | client/products.json | Code block |
-   | 4. Product Catalog (Visual) | client/products.md | Markdown |
-   | 5. Quiz Architecture | client/architecture.md | Markdown |
-   | 6. Questions & Answers | client/questions-answers.md | Markdown |
-   | 7. Questions CSV | client/questions-answers.csv | Code block |
-   | 8. Design System | client/design.md | Markdown |
+   **Deployment reference (deploy/ folder):** astro.config.mjs, src/pages/index.astro, src/pages/quiz/index.astro, src/pages/quiz/thank-you.astro, public/styles/global.css, public/scripts/quiz.js
 
-   **Copy & Content (client/ folder):**
-   | Page Title | Source File | Content Format |
-   |------------|-------------|----------------|
-   | 9. Landing Page Copy | client/landing-page-copy.md | Markdown |
-   | 10. Quiz Copy | client/quiz-copy.md | Markdown |
-   | 11. Quiz Copy Explainer | client/quiz-copy-explainer.html | Code block |
-   | 12. Content Blocks Explainer | client/content-blocks-explainer.html | Code block |
-   | 13. Email Sequences | client/email-sequences.md | Markdown |
-   | 13. Email CSV | client/email-sequences.csv | Code block |
-   | 14. Email Preview | client/email-sequences.html | Code block |
-
-   **Deployment (deploy/ folder):**
-   | Page Title | Source File | Content Format |
-   |------------|-------------|----------------|
-   | 15. Astro Config | deploy/astro.config.mjs | Code block |
-   | 16. Landing Page | deploy/src/pages/index.astro | Code block |
-   | 17. Quiz Page | deploy/src/pages/quiz/index.astro | Code block |
-   | 18. Thank You Page | deploy/src/pages/quiz/thank-you.astro | Code block |
-   | 19. Global CSS | deploy/public/styles/global.css | Code block |
-   | 20. Quiz JavaScript | deploy/public/scripts/quiz.js | Code block |
-
-   **Root Level:**
-   | Page Title | Source File | Content Format |
-   |------------|-------------|----------------|
-   | 21. Builder Prompt | builder-prompt.md | Markdown |
-   | 22. README | README.md | Markdown |
-
-   **Social Ad Video (in deploy/videos/):**
-   | 23. Social Ad Source | deploy/videos/SocialAd.tsx | Code block |
+   **Root Level:** builder-prompt.md, README.md
 
 ## Output
 Report back with:
-- GitHub repo URL (private): https://github.com/YOUR_GITHUB_USERNAME/[business-name]-quiz-funnel
-- GitHub Pages URL (public preview): https://YOUR_GITHUB_USERNAME.github.io/[business-name]-quiz-preview/
-- Notion page URL: [link to parent page]
-- Confirmation: "Published successfully with 22+ child pages"
+- GitHub repo URL (private): https://github.com/diane-blip/[business-name]-quiz-funnel
+- Cloudflare preview URL (client preview): https://[business-name]-quiz-preview.pages.dev/
+- Vault deliverable path: clients/[business-name]/
+- Confirmation: "Published successfully and saved to the vault"
 
 ## Validation
 - [ ] Private GitHub repo created and accessible
 - [ ] All files pushed to GitHub (deploy/, client/, client-preview/ folders)
-- [ ] Public preview repo created with GitHub Pages enabled
-- [ ] GitHub Pages URL is accessible
-- [ ] Notion parent page created with correct properties (including Preview URL)
-- [ ] All child pages created in Notion (organized by section)
-- [ ] Content renders correctly in Notion
+- [ ] Cloudflare preview deploy is live and the URL is accessible
+- [ ] Deliverables copied to clients/[business-name]/ in the vault (not Notion, not GitHub-only)
+- [ ] Vault index records the repo URL, preview URL, and segment summary
 ```
 
 #### Validation Gate 5
 After Publish Agent completes, verify:
 - Private GitHub repo URL is valid and accessible
-- Public GitHub Pages preview URL is live and accessible
-- Notion page URL is valid
-- 22+ child pages exist in Notion (organized by section)
+- Cloudflare preview URL is live and accessible
+- clients/[business-name]/ exists in the vault with the strategy docs, preview HTML, and an index
 - All content is readable
-- Preview URL property populated in Notion
 
 ---
 
@@ -4499,12 +3960,12 @@ After all stages complete, confirm to user:
 Lead magnet quiz package complete!
 
 ## Published To:
-- GitHub (private): https://github.com/YOUR_GITHUB_USERNAME/[business-name]-quiz-funnel
-- GitHub Pages (client preview): https://YOUR_GITHUB_USERNAME.github.io/[business-name]-quiz-preview/
-- Notion: [link to parent page with 22+ child pages]
+- GitHub (private): https://github.com/diane-blip/[business-name]-quiz-funnel
+- Cloudflare preview (client preview): https://[business-name]-quiz-preview.pages.dev/
+- Vault deliverables: clients/[business-name]/
 
 ## Local Files:
-Output: /output/[business-name]/
+Working build: /output/[business-name]/  (final deliverables also saved to clients/[business-name]/ in the vault)
 
 ### Root Level
 1. README.md - Package overview with deployment instructions
@@ -4528,11 +3989,11 @@ Output: /output/[business-name]/
 15. client/email-sequences.csv - Import-ready email data
 16. client/email-sequences.html - Visual email preview
 
-### deploy/ (Vercel-Ready Astro Project)
-17. deploy/astro.config.mjs - Astro config with Vercel adapter
+### deploy/ (Astro Project for the client's hosting)
+17. deploy/astro.config.mjs - Astro config with the Cloudflare adapter
 18. deploy/tsconfig.json - TypeScript config
-19. deploy/package.json - Astro + Supabase dependencies
-20. deploy/vercel.json - Cron config + CORS headers
+19. deploy/package.json - Astro dependencies (Kit via REST, no DB client)
+20. deploy/wrangler.jsonc - Worker config: D1 binding, analytics cleanup cron, env vars
 21. deploy/.env.example - Environment variable template
 22. deploy/public/images/ - Local images (logo + products)
 23. deploy/public/styles/global.css - CSS variables and styles
@@ -4543,15 +4004,15 @@ Output: /output/[business-name]/
 28. deploy/src/pages/quiz/index.astro - Quiz page
 29. deploy/src/pages/quiz/thank-you.astro - Results page
 30. deploy/src/pages/admin/index.astro - Analytics dashboard
-31. deploy/scripts/setup-schema.js - Database setup
-32. deploy/supabase/schema.sql - Database schema
-33. deploy/api/quiz-submit.js - Quiz submission Edge Function
-34. deploy/api/email-sender.js - Email Cron Function
-35. deploy/api/analytics-event.js - Analytics tracking
-36. deploy/api/analytics-query.js - Dashboard queries
-37. deploy/api/data-cleanup.js - Data retention Cron Function
+31. deploy/src/lib/kit.ts - Kit v4 REST helpers
+32. deploy/src/lib/content-blocks.ts - Submit-time content-block resolver
+33. deploy/src/data/content-blocks.json - Bundled content blocks (from CSV)
+34. deploy/d1/analytics-schema.sql - The single analytics table
+35. deploy/src/pages/api/quiz-submit.ts - Registers the lead in Kit + logs analytics
+36. deploy/src/pages/api/analytics-event.ts - Analytics tracking (D1)
+37. deploy/src/pages/api/analytics-query.ts - Dashboard queries (D1, password-gated)
 
-### client-preview/ (GitHub Pages)
+### client-preview/ (Cloudflare preview deploy)
 38. client-preview/index.html - Navigation page
 39. client-preview/walkthrough.html - Quiz funnel walkthrough and usage guide
 40. client-preview/research.html - Research preview
@@ -4563,43 +4024,39 @@ Output: /output/[business-name]/
 46. client-preview/social-content.html - 30-day content calendar
 47. client-preview/sales-scripts.html - Sales conversation frameworks
 
-### Social Ad Video (in deploy/videos/)
-48. deploy/videos/SocialAd.tsx - Social ad source component
-49. deploy/videos/SocialAd.mp4 - Rendered video for client delivery
-
-## Deployment (Multi-Tenant Ready)
-The deploy/ folder is a complete Astro project ready for deployment:
+## Deployment
+Kit-side setup runs first (`/setup-quiz-kit`), then deploy the Astro project to the client's hosting:
 ```bash
 cd /output/[business-name]/deploy/
 
-# 1. Set environment variables for schema creation
-export SUPABASE_DB_URL="postgresql://postgres.[project-ref]:[password]@aws-0-us-east-1.pooler.supabase.com:6543/postgres"
-export TABLE_PREFIX="[business-name]_"
-
-# 2. Install dependencies and create database tables
+# 1. Install dependencies and create the analytics database
 npm install
-npm run setup-db
+wrangler d1 create [business-name]-quiz-analytics      # once; paste id into wrangler.jsonc
+wrangler d1 execute ANALYTICS_DB --file=./d1/analytics-schema.sql
 
-# 3. Build Astro project and deploy to Vercel
+# 2. Set secrets (the client's own Kit key + admin password)
+wrangler secret put KIT_API_KEY
+wrangler secret put ADMIN_PASSWORD
+
+# 3. Build and deploy
 npm run build
-vercel --prod
+wrangler deploy
 ```
 
-Required Vercel environment variables:
-- SUPABASE_URL
-- SUPABASE_SERVICE_ROLE_KEY
-- TABLE_PREFIX
-- CRON_SECRET
-- RESEND_API_KEY (optional)
+Required configuration (secrets via `wrangler secret put`, the rest as vars in wrangler.jsonc):
+- KIT_API_KEY (secret — the client's own Kit account)
+- ADMIN_PASSWORD (secret)
+- KIT_SEQUENCE_HOT / KIT_SEQUENCE_WARM / KIT_SEQUENCE_COLD, KIT_TAG_PREFIX
+- DATA_RETENTION_ANALYTICS_DAYS (optional, default 90)
 
 Post-deployment:
 1. Test quiz submission end-to-end
-2. Verify data appears in Supabase tables
-3. (Optional) Create Gumloop workflow for Notion sync
+2. Verify the subscriber appears in the client's Kit account and the analytics row landed in D1
+3. Visit /admin and confirm the dashboard loads
 
-## Client Preview (GitHub Pages)
-Share the GitHub Pages URL with clients for review:
-https://YOUR_GITHUB_USERNAME.github.io/[business-name]-quiz-preview/
+## Client Preview (Cloudflare preview deploy)
+Share the preview URL with clients for review:
+https://[business-name]-quiz-preview.pages.dev/
 
 Includes:
 - Quiz funnel walkthrough (walkthrough.html)
@@ -4614,16 +4071,12 @@ Includes:
 ## Alternative (Replit)
 Paste builder-prompt.md into Replit Agent to generate custom quiz app.
 
-## Social Ad Video
-Every quiz funnel includes a 20-second social ad video (`deploy/videos/SocialAd.tsx` + `SocialAd.mp4`). The Build Agent renders it automatically. To re-render manually:
-```bash
-cd ./remotion
-./render-quiz-videos.sh "/path/to/output/deploy/videos"
-```
+## Social Ad Video (optional)
+Off by default — no video is generated automatically. If a client wants one, produce a short atmospheric promo via the AI video provider (see `agents/lead-magnet-agents/shared/generation-providers.md`) and deliver it with the other client files.
 
 ---
 
-## ⏭️ NEXT STEP: Database Setup
+## ⏭️ NEXT STEP: Kit Setup
 
 **IMPORTANT: After all files are generated, ALWAYS output this prompt to the user:**
 
@@ -4632,11 +4085,11 @@ cd ./remotion
 
 📁 Output: output/[business-name]/
 
-Next step: Run /setup-quiz-db [business-name] to:
-• Connect Supabase database
-• Create tables and seed email templates
-• Configure admin dashboard
-• Set up Gumloop webhook (optional)
+Next step: Run /setup-quiz-kit [business-name] to:
+• Set up the client's own Kit account (custom fields, tags, sequences)
+• Seed all 26 emails into Kit with Liquid merge tags
+• Create + migrate the D1 analytics database
+• Deploy to the client's hosting
 
 This will guide you through the setup process.
 ```
@@ -4645,59 +4098,65 @@ This will guide you through the setup process.
 
 ## ⚡ POST-WORKFLOW CHECKLIST (Manual Alternative)
 
-If not using /setup-quiz-db, complete these steps manually:
+If not using /setup-quiz-kit, complete these steps manually:
 
-### 1. Supabase Setup
-- [ ] Create a new Supabase project (or use existing)
-- [ ] Copy **Project URL** from Settings → API
-- [ ] Copy **Service Role Key** from Settings → API (not anon key)
+### 1. Kit Setup (the client's own Kit account)
+- [ ] Confirm you have the client's Kit v4 API key (never SRC's account)
+- [ ] Create custom fields: quiz_profile, quiz_temperature, quiz_score, profile_block, answer_callback_1, answer_callback_2
+- [ ] Create tags: quiz:profile:<id> (one per profile) and quiz:temp:hot/warm/cold
+- [ ] Create the 3 temperature sequences + Re-Engagement, seed all 26 emails with Liquid merge tags
+- [ ] Capture the tag IDs and sequence IDs for the deploy config
 
 ### 2. Local Environment Setup
 \`\`\`bash
 cd output/[business-name]/deploy
-cp .env.example .env.local
+cp .env.example .dev.vars
 \`\`\`
 
-Edit `.env.local`:
+Edit `.dev.vars` (and mirror non-secret values into wrangler.jsonc vars):
 \`\`\`
-SUPABASE_URL=your_project_url
-SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
-TABLE_PREFIX=businessname_
+KIT_API_KEY=the_clients_kit_key
+KIT_SEQUENCE_HOT=...
+KIT_SEQUENCE_WARM=...
+KIT_SEQUENCE_COLD=...
+KIT_TAG_PREFIX=quiz
 ADMIN_PASSWORD=your_secure_password
-RESEND_API_KEY=your_resend_key  # Optional
+DATA_RETENTION_ANALYTICS_DAYS=90
 \`\`\`
 
-### 3. Database Setup
+### 3. Analytics Database Setup
 \`\`\`bash
 npm install
-npm run setup-db
+wrangler d1 create [business-name]-quiz-analytics      # paste id into wrangler.jsonc
+wrangler d1 execute ANALYTICS_DB --file=./d1/analytics-schema.sql
 \`\`\`
-Creates tables AND seeds email templates.
 
-### 4. Deploy to Vercel
+### 4. Deploy
 \`\`\`bash
-vercel --prod
+wrangler secret put KIT_API_KEY
+wrangler secret put ADMIN_PASSWORD
+npm run build
+wrangler deploy
 \`\`\`
 
-### 5. Vercel Environment Variables
-In Vercel Dashboard → Project → Settings → Environment Variables:
-- [ ] `SUPABASE_URL`
-- [ ] `SUPABASE_SERVICE_ROLE_KEY`
-- [ ] `TABLE_PREFIX`
-- [ ] `ADMIN_PASSWORD`
-- [ ] `RESEND_API_KEY` (if using email)
+### 5. Configuration
+- [ ] `KIT_API_KEY` (secret)
+- [ ] `ADMIN_PASSWORD` (secret)
+- [ ] `KIT_SEQUENCE_HOT` / `KIT_SEQUENCE_WARM` / `KIT_SEQUENCE_COLD`, `KIT_TAG_PREFIX` (wrangler.jsonc vars)
+- [ ] `DATA_RETENTION_ANALYTICS_DAYS` (optional)
 - [ ] `DEAL_VALUE` (optional, for ROI tracking on admin dashboard)
 - [ ] `CLOSE_RATE` (optional, for ROI tracking on admin dashboard)
 
 ### 6. Post-Deploy Testing
 - [ ] Complete a test quiz submission
-- [ ] Check Supabase tables for data
+- [ ] Confirm the subscriber appears in the client's Kit account with the right tags + custom fields
+- [ ] Confirm the analytics row landed in D1
 - [ ] Visit `/admin` and login
 - [ ] Verify dashboard shows test data
 
 ### 7. Client Handoff
-- [ ] Share GitHub Pages preview URL for client review
-- [ ] Review Notion page for accuracy
+- [ ] Share the Cloudflare preview URL for client review
+- [ ] Save final deliverables to clients/[business-name]/ in the vault
 ```
 
 ---
@@ -4744,11 +4203,10 @@ In Vercel Dashboard → Project → Settings → Environment Variables:
 ### Publish Stage
 | Tool | Purpose |
 |------|---------|
-| `gh repo create` (Bash) | Create GitHub repository |
+| `gh repo create` (Bash) | Create the private GitHub repository |
 | `gh repo view` (Bash) | Get repository URL |
-| Notion MCP `create_page` | Create parent page in database |
-| Notion MCP `append_block_children` | Add content blocks to pages |
-| Notion MCP `create_page` (nested) | Create child pages under parent |
+| `wrangler pages deploy` (Bash) | Deploy the client-preview/ folder to a Cloudflare preview URL |
+| Write/copy to `clients/<client>/` | Save final deliverables to the vault (Obsidian home-base rule) |
 
 ---
 

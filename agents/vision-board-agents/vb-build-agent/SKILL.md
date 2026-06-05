@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Generate the complete Vercel-deployable Astro project for a vision board builder lead magnet, including builder UI, reveal page with Glif-generated graphics, social sharing, email automation, and analytics dashboard.
+Generate the complete Cloudflare-deployable Astro project for a vision board builder lead magnet, including builder UI, reveal page with the generated graphic (pre-generated base image composited in-browser by default), social sharing, Kit-native email automation, and analytics dashboard.
 
 This is the forked counterpart of the quiz Build Agent. Where the quiz Build Agent generates quiz pages (`quiz/index.astro`, `quiz/thank-you.astro`) with `quiz.js`, this agent generates builder pages (`builder/index.astro`, `reveal/index.astro`) with `builder.js` and `reveal.js`.
 
@@ -22,13 +22,16 @@ Read all client files from `output/[business-name]/client/`:
 | `landing-page-copy.md` | VB Copy Agent | Landing page headline, subheadline, benefits, how-it-works, CTA text, meta tags |
 | `builder-copy.md` | VB Copy Agent | Step titles, subtitles, transition messages, email capture copy, intro screen |
 | `email-sequences.md` | VB Copy Agent | 10 emails across 4 sequences (human-readable) |
-| `email-sequences.csv` | VB Copy Agent | Email templates for database seeding (email_id, email_name, sequence_name, segment, send_day, subject, body_html, cta_text, sender_name) |
+| `email-sequences.csv` | VB Copy Agent | Email templates for Kit sequence seeding (email_id, email_name, sequence_name, segment, send_day, subject, body_html, cta_text, sender_name) |
 
 Also read:
 - `design.md` for CSS variables, design mode, and motion patterns
 - Reference files:
+  - `agents/lead-magnet-agents/build-agent/references/cloudflare-kit-patterns.md` (Cloudflare + Kit deploy/runtime plumbing — canonical)
   - `agents/lead-magnet-agents/build-agent/references/astro-patterns.md` (Astro component patterns)
-  - `.claude/skills/lead-magnet-vision-board/references/glif-prompt-patterns.md` (Glif prompt construction)
+  - `agents/lead-magnet-agents/shared/generation-providers.md` (image/video generation provider layer)
+  - `agents/lead-magnet-agents/shared/kit-integration.md` (Supabase→Kit mapping, custom fields, sequences)
+  - `.claude/skills/lead-magnet-vision-board/references/image-prompt-patterns.md` (image prompt construction)
   - `.claude/skills/lead-magnet-vision-board/references/vertical-[name].json` (vertical template if used)
 
 ---
@@ -39,21 +42,22 @@ Also read:
 
 ```
 deploy/
-  astro.config.mjs                    # Astro config with @astrojs/vercel/static adapter
+  astro.config.mjs                    # Astro config with @astrojs/cloudflare adapter
   tsconfig.json                       # TypeScript config extending astro/tsconfigs/strict
-  package.json                        # Astro + Supabase dependencies
-  vercel.json                         # Cron config for email-sender + CORS headers
+  package.json                        # Astro dependencies (no Supabase)
+  wrangler.jsonc                      # Worker config: D1 analytics binding, vars/secrets, optional nightly cleanup cron
   .env.example                        # All required environment variables
   public/
     images/
       logo.svg                        # Business logo (downloaded from website)
-      hero.jpg                        # Glif-generated landing page hero image
-      style-[option-id].jpg           # Glif-generated style card images (one per vibe option)
-      profile-[profile-id].jpg        # Glif-generated profile mood board fallbacks
+      hero.jpg                        # Generated landing page hero image
+      style-[option-id].jpg           # Generated style card images (one per vibe option)
+      profiles/
+        [profile-id].png              # Pre-generated profile base graphics (build-time, composited at runtime)
       portfolio-[n].jpg               # Portfolio images from services.json
     scripts/
       builder.js                      # Builder selection flow logic + analytics tracking
-      reveal.js                       # Graphic loading, download, share, recommendations
+      reveal.js                       # Graphic composite, download, share, recommendations
       admin.js                        # Analytics dashboard (adapted from quiz version)
     styles/
       global.css                      # CSS variables from design.md + base styles + animations
@@ -61,6 +65,9 @@ deploy/
   src/
     layouts/
       Layout.astro                    # Base HTML shell with fonts, meta, global CSS
+    lib/
+      kit.ts                          # Kit v4 REST helpers (kit, kitTag, kitSequence)
+      kit-ids.ts                      # Generated TAG_IDS + sequence-id map (from /setup-visionboard-kit)
     pages/
       index.astro                     # Landing page
       builder/
@@ -69,18 +76,13 @@ deploy/
         index.astro                   # Reveal page (graphic + profile + recommendations)
       admin/
         index.astro                   # Analytics dashboard (password protected)
-  scripts/
-    setup-schema.js                   # Creates prefixed Supabase tables + seeds email templates from CSV
-  supabase/
-    schema.sql                        # Schema template with {PREFIX} placeholders
-  api/
-    visionboard-submit.js             # Saves lead + selections + schedules emails
-    generate-graphic.js               # Calls Glif API with prompt template, returns image URL
-    prompt-templates/
-      [vertical].js                   # Vertical-specific prompt builder (e.g., wedding.js)
-    email-sender.js                   # Hourly cron for scheduled emails
-    analytics-event.js                # POST - logs funnel events to Supabase
-    analytics-query.js                # GET - dashboard data queries (password protected)
+      api/
+        visionboard-submit.ts         # Astro API route (prerender = false): resolves fields, registers lead in Kit, logs to D1
+        generate-graphic.ts           # OPTIONAL: live per-user generation via client's REST provider (only when runtime_mode = live_generation)
+        analytics-event.ts            # POST - logs funnel events to D1
+        analytics-query.ts            # GET - dashboard data queries (password protected)
+  d1/
+    analytics-schema.sql              # Single D1 analytics_events table (see d1-analytics-schema.sql)
 ```
 
 Root-level files (outside `deploy/`):
@@ -97,17 +99,19 @@ builder-prompt.md                     # AI-ready development prompt for Cursor/R
 
 ```javascript
 import { defineConfig } from 'astro/config';
-import vercel from '@astrojs/vercel/static';
+import cloudflare from '@astrojs/cloudflare';
 
 export default defineConfig({
   site: 'https://[business-domain].com',
-  output: 'static',
-  adapter: vercel(),
+  output: 'static',          // pages prerender; API routes opt out per-route
+  adapter: cloudflare(),
   build: {
     inlineStylesheets: 'auto'
   }
 });
 ```
+
+Landing / builder / reveal pages are static. API routes set `export const prerender = false` so they run on the Worker at request time. See `build-agent/references/cloudflare-kit-patterns.md`.
 
 ### deploy/tsconfig.json
 
@@ -132,44 +136,42 @@ export default defineConfig({
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview",
-    "setup-db": "node scripts/setup-schema.js"
+    "preview": "astro preview"
   },
-  "dependencies": {
-    "@supabase/supabase-js": "^2.39.0",
-    "pg": "^8.11.3"
-  },
+  "dependencies": {},
   "devDependencies": {
     "astro": "^4.0.0",
-    "@astrojs/vercel": "^7.0.0"
+    "@astrojs/cloudflare": "^12.0.0"
   }
 }
 ```
 
-### deploy/vercel.json
+No Supabase/pg dependencies — the lead lives in Kit (registered via REST at runtime), and the only database is one D1 analytics table accessed through the Worker binding. Kit-side setup (custom fields, tags, sequences, seeded emails, D1 create/migrate) runs in the `/setup-visionboard-kit` skill before deploy, not via an npm script.
 
-Cron config for email sender plus CORS headers. No rewrites needed -- Astro handles routing.
+### deploy/wrangler.jsonc
 
-```json
+Worker config: D1 analytics binding, vars/secrets, and an optional nightly analytics-cleanup cron. No email cron — Kit owns email and its retention. Routing is file-based (Astro API routes), so no rewrites. CORS headers are set per-route in the API route handlers.
+
+```jsonc
 {
-  "crons": [
-    {
-      "path": "/api/email-sender",
-      "schedule": "0 * * * *"
-    }
+  "name": "clientname-vision-board",
+  "compatibility_date": "2026-01-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": { "directory": "./dist" },
+  "d1_databases": [
+    { "binding": "ANALYTICS_DB", "database_name": "clientname-vb-analytics", "database_id": "<from wrangler d1 create>" }
   ],
-  "headers": [
-    {
-      "source": "/api/(.*)",
-      "headers": [
-        { "key": "Access-Control-Allow-Origin", "value": "*" },
-        { "key": "Access-Control-Allow-Methods", "value": "GET, POST, OPTIONS" },
-        { "key": "Access-Control-Allow-Headers", "value": "Content-Type, Authorization, X-Admin-Password" }
-      ]
-    }
-  ]
+  "triggers": {
+    // Optional: nightly analytics cleanup. Kit owns email retention, so this is analytics-only.
+    "crons": ["0 3 * * *"]
+  }
+  // Secrets (wrangler secret put): KIT_API_KEY, ADMIN_PASSWORD, optional GEN_API_KEY (live_generation only)
+  // Vars: KIT_SEQUENCE_HOT, KIT_SEQUENCE_WARM, KIT_SEQUENCE_COLD,
+  //       KIT_TAG_PREFIX, DATA_RETENTION_ANALYTICS_DAYS
 }
 ```
+
+`KIT_API_KEY` is the **client's own** Kit account key. See `build-agent/references/cloudflare-kit-patterns.md` for the full binding table.
 
 ---
 
@@ -645,7 +647,7 @@ const BUILDER_CONFIG = {
       matchThreshold: {0.0-1.0},
       description: '{profile description}',
       shareText: '{social sharing text}',
-      graphicMood: '{Glif prompt mood}'
+      graphicMood: '{image prompt mood}'
     }
   ],
   fallbackProfile: {
@@ -1236,6 +1238,7 @@ const REVEAL_CONFIG = {
   consultationUrl: '{consultation or contact URL}',
   vertical: '{vertical name, e.g., "wedding"}',
   designMode: '{design_mode}',
+  runtimeMode: '{runtime_mode from workflow-config.json — "pregenerated_composite" (default) or "live_generation"}',
 
   // Profile copy variations from builder-copy.md reveal_page.profile_variations
   profileVariations: {
@@ -1302,20 +1305,36 @@ document.addEventListener('DOMContentLoaded', async () => {
   // 3. Start loading animation (step-by-step reveal)
   animateLoadingSteps();
 
-  // 4. Call generate-graphic API
+  // 4. Produce the board graphic.
+  //    DEFAULT (runtime_mode = 'pregenerated_composite'): no generative API call.
+  //    The pre-generated profile base image ships in /images/profiles/ and the
+  //    user's name + selected tags are composited onto it in-browser (canvas).
+  //    Instant, free, deterministic, reliably on-brand. See shared/generation-providers.md.
+  //
+  //    OPTIONAL UPGRADE (runtime_mode = 'live_generation'): when the client owns a
+  //    REST-capable generation provider, call /api/generate-graphic to submit a
+  //    per-user job (the Worker holds the client's GEN_API_KEY and caches the result).
   try {
-    const graphicResponse = await fetch('/api/generate-graphic', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        selections: result.selections,
-        vertical: REVEAL_CONFIG.vertical,
-        profileId: result.profileId,
-        allTags: result.allTags
-      })
-    });
+    let graphicData;
 
-    const graphicData = await graphicResponse.json();
+    if (REVEAL_CONFIG.runtimeMode === 'live_generation') {
+      // Optional live per-user generation via the client's REST provider.
+      const graphicResponse = await fetch('/api/generate-graphic', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          selections: result.selections,
+          vertical: REVEAL_CONFIG.vertical,
+          profileId: result.profileId,
+          allTags: result.allTags
+        })
+      });
+      graphicData = await graphicResponse.json();
+    } else {
+      // Default: composite the user's details onto the pre-generated base image.
+      const imageUrl = await compositeBoard(result);
+      graphicData = { imageUrl, cached: true };
+    }
 
     // 5. Populate reveal content
     populateRevealContent(result, graphicData);
@@ -1334,9 +1353,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   } catch (error) {
     console.error('Graphic generation failed:', error);
-    // Fallback: use pre-generated profile image
+    // Fallback: use the pre-generated profile base image directly (no composite).
     populateRevealContent(result, {
-      imageUrl: `/images/profile-${result.profileId}.jpg`,
+      imageUrl: `/images/profiles/${result.profileId}.png`,
       cached: false,
       fallback: true
     });
@@ -1347,6 +1366,36 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('reveal-content').classList.add('active');
   }
 });
+
+// ============================================================
+// IN-BROWSER COMPOSITE (default runtime path — no API call)
+// ============================================================
+
+async function compositeBoard(result) {
+  // Load the pre-generated base image for the matched profile, draw it to a
+  // canvas, overlay the user's name + a few selected tags on-brand, and return a
+  // data/object URL. Deterministic and free; nothing to poll. The download + share
+  // buttons operate on this same composited canvas.
+  const baseUrl = `/images/profiles/${result.profileId}.png`;
+  const img = await new Promise((resolve, reject) => {
+    const i = new Image();
+    i.crossOrigin = 'anonymous';
+    i.onload = () => resolve(i);
+    i.onerror = reject;
+    i.src = baseUrl;
+  });
+
+  const canvas = document.createElement('canvas');
+  canvas.width = img.naturalWidth;
+  canvas.height = img.naturalHeight;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(img, 0, 0);
+
+  // Overlay the user's name + selected tags (positioning/styling from design.md).
+  // Keep text on-brand; the page handles all other copy.
+  window.__visionBoardCanvas = canvas; // download/share read from here
+  return canvas.toDataURL('image/png');
+}
 
 // ============================================================
 // LOADING ANIMATION
@@ -1550,247 +1599,68 @@ function trackEvent(eventType, eventData = {}) {
 
 ---
 
-### deploy/api/visionboard-submit.js (API Endpoint)
+### deploy/src/pages/api/visionboard-submit.ts (API Route)
 
-Vercel Edge Function that saves the lead, stores selections, inserts recommended services, schedules email sequence, sends Day 0 email immediately, and fires webhooks.
+Astro API route (runs on the Worker at request time) that registers the lead in the **client's** Kit account: resolves personalization into Kit custom fields, applies profile + qualification tags, subscribes to the matching Kit sequence, and logs one completion row to D1. No leads table, no selections table, no email queue, no Resend, no webhook — Kit owns the lead and email; D1 holds analytics only. See `build-agent/references/cloudflare-kit-patterns.md` and `shared/kit-integration.md`.
 
-```javascript
-export const config = { runtime: 'edge' };
+```ts
+export const prerender = false;
+import type { APIRoute } from 'astro';
+import { kit, kitTag, kitSequence } from '../../lib/kit';
+import { resolveProfileBlock, resolveAnswerCallbacks } from '../../lib/content-blocks';
 
-import { createClient } from '@supabase/supabase-js';
+export const POST: APIRoute = async ({ request, locals }) => {
+  const env = locals.runtime.env;
+  const { email, name, selections, tags, profileId, profileName, qualificationSignal } = await request.json();
 
-const TABLE_PREFIX = process.env.TABLE_PREFIX || '';
-const table = (name) => `${TABLE_PREFIX}${name}`;
+  // Vision board qualification signal maps onto the Kit temperature tracks
+  // (hot / warm / cold). The builder emits hot/warm/cool — normalize 'cool' → 'cold'.
+  const temperature = qualificationSignal === 'cool' ? 'cold' : qualificationSignal;
 
-export default async function handler(req) {
-  // CORS preflight
-  if (req.method === 'OPTIONS') {
-    return new Response(null, { status: 200 });
-  }
-  if (req.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405 });
-  }
+  // 1. Resolve content blocks at submit time → final strings stored on the subscriber.
+  //    content-blocks.csv is bundled into the build (src/data/content-blocks.json).
+  const profile_block = resolveProfileBlock(profileId);                 // string
+  const { answer_callback_1, answer_callback_2 } = resolveAnswerCallbacks(selections);
 
-  const supabase = createClient(
-    process.env.SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_ROLE_KEY
-  );
-
-  const { email, name, selections, tags, profileId, profileName, qualificationSignal } = await req.json();
-
-  // 1. Upsert lead
-  const { data: lead, error: leadError } = await supabase
-    .from(table('leads'))
-    .upsert({
-      email,
-      name,
-      profile_id: profileId,
-      profile_name: profileName,
-      qualification_signal: qualificationSignal,
-      tags,
-      source: 'vision-board',
-      status: 'active'
-    }, { onConflict: 'email,source' })
-    .select()
-    .single();
-
-  if (leadError) {
-    return new Response(JSON.stringify({ error: 'Lead insert failed', details: leadError.message }), { status: 500 });
-  }
-
-  // 2. Store selections (one row per dimension)
-  let selectionsError = null;
-  try {
-    const selectionRows = Object.entries(selections).map(([dimension, data]) => ({
-      lead_id: lead.id,
-      step_id: dimension,
-      dimension,
-      selected_options: data.selectedOptions, // JSONB
-      selected_labels: data.selectedOptions.map(o => o.label || o.id),
-      tags: data.tags || []
-    }));
-
-    const { error } = await supabase
-      .from(table('selections'))
-      .insert(selectionRows);
-
-    if (error) selectionsError = error.message;
-  } catch (err) {
-    selectionsError = err.message;
-  }
-
-  // 3. Insert recommended services based on profile
-  let recommendedServices = [];
-  try {
-    // Service recommendations are stored in the REVEAL_CONFIG on the client
-    // but the API receives the profileId and can look up recommendations
-    // For now, the client-side sends the profileId and the email templates
-    // reference the profile for recommendations
-  } catch (err) {
-    // Non-critical -- continue
-  }
-
-  // 4. Schedule email sequence based on qualification signal
-  await scheduleEmails(supabase, lead.id, qualificationSignal);
-
-  // 5. Send Day 0 email immediately (if RESEND_API_KEY configured)
-  const RESEND_API_KEY = process.env.RESEND_API_KEY;
-  if (RESEND_API_KEY) {
-    try {
-      const { data: template } = await supabase
-        .from(table('email_templates'))
-        .select('subject, body_html, sender_name')
-        .eq('email_id', 'WELCOME-01')
-        .single();
-
-      if (template) {
-        const firstName = name?.split(' ')[0] || 'there';
-        const subject = interpolate(template.subject, {
-          first_name: firstName,
-          profile_name: profileName
-        });
-        const bodyHtml = interpolate(template.body_html, {
-          first_name: firstName,
-          profile_name: profileName,
-          profile_description: getProfileDescription(profileName),
-          board_url: `${process.env.SITE_URL || ''}/reveal/?leadId=${lead.id}`,
-          consultation_url: process.env.CONSULTATION_URL || '',
-          cta_based_on_qualification: getQualificationCTA(qualificationSignal)
-        });
-
-        const resendResponse = await fetch('https://api.resend.com/emails', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${RESEND_API_KEY}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            from: `${template.sender_name || 'Vision Board'} <${process.env.EMAIL_FROM || 'hello@yourdomain.com'}>`,
-            to: [email],
-            subject,
-            html: wrapEmailHtml(bodyHtml)
-          })
-        });
-
-        const emailStatus = resendResponse.ok ? 'sent' : 'failed';
-        await supabase.from(table('email_log'))
-          .update({ status: emailStatus, sent_at: emailStatus === 'sent' ? new Date().toISOString() : null })
-          .eq('lead_id', lead.id)
-          .eq('email_id', 'WELCOME-01');
-      }
-    } catch (emailSendError) {
-      console.error('Immediate email send error:', emailSendError);
-      await supabase.from(table('email_log'))
-        .update({ status: 'failed', error_message: emailSendError.message })
-        .eq('lead_id', lead.id)
-        .eq('email_id', 'WELCOME-01');
+  // 2. Upsert subscriber + custom fields (Kit v4 upserts by email_address).
+  await kit(env, 'POST', '/subscribers', {
+    email_address: email,
+    first_name: name?.split(' ')[0] || '',
+    fields: {
+      vb_profile: profileId,
+      vb_profile_name: profileName,
+      vb_temperature: temperature,   // internal only, never shown to the user
+      profile_block,
+      answer_callback_1,
+      answer_callback_2
     }
-  }
+  });
 
-  // 6. Fire Gumloop webhook (non-blocking)
-  const GUMLOOP_WEBHOOK_URL = process.env.GUMLOOP_WEBHOOK_URL;
-  if (GUMLOOP_WEBHOOK_URL) {
-    fetch(GUMLOOP_WEBHOOK_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        event: 'vision_board_completed',
-        leadId: lead.id,
-        email,
-        name,
-        profileId,
-        profileName,
-        qualificationSignal,
-        tags,
-        completedAt: new Date().toISOString()
-      })
-    }).catch(err => console.error('Gumloop webhook error:', err));
-  }
+  // 3. Tags (profile + temperature) and the temperature sequence.
+  const tagPrefix = env.KIT_TAG_PREFIX ?? 'vb';
+  await kitTag(env, `${tagPrefix}:profile:${profileId}`, email);
+  await kitTag(env, `${tagPrefix}:temp:${temperature}`, email);
+  await kitSequence(env, env[`KIT_SEQUENCE_${temperature.toUpperCase()}`], email);
 
-  // 7. Return response
+  // 4. One analytics row. No leads table — the lead lives in Kit.
+  await env.ANALYTICS_DB.prepare(
+    `INSERT INTO analytics_events (event_type, profile_id, temperature, created_at)
+     VALUES ('board_generated', ?, ?, datetime('now'))`
+  ).bind(profileId, temperature).run();
+
   return new Response(JSON.stringify({
     success: true,
-    leadId: lead.id,
     profileId,
     profileName,
-    qualification: qualificationSignal,
-    _debug: {
-      selectionsError,
-      tablePrefix: TABLE_PREFIX
-    }
+    qualification: qualificationSignal
   }), {
     status: 200,
     headers: { 'Content-Type': 'application/json' }
   });
-}
-
-// ============================================================
-// HELPER FUNCTIONS (must be defined here, not shared modules)
-// Vercel Edge Functions are independently bundled.
-// ============================================================
-
-function interpolate(template, data) {
-  let result = template;
-  for (const [key, value] of Object.entries(data)) {
-    result = result.replace(new RegExp(`\\{\\{${key}\\}\\}`, 'g'), value || '');
-  }
-  return result;
-}
-
-function getProfileDescription(profileName) {
-  // Return profile-specific description from embedded config
-  // (populated from architecture.md during build)
-  const descriptions = {
-    // '{Profile Name}': '{description}'
-  };
-  return descriptions[profileName] || '';
-}
-
-function getQualificationCTA(qualification) {
-  // Return HTML button appropriate for qualification level
-  const ctas = {
-    hot: '<a href="{consultationUrl}" style="...">Book Your Consultation</a>',
-    warm: '<a href="{portfolioUrl}" style="...">Explore Our Portfolio</a>',
-    cool: '<a href="{blogUrl}" style="...">Get More Inspiration</a>'
-  };
-  return ctas[qualification] || ctas.warm;
-}
-
-function wrapEmailHtml(bodyHtml) {
-  // Wrap body in styled HTML email template with inline CSS
-  return `<!DOCTYPE html>
-<html>
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;padding:0;background:#f9fafb;font-family:sans-serif;">
-<div style="max-width:600px;margin:0 auto;padding:32px 24px;">
-${bodyHtml}
-</div>
-</body>
-</html>`;
-}
-
-async function scheduleEmails(supabase, leadId, qualification) {
-  // Fetch all email templates for this qualification level + "All" segment
-  const { data: templates } = await supabase
-    .from(table('email_templates'))
-    .select('email_id, email_name, sequence_name, send_day')
-    .or(`segment.eq.All,segment.eq.${qualification.charAt(0).toUpperCase() + qualification.slice(1)}`);
-
-  if (!templates || templates.length === 0) return;
-
-  const now = new Date();
-  const emailRows = templates.map(t => ({
-    lead_id: leadId,
-    email_id: t.email_id,
-    email_name: t.email_name,
-    sequence_name: t.sequence_name,
-    status: t.send_day === 0 ? 'pending' : 'scheduled',
-    scheduled_for: new Date(now.getTime() + t.send_day * 86400000).toISOString()
-  }));
-
-  await supabase.from(table('email_log')).insert(emailRows);
-}
+};
 ```
+
+`resolveProfileBlock` / `resolveAnswerCallbacks` live in `src/lib/content-blocks.ts` and read the bundled `src/data/content-blocks.json` (built from `content-blocks.csv`). Kit needs no resolution logic — it just merges the resolved fields via Liquid. The Kit v4 helpers (`kit`, `kitTag`, `kitSequence`) are in `src/lib/kit.ts`; tag IDs and sequence IDs come from `src/lib/kit-ids.ts`, generated by `/setup-visionboard-kit`.
 
 **Request payload:**
 ```json
@@ -1812,139 +1682,89 @@ async function scheduleEmails(supabase, leadId, qualification) {
 ```json
 {
   "success": true,
-  "leadId": "uuid",
   "profileId": "the-romantic",
   "profileName": "The Romantic",
-  "qualification": "warm",
-  "_debug": {
-    "selectionsError": null,
-    "tablePrefix": "businessname_"
-  }
+  "qualification": "warm"
 }
 ```
 
+> The client builder posts `leadId` into `sessionStorage` for the reveal page. With no leads table, the submit route no longer returns a `leadId`; the reveal page already works from `sessionStorage` alone (profileId, selections, allTags, name, email), so this is non-breaking.
+
 ---
 
-### deploy/api/generate-graphic.js (Glif API Endpoint)
+### deploy/src/pages/api/generate-graphic.ts (OPTIONAL — live per-user generation)
 
-Vercel Edge Function that constructs a Glif prompt from user selections and returns a generated image URL.
+**Only generated when `runtime_mode = "live_generation"`** in `workflow-config.json`. The default runtime path is pre-generate at build time + composite in-browser (no API call), so most builds omit this route entirely. Generate it only when the client owns a REST-capable generation provider (KREA, possibly Magica) and wants fully-bespoke per-user imagery. See `shared/generation-providers.md` ("Optional upgrade — live per-user generation").
 
-```javascript
-export const config = { runtime: 'edge' };
+Astro API route (runs on the Worker) that constructs an image prompt from user selections, submits a generation job to the **client's** provider via its REST API, caches the result (D1 or KV) keyed by a hash of selections, and returns the image URL. Because these provider APIs are async, the reveal page shows a "creating your board…" state while the job runs. The Worker holds the client's provider key as a secret (`GEN_API_KEY`), the same handling as `KIT_API_KEY`.
 
-import { createClient } from '@supabase/supabase-js';
-import crypto from 'crypto';
+```ts
+export const prerender = false;
+import type { APIRoute } from 'astro';
+import { buildPrompt } from '../../lib/prompt-templates';
 
-const TABLE_PREFIX = process.env.TABLE_PREFIX || '';
-const table = (name) => `${TABLE_PREFIX}${name}`;
+export const POST: APIRoute = async ({ request, locals }) => {
+  const env = locals.runtime.env;
+  const { selections, vertical, profileId, allTags } = await request.json();
 
-export default async function handler(req) {
-  if (req.method === 'OPTIONS') {
-    return new Response(null, { status: 200 });
-  }
-  if (req.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405 });
-  }
+  // 1. Construct prompt from selections (vertical-specific builder).
+  const prompt = buildPrompt(vertical, selections, allTags, profileId);
 
-  const supabase = createClient(
-    process.env.SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_ROLE_KEY
-  );
+  // 2. Cache key = SHA-256 of the deterministic inputs.
+  const cacheKey = await sha256(JSON.stringify({ selections, vertical, profileId }));
 
-  const { selections, vertical, profileId, allTags } = await req.json();
+  // 3. Check the D1 graphic cache first (avoids a paid re-generation).
+  const hit = await env.ANALYTICS_DB.prepare(
+    `SELECT image_url FROM graphic_cache WHERE cache_key = ?`
+  ).bind(cacheKey).first();
 
-  // 1. Import vertical-specific prompt builder
-  const { buildPrompt } = await import(`./prompt-templates/${vertical}.js`);
-
-  // 2. Construct prompt from selections
-  const prompt = buildPrompt(selections, allTags, profileId);
-
-  // 3. Check cache first
-  const cacheKey = crypto.createHash('sha256')
-    .update(JSON.stringify({ selections, vertical, profileId }))
-    .digest('hex');
-
-  const { data: cached } = await supabase
-    .from(table('graphic_cache'))
-    .select('image_url')
-    .eq('cache_key', cacheKey)
-    .single();
-
-  if (cached) {
-    return new Response(JSON.stringify({
-      imageUrl: cached.image_url,
-      prompt,
-      cached: true
-    }), {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json',
-        'Cache-Control': 'public, max-age=86400'
-      }
-    });
+  if (hit) {
+    return json({ imageUrl: hit.image_url, prompt, cached: true });
   }
 
-  // 4. Call Glif API
+  // 4. Submit a job to the client's REST provider, await/poll the result.
+  //    Provider + base URL come from workflow-config.json → generation.runtime_provider.
   try {
-    const GLIF_API_TOKEN = process.env.GLIF_API_TOKEN;
-    const GLIF_MODEL_ID = process.env.GLIF_MODEL_ID || 'cmi7ne4p40000kz04yup2nxgh';
+    const imageUrl = await runProviderGeneration(env, prompt);
 
-    const glifResponse = await fetch('https://simple-api.glif.app', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${GLIF_API_TOKEN}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        id: GLIF_MODEL_ID,
-        inputs: [prompt]
-      })
-    });
+    // 5. Store in cache.
+    await env.ANALYTICS_DB.prepare(
+      `INSERT INTO graphic_cache (cache_key, image_url, prompt_used, vertical, created_at)
+       VALUES (?, ?, ?, ?, datetime('now'))`
+    ).bind(cacheKey, imageUrl, prompt, vertical).run();
 
-    if (!glifResponse.ok) {
-      throw new Error(`Glif API returned ${glifResponse.status}`);
-    }
-
-    const glifResult = await glifResponse.json();
-    const imageUrl = glifResult.output;
-
-    // 5. Store in cache
-    await supabase.from(table('graphic_cache')).insert({
-      cache_key: cacheKey,
-      image_url: imageUrl,
-      prompt_used: prompt,
-      vertical
-    });
-
-    return new Response(JSON.stringify({
-      imageUrl,
-      prompt,
-      cached: false
-    }), {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json',
-        'Cache-Control': 'public, max-age=86400'
-      }
-    });
+    return json({ imageUrl, prompt, cached: false });
 
   } catch (error) {
-    console.error('Glif generation error:', error);
-
-    // 6. Fallback: return pre-generated profile image
-    return new Response(JSON.stringify({
-      imageUrl: `/images/profile-${profileId}.jpg`,
+    console.error('Live generation error:', error);
+    // 6. Fallback: the pre-generated profile base image always ships with the build.
+    return json({
+      imageUrl: `/images/profiles/${profileId}.png`,
       prompt,
       cached: false,
       fallback: true,
       error: error.message
-    }), {
-      status: 200, // 200 not 500 -- client handles fallback gracefully
-      headers: { 'Content-Type': 'application/json' }
     });
   }
+};
+
+const json = (body) => new Response(JSON.stringify(body), {
+  status: 200, // always 200 — the client handles fallback gracefully
+  headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' }
+});
+
+async function sha256(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
 }
+
+// runProviderGeneration: submit job to the client's provider REST API (e.g. api.krea.ai),
+// poll/await the async result, return the image URL. Implement against the provider's
+// live, official docs at build time. Never assert a provider's runtime REST capability
+// in code until verified. See shared/generation-providers.md.
 ```
+
+> The default `pregenerated_composite` build does **not** ship this route. When it is shipped, the D1 `graphic_cache` table is added alongside the analytics table (see the analytics schema doc); for a KV-backed cache instead, bind a KV namespace in `wrangler.jsonc` and swap steps 3 and 5 accordingly.
 
 **Request payload:**
 ```json
@@ -1959,7 +1779,7 @@ export default async function handler(req) {
 **Response (success):**
 ```json
 {
-  "imageUrl": "https://res.cloudinary.com/glif/image/...",
+  "imageUrl": "https://<client-provider-cdn>/image/...",
   "prompt": "Pinterest-style wedding mood board collage...",
   "cached": false
 }
@@ -1968,21 +1788,21 @@ export default async function handler(req) {
 **Response (fallback):**
 ```json
 {
-  "imageUrl": "/images/profile-the-romantic.jpg",
+  "imageUrl": "/images/profiles/the-romantic.png",
   "prompt": "Pinterest-style wedding mood board collage...",
   "cached": false,
   "fallback": true,
-  "error": "Glif API returned 429"
+  "error": "Provider API returned 429"
 }
 ```
 
 ---
 
-### deploy/api/prompt-templates/[vertical].js (Prompt Builder)
+### deploy/src/lib/prompt-templates.ts (Prompt Builder — live_generation only)
 
-Each vertical exports a `buildPrompt` function. The function receives user selections and constructs a Glif prompt string.
+Used only by the optional live-generation route. Each vertical contributes a `buildPrompt` branch. The function receives user selections and constructs an image prompt string.
 
-**Example: `deploy/api/prompt-templates/wedding.js`**
+**Example (wedding branch of `deploy/src/lib/prompt-templates.ts`):**
 
 ```javascript
 export function buildPrompt(selections, allTags, profileId) {
@@ -2022,150 +1842,34 @@ Ultra-detailed, professional wedding photography quality, 8K.`;
 6. Always include: "No text overlays, purely visual" (text is handled on the page)
 7. Graceful fallbacks for every field (never output `undefined` in the prompt)
 
-Reference: `.claude/skills/lead-magnet-vision-board/references/glif-prompt-patterns.md`
+Reference: `.claude/skills/lead-magnet-vision-board/references/image-prompt-patterns.md`
 
 ---
 
-### deploy/api/email-sender.js (Hourly Cron)
+### Email sending — REMOVED (Kit owns it)
 
-Identical pattern to the quiz version. Vercel Cron Function that:
-- Reads `TABLE_PREFIX` from environment
-- Uses `table()` helper for all Supabase table references
-- Queries pending emails from `email_log` where `scheduled_for <= now`
-- Fetches email content from `email_templates` table by `email_id`
-- Interpolates lead data (firstName, profileName, qualification) into template
-- Sends via Resend API (if configured)
-- Updates status to `'sent'` or `'failed'`
-- Handles foreign key joins with dynamic table names
+There is **no `email-sender` cron and no Resend**. Kit sequences schedule and send every email natively. The `visionboard-submit.ts` route subscribes the lead to the matching Kit sequence (`KIT_SEQUENCE_HOT/WARM/COLD`); Kit handles all delays, sends, and retention from there. The original hourly cron, `email_log`/`email_templates` tables, and `wrapEmailHtml`/`interpolate` send helpers are all gone. Email bodies are seeded into Kit sequences at build time by `/setup-visionboard-kit`, with `{{profile_block}}` / `{{answer_callback_N}}` authored as Kit Liquid merge tags:
 
-```javascript
-export const config = { runtime: 'edge' };
-
-import { createClient } from '@supabase/supabase-js';
-
-const TABLE_PREFIX = process.env.TABLE_PREFIX || '';
-const table = (name) => `${TABLE_PREFIX}${name}`;
-
-export default async function handler(req) {
-  // Verify cron secret
-  const authHeader = req.headers.get('authorization');
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return new Response('Unauthorized', { status: 401 });
-  }
-
-  const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
-  const leadsTable = table('leads');
-
-  // Fetch pending emails with scheduled_for <= now
-  const { data: pendingEmails, error } = await supabase
-    .from(table('email_log'))
-    .select(`*, ${leadsTable} (id, email, name, profile_name, qualification_signal)`)
-    .eq('status', 'scheduled')
-    .lte('scheduled_for', new Date().toISOString())
-    .limit(50);
-
-  if (error || !pendingEmails?.length) {
-    return new Response(JSON.stringify({ processed: 0, error: error?.message }), { status: 200 });
-  }
-
-  let sent = 0, failed = 0;
-  const RESEND_API_KEY = process.env.RESEND_API_KEY;
-
-  for (const emailRecord of pendingEmails) {
-    const lead = emailRecord[leadsTable];
-    if (!lead) continue;
-
-    // Fetch template
-    const { data: template } = await supabase
-      .from(table('email_templates'))
-      .select('subject, body_html, cta_text, sender_name')
-      .eq('email_id', emailRecord.email_id)
-      .single();
-
-    if (!template) continue;
-
-    const firstName = lead.name?.split(' ')[0] || 'there';
-    const subject = interpolate(template.subject, { first_name: firstName, profile_name: lead.profile_name });
-    const bodyHtml = interpolate(template.body_html, {
-      first_name: firstName,
-      profile_name: lead.profile_name,
-      qualification: lead.qualification_signal
-    });
-
-    if (RESEND_API_KEY) {
-      try {
-        const res = await fetch('https://api.resend.com/emails', {
-          method: 'POST',
-          headers: { 'Authorization': `Bearer ${RESEND_API_KEY}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            from: `${template.sender_name || 'Vision Board'} <${process.env.EMAIL_FROM || 'hello@yourdomain.com'}>`,
-            to: [lead.email],
-            subject,
-            html: wrapEmailHtml(bodyHtml)
-          })
-        });
-        const status = res.ok ? 'sent' : 'failed';
-        await supabase.from(table('email_log'))
-          .update({ status, sent_at: status === 'sent' ? new Date().toISOString() : null })
-          .eq('id', emailRecord.id);
-        if (res.ok) sent++; else failed++;
-      } catch (err) {
-        await supabase.from(table('email_log'))
-          .update({ status: 'failed', error_message: err.message })
-          .eq('id', emailRecord.id);
-        failed++;
-      }
-    }
-  }
-
-  return new Response(JSON.stringify({ processed: sent + failed, sent, failed }), { status: 200 });
-}
-
-function interpolate(template, data) {
-  let result = template;
-  for (const [key, value] of Object.entries(data)) {
-    result = result.replace(new RegExp(`\\{\\{${key}\\}\\}`, 'g'), value || '');
-  }
-  return result;
-}
-
-function wrapEmailHtml(bodyHtml) {
-  return `<!DOCTYPE html>
-<html>
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;padding:0;background:#f9fafb;font-family:sans-serif;">
-<div style="max-width:600px;margin:0 auto;padding:32px 24px;">
-${bodyHtml}
-</div>
-</body>
-</html>`;
-}
+```liquid
+{{ subscriber.custom_fields.profile_block }}
+{{ subscriber.custom_fields.answer_callback_1 }}
 ```
 
+Day offsets from `email-sequences.csv` become Kit sequence email delays. See `shared/kit-integration.md` (Sequences) for the track mapping. The only remaining scheduled job is the optional nightly D1 analytics cleanup in `wrangler.jsonc`.
+
 ---
 
-### deploy/api/analytics-event.js (POST Endpoint)
+### deploy/src/pages/api/analytics-event.ts (POST Endpoint)
 
 Identical to the quiz version. Validates event type and inserts into `analytics_events` table.
 
-```javascript
-export const config = { runtime: 'edge' };
+```ts
+export const prerender = false;
+import type { APIRoute } from 'astro';
 
-import { createClient } from '@supabase/supabase-js';
-
-const TABLE_PREFIX = process.env.TABLE_PREFIX || '';
-const table = (name) => `${TABLE_PREFIX}${name}`;
-
-export default async function handler(req) {
-  if (req.method === 'OPTIONS') {
-    return new Response(null, { status: 200 });
-  }
-  if (req.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405 });
-  }
-
-  const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
-  const payload = await req.json();
+export const POST: APIRoute = async ({ request, locals }) => {
+  const env = locals.runtime.env;
+  const payload = await request.json();
 
   const validEventTypes = [
     'page_view', 'builder_start', 'step_viewed', 'selection_made',
@@ -2177,22 +1881,28 @@ export default async function handler(req) {
     return new Response(JSON.stringify({ error: 'Invalid event_type' }), { status: 400 });
   }
 
-  const { error } = await supabase.from(table('analytics_events')).insert({
-    session_id: payload.session_id,
-    event_type: payload.event_type,
-    event_data: payload.event_data || {},
-    utm_source: payload.utm_source,
-    utm_medium: payload.utm_medium,
-    utm_campaign: payload.utm_campaign,
-    utm_term: payload.utm_term,
-    utm_content: payload.utm_content,
-    page_url: payload.page_url,
-    referrer: payload.referrer,
-    user_agent: payload.user_agent
-  });
+  // Single D1 analytics table. event_data is stored as a JSON string.
+  await env.ANALYTICS_DB.prepare(
+    `INSERT INTO analytics_events
+       (session_id, event_type, event_data, utm_source, utm_medium, utm_campaign,
+        utm_term, utm_content, page_url, referrer, user_agent, created_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))`
+  ).bind(
+    payload.session_id,
+    payload.event_type,
+    JSON.stringify(payload.event_data || {}),
+    payload.utm_source ?? null,
+    payload.utm_medium ?? null,
+    payload.utm_campaign ?? null,
+    payload.utm_term ?? null,
+    payload.utm_content ?? null,
+    payload.page_url ?? null,
+    payload.referrer ?? null,
+    payload.user_agent ?? null
+  ).run();
 
-  return new Response(JSON.stringify({ success: !error }), { status: error ? 500 : 200 });
-}
+  return new Response(JSON.stringify({ success: true }), { status: 200 });
+};
 ```
 
 **Valid event types for vision board (different from quiz):**
@@ -2208,11 +1918,11 @@ export default async function handler(req) {
 
 ---
 
-### deploy/api/analytics-query.js (GET Endpoint)
+### deploy/src/pages/api/analytics-query.ts (GET Endpoint)
 
-Password-protected dashboard data queries. Adapted from quiz version with vision board event types.
+Password-protected dashboard data queries. Adapted from quiz version with vision board event types. Runs on the Worker against the D1 `analytics_events` table; no Supabase, no table prefix.
 
-Same auth pattern: uses `X-Admin-Password` HTTP header (NOT URL params). All responses include `Cache-Control: no-store, no-cache, must-revalidate`.
+Same auth pattern: uses `X-Admin-Password` HTTP header (NOT URL params), checked against the `ADMIN_PASSWORD` secret. All responses include `Cache-Control: no-store, no-cache, must-revalidate`.
 
 **Actions (via `?action=` query param):**
 - `funnel` -- page_views, builder_starts, email_captures, boards_generated, cta_clicks
@@ -2220,20 +1930,20 @@ Same auth pattern: uses `X-Admin-Password` HTTP header (NOT URL params). All res
 - `daily` -- daily stats over time period
 - `selections` -- selection distribution from analytics_events (captures ALL users including abandoned)
 - `utm` -- UTM source tracking
-- `leads` -- list of leads with name, email, profile, qualification
 
-**Key difference from quiz:** The `profiles` action replaces `temperature`. It groups leads by `profile_id` rather than `temperature`, since vision board profiles are the primary segmentation axis.
+**Key difference from quiz:** The `profiles` action replaces `temperature`. It groups by `profile_id` rather than `temperature`, since vision board profiles are the primary segmentation axis. (The old `leads` action is **gone** — leads live in the client's Kit account now, not a queryable DB. Lead lists, segments, and engagement come from Kit itself.)
 
 ```javascript
-// Selection distribution - queries analytics_events to capture ALL users
-async function getSelectionDistribution(supabase, prefix, startDate) {
-  const { data: events } = await supabase
-    .from(`${prefix}analytics_events`)
-    .select('session_id, event_data')
-    .eq('event_type', 'selection_made')
-    .gte('created_at', startDate);
+// Selection distribution - queries the D1 analytics_events table to capture ALL users.
+// event_data is stored as a JSON string in D1, so parse it per row.
+async function getSelectionDistribution(db, startDate) {
+  const { results: events } = await db.prepare(
+    `SELECT session_id, event_data FROM analytics_events
+      WHERE event_type = 'selection_made' AND created_at >= ?`
+  ).bind(startDate).all();
 
   if (!events) return { selections: [], dimensionLabels: {} };
+  events.forEach(e => { e.event_data = JSON.parse(e.event_data || '{}'); });
 
   // Deduplicate: keep last selection per session per dimension
   const sessionSelections = {};
@@ -2277,294 +1987,103 @@ async function getSelectionDistribution(supabase, prefix, startDate) {
 
 ---
 
-### deploy/supabase/schema.sql
+### deploy/d1/analytics-schema.sql
 
-Complete SQL schema with `{PREFIX}` placeholders.
+The **only** database is one Cloudflare D1 table for analytics. No leads, selections, email_templates, email_log, recommended_services tables — leads and email live in the client's Kit account. Canonical schema lives in `build-agent/references/d1-analytics-schema.sql`; this is the vision-board view of it (the analytics event types match the builder funnel).
 
 ```sql
 -- ============================================================
--- Vision Board Builder - Supabase Schema
--- Replace {PREFIX} with TABLE_PREFIX (e.g., "businessname_")
+-- Vision Board Builder - D1 analytics (single table)
+-- Applied with: wrangler d1 execute ANALYTICS_DB --file=./d1/analytics-schema.sql
 -- ============================================================
 
--- Leads table
-CREATE TABLE IF NOT EXISTS {PREFIX}leads (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  email TEXT NOT NULL,
-  name TEXT,
-  profile_id TEXT,
-  profile_name TEXT,
-  qualification_signal TEXT CHECK (qualification_signal IN ('hot', 'warm', 'cool')),
-  tags TEXT[] DEFAULT '{}',
-  source TEXT DEFAULT 'vision-board',
-  status TEXT DEFAULT 'active',
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW(),
-  CONSTRAINT {PREFIX}unique_email_per_source UNIQUE (email, source)
-);
-CREATE INDEX IF NOT EXISTS {PREFIX}idx_leads_email ON {PREFIX}leads(email);
-CREATE INDEX IF NOT EXISTS {PREFIX}idx_leads_profile ON {PREFIX}leads(profile_id);
-CREATE INDEX IF NOT EXISTS {PREFIX}idx_leads_qualification ON {PREFIX}leads(qualification_signal);
-
--- Selections table (one row per dimension per lead)
-CREATE TABLE IF NOT EXISTS {PREFIX}selections (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  lead_id UUID NOT NULL REFERENCES {PREFIX}leads(id) ON DELETE CASCADE,
-  step_id TEXT NOT NULL,
-  dimension TEXT NOT NULL,
-  selected_options JSONB DEFAULT '[]',
-  selected_labels TEXT[] DEFAULT '{}',
-  tags TEXT[] DEFAULT '{}',
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
-CREATE INDEX IF NOT EXISTS {PREFIX}idx_selections_lead ON {PREFIX}selections(lead_id);
-CREATE INDEX IF NOT EXISTS {PREFIX}idx_selections_dimension ON {PREFIX}selections(dimension);
-
--- Email templates (seeded from CSV by setup-schema.js)
-CREATE TABLE IF NOT EXISTS {PREFIX}email_templates (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  email_id TEXT UNIQUE NOT NULL,
-  email_name TEXT NOT NULL,
-  sequence_name TEXT NOT NULL,
-  segment TEXT NOT NULL,
-  send_day INTEGER NOT NULL,
-  subject TEXT NOT NULL,
-  body_html TEXT NOT NULL,
-  cta_text TEXT,
-  sender_name TEXT,
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
-CREATE INDEX IF NOT EXISTS {PREFIX}idx_email_templates_id ON {PREFIX}email_templates(email_id);
-
--- Email log (scheduled + sent emails per lead)
-CREATE TABLE IF NOT EXISTS {PREFIX}email_log (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  lead_id UUID NOT NULL REFERENCES {PREFIX}leads(id) ON DELETE CASCADE,
-  email_id TEXT NOT NULL,
-  email_name TEXT,
-  sequence_name TEXT,
-  status TEXT DEFAULT 'scheduled' CHECK (status IN ('scheduled', 'pending', 'sent', 'failed')),
-  scheduled_for TIMESTAMPTZ,
-  sent_at TIMESTAMPTZ,
-  error_message TEXT,
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
-CREATE INDEX IF NOT EXISTS {PREFIX}idx_email_log_lead ON {PREFIX}email_log(lead_id);
-CREATE INDEX IF NOT EXISTS {PREFIX}idx_email_log_status ON {PREFIX}email_log(status, scheduled_for);
-
--- Recommended services (per lead, based on profile match)
-CREATE TABLE IF NOT EXISTS {PREFIX}recommended_services (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  lead_id UUID NOT NULL REFERENCES {PREFIX}leads(id) ON DELETE CASCADE,
-  service_id TEXT,
-  service_name TEXT NOT NULL,
-  service_url TEXT,
-  position INTEGER DEFAULT 0,
-  match_reason TEXT,
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
-CREATE INDEX IF NOT EXISTS {PREFIX}idx_rec_services_lead ON {PREFIX}recommended_services(lead_id);
-
--- Analytics events
-CREATE TABLE IF NOT EXISTS {PREFIX}analytics_events (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  session_id UUID NOT NULL,
-  event_type TEXT NOT NULL CHECK (event_type IN (
-    'page_view', 'builder_start', 'step_viewed', 'selection_made',
-    'email_captured', 'board_generated', 'board_downloaded',
-    'board_shared', 'cta_clicked'
-  )),
-  event_data JSONB DEFAULT '{}',
-  utm_source TEXT,
-  utm_medium TEXT,
+CREATE TABLE IF NOT EXISTS analytics_events (
+  id          INTEGER PRIMARY KEY AUTOINCREMENT,
+  session_id  TEXT,
+  event_type  TEXT NOT NULL,        -- page_view, builder_start, step_viewed, selection_made,
+                                     -- email_captured, board_generated, board_downloaded,
+                                     -- board_shared, cta_clicked
+  profile_id  TEXT,
+  temperature TEXT,                  -- hot / warm / cold (internal; never shown to the user)
+  event_data  TEXT,                  -- JSON string
+  utm_source  TEXT,
+  utm_medium  TEXT,
   utm_campaign TEXT,
-  utm_term TEXT,
+  utm_term    TEXT,
   utm_content TEXT,
-  page_url TEXT,
-  referrer TEXT,
-  user_agent TEXT,
-  created_at TIMESTAMPTZ DEFAULT NOW()
+  page_url    TEXT,
+  referrer    TEXT,
+  user_agent  TEXT,
+  created_at  TEXT DEFAULT (datetime('now'))
 );
-CREATE INDEX IF NOT EXISTS {PREFIX}idx_analytics_session ON {PREFIX}analytics_events(session_id);
-CREATE INDEX IF NOT EXISTS {PREFIX}idx_analytics_event_type ON {PREFIX}analytics_events(event_type);
-CREATE INDEX IF NOT EXISTS {PREFIX}idx_analytics_created ON {PREFIX}analytics_events(created_at DESC);
-CREATE INDEX IF NOT EXISTS {PREFIX}idx_analytics_funnel ON {PREFIX}analytics_events(event_type, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_analytics_session ON analytics_events(session_id);
+CREATE INDEX IF NOT EXISTS idx_analytics_event_type ON analytics_events(event_type);
+CREATE INDEX IF NOT EXISTS idx_analytics_created ON analytics_events(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_analytics_funnel ON analytics_events(event_type, created_at DESC);
+```
 
--- Graphic cache (stores Glif-generated image URLs to avoid re-generation)
-CREATE TABLE IF NOT EXISTS {PREFIX}graphic_cache (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  cache_key TEXT UNIQUE NOT NULL,
-  image_url TEXT NOT NULL,
+**Optional (live_generation only): graphic cache.** Add this table only when shipping the optional `/api/generate-graphic` route, to avoid paying for a re-generation of identical selections. Omit it for the default `pregenerated_composite` build.
+
+```sql
+CREATE TABLE IF NOT EXISTS graphic_cache (
+  id          INTEGER PRIMARY KEY AUTOINCREMENT,
+  cache_key   TEXT UNIQUE NOT NULL,   -- SHA-256 of {selections, vertical, profileId}
+  image_url   TEXT NOT NULL,
   prompt_used TEXT,
-  vertical TEXT,
-  created_at TIMESTAMPTZ DEFAULT NOW()
+  vertical    TEXT,
+  created_at  TEXT DEFAULT (datetime('now'))
 );
-CREATE INDEX IF NOT EXISTS {PREFIX}idx_graphic_cache_key ON {PREFIX}graphic_cache(cache_key);
-
--- Auto-update trigger for leads.updated_at
-CREATE OR REPLACE FUNCTION {PREFIX}update_updated_at()
-RETURNS TRIGGER AS $$
-BEGIN
-  NEW.updated_at = NOW();
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER {PREFIX}update_leads_updated_at
-  BEFORE UPDATE ON {PREFIX}leads
-  FOR EACH ROW
-  EXECUTE FUNCTION {PREFIX}update_updated_at();
-
--- Enable Row Level Security
-ALTER TABLE {PREFIX}leads ENABLE ROW LEVEL SECURITY;
-ALTER TABLE {PREFIX}selections ENABLE ROW LEVEL SECURITY;
-ALTER TABLE {PREFIX}email_templates ENABLE ROW LEVEL SECURITY;
-ALTER TABLE {PREFIX}email_log ENABLE ROW LEVEL SECURITY;
-ALTER TABLE {PREFIX}recommended_services ENABLE ROW LEVEL SECURITY;
-ALTER TABLE {PREFIX}analytics_events ENABLE ROW LEVEL SECURITY;
-ALTER TABLE {PREFIX}graphic_cache ENABLE ROW LEVEL SECURITY;
+CREATE INDEX IF NOT EXISTS idx_graphic_cache_key ON graphic_cache(cache_key);
 ```
 
-**Tables (7 total):**
+**Tables:**
 
-| Table | Purpose |
-|-------|---------|
-| `{PREFIX}leads` | Lead data with profile, qualification, tags |
-| `{PREFIX}selections` | Per-dimension selections (JSONB) per lead |
-| `{PREFIX}email_templates` | Email content seeded from CSV |
-| `{PREFIX}email_log` | Scheduled and sent email tracking |
-| `{PREFIX}recommended_services` | Services matched to each lead |
-| `{PREFIX}analytics_events` | All funnel analytics events |
-| `{PREFIX}graphic_cache` | Cached Glif image URLs |
+| Table | Purpose | When |
+|-------|---------|------|
+| `analytics_events` | All funnel analytics events | always |
+| `graphic_cache` | Cached per-user generation results | only if `runtime_mode = live_generation` |
 
----
-
-### deploy/scripts/setup-schema.js
-
-Automated database setup. Reads schema.sql, replaces `{PREFIX}`, creates tables, then seeds email templates from CSV.
-
-```javascript
-import fs from 'fs';
-import path from 'path';
-import pg from 'pg';
-import { fileURLToPath } from 'url';
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-async function setup() {
-  const dbUrl = process.env.SUPABASE_DB_URL;
-  const prefix = process.env.TABLE_PREFIX || '';
-
-  if (!dbUrl) {
-    console.error('Missing SUPABASE_DB_URL');
-    process.exit(1);
-  }
-
-  const client = new pg.Client({ connectionString: dbUrl });
-  await client.connect();
-
-  // 1. Read and execute schema
-  const schemaPath = path.join(__dirname, '..', 'supabase', 'schema.sql');
-  let schema = fs.readFileSync(schemaPath, 'utf-8');
-  schema = schema.replace(/\{PREFIX\}/g, prefix);
-
-  console.log(`Creating tables with prefix: "${prefix}"`);
-  await client.query(schema);
-  console.log('Schema created successfully');
-
-  // 2. Seed email templates from CSV
-  const csvPath = path.join(__dirname, '..', '..', 'client', 'email-sequences.csv');
-  if (fs.existsSync(csvPath)) {
-    const csvContent = fs.readFileSync(csvPath, 'utf-8');
-    const rows = parseCSV(csvContent);
-
-    for (const row of rows) {
-      await client.query(`
-        INSERT INTO ${prefix}email_templates
-        (email_id, email_name, sequence_name, segment, send_day, subject, body_html, cta_text, sender_name)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-        ON CONFLICT (email_id) DO UPDATE SET
-          subject = EXCLUDED.subject,
-          body_html = EXCLUDED.body_html,
-          cta_text = EXCLUDED.cta_text
-      `, [row.email_id, row.email_name, row.sequence_name, row.segment,
-          parseInt(row.send_day), row.subject, row.body_html, row.cta_text, row.sender_name]);
-    }
-    console.log(`Seeded ${rows.length} email templates`);
-  } else {
-    console.warn('No email-sequences.csv found, skipping email template seeding');
-  }
-
-  await client.end();
-  console.log('Setup complete');
-}
-
-function parseCSV(content) {
-  const lines = content.split('\n').filter(l => l.trim());
-  const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
-  return lines.slice(1).map(line => {
-    const values = line.match(/("(?:[^"]*(?:""[^"]*)*)")|([^,]+)/g) || [];
-    const row = {};
-    headers.forEach((h, i) => {
-      row[h] = (values[i] || '').replace(/^"|"$/g, '').replace(/""/g, '"').trim();
-    });
-    return row;
-  });
-}
-
-setup().catch(err => {
-  console.error('Setup failed:', err);
-  process.exit(1);
-});
-```
+> SQLite/D1, not Postgres: no `UUID`/`gen_random_uuid()`, no `TIMESTAMPTZ`, no array columns, no `plpgsql` triggers, no RLS. The `setup-schema.js` Postgres seeding script is gone — there are no email/lead tables to seed. The D1 table is created at deploy time with `wrangler d1 execute`, and Kit-side seeding is handled by `/setup-visionboard-kit`.
 
 ---
 
 ### deploy/.env.example
 
+Runtime secrets/vars are managed through `wrangler secret put` and `wrangler.jsonc` vars. `.env.example` documents them for local reference.
+
 ```
 # ==================================
-# Supabase Configuration (Required)
+# Kit (Required) — the CLIENT'S OWN Kit account, never SRC's
 # ==================================
-SUPABASE_URL=https://your-project-ref.supabase.co
-SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+# Set as a Worker secret: wrangler secret put KIT_API_KEY
+KIT_API_KEY=kit_v4_api_key_for_the_clients_account
+KIT_SEQUENCE_HOT=000000
+KIT_SEQUENCE_WARM=000000
+KIT_SEQUENCE_COLD=000000
+KIT_TAG_PREFIX=vb
 
 # ==================================
-# Schema Automation (For setup-db script)
+# Analytics (D1) — bound in wrangler.jsonc as ANALYTICS_DB
 # ==================================
-SUPABASE_DB_URL=postgresql://postgres.[project-ref]:[password]@aws-0-us-east-1.pooler.supabase.com:6543/postgres
-TABLE_PREFIX=[business-name]_
-
-# ==================================
-# Glif Configuration (Required for runtime graphic generation)
-# ==================================
-# Get API token from: https://glif.app/settings
-GLIF_API_TOKEN=your-glif-api-token
-GLIF_MODEL_ID=cmi7ne4p40000kz04yup2nxgh
+DATA_RETENTION_ANALYTICS_DAYS=90
 
 # ==================================
 # Site Configuration
 # ==================================
-SITE_URL=https://your-deployed-url.vercel.app
+SITE_URL=https://your-deployed-url
 CONSULTATION_URL=https://business-website.com/contact
 
 # ==================================
-# Email Configuration (Optional)
+# Generation (only when runtime_mode = live_generation)
 # ==================================
-RESEND_API_KEY=re_xxxxxxxxxxxx
-EMAIL_FROM=Vision Board <hello@yourdomain.com>
-EMAIL_REPLY_TO=support@yourdomain.com
+# The CLIENT'S provider key (KREA / Magica). Set as a Worker secret: wrangler secret put GEN_API_KEY
+GEN_API_KEY=
 
 # ==================================
-# Security (Required for cron + admin)
+# Security (Required for admin dashboard)
 # ==================================
-CRON_SECRET=your-random-secret-string
+# Set as a Worker secret: wrangler secret put ADMIN_PASSWORD
 ADMIN_PASSWORD=your_secure_admin_password_here
-
-# ==================================
-# Automation Webhook (Optional)
-# ==================================
-GUMLOOP_WEBHOOK_URL=
 ```
 
 ---
@@ -2603,9 +2122,11 @@ The `admin.js` file uses the same authentication pattern as the quiz version: `X
 
 ---
 
-## Build-Time Glif Generation
+## Build-Time Image Generation (provider layer)
 
-During the build process, this agent uses the `run_glif` MCP tool (NOT the REST API) to generate static images that ship with the deploy.
+During the build process, this agent generates the static images that ship with the deploy via the **build-time generation provider** — default **Higgsfield**, through its first-party MCP (SRC's own account, parallels SRC owning build-time work). Generation is a pluggable provider layer, not one baked-in service; the provider is read from `workflow-config.json → generation.build_time_provider`. See `shared/generation-providers.md`. Use official channels only (vendor CLI / first-party MCP), never third-party wrappers.
+
+The profile mood boards are the **base graphics** the reveal page composites onto at runtime in the default `pregenerated_composite` mode, so they must be on-brand and high quality — one per result profile.
 
 ### Images to Generate
 
@@ -2613,20 +2134,20 @@ During the build process, this agent uses the `run_glif` MCP tool (NOT the REST 
 |-------|---------------|--------|---------------|
 | Hero image (1) | Landing page hero template | 16:9 | `deploy/public/images/hero.jpg` |
 | Style cards (one per vibe option) | Style card template | 4:5 | `deploy/public/images/style-{option-id}.jpg` |
-| Profile mood boards (one per profile) | Profile mood board template | 1:1 | `deploy/public/images/profile-{profile-id}.jpg` |
+| Profile base graphics (one per profile) | Profile mood board template | 1:1 | `deploy/public/images/profiles/{profile-id}.png` |
 
-### Glif MCP Tool Usage
+### Provider MCP Usage (build-time)
 
+Use the build-time provider's first-party MCP (Higgsfield by default; async, poll for completion). The tool returns an image URL. Download each image using curl/Bash and save to `deploy/public/images/`. For a CLI-based provider (e.g. KREA), call its official CLI instead:
+
+```bash
+# KREA build-time alternative (official CLI):
+krea generate image --json --wait -p "<prompt>" -o ./public/images/profiles/<profile>.png
 ```
-Tool: run_glif
-Inputs: ["prompt text here"]
-```
-
-The tool returns an image URL. Download each image using curl/Bash and save to `deploy/public/images/`.
 
 ### Prompt Templates for Build-Time
 
-**Style Card Image** (from `glif-prompt-patterns.md`):
+**Style Card Image** (from `image-prompt-patterns.md`):
 ```
 {vibe_glif_keywords}, professional {vertical} photography,
 editorial quality, aspirational, {mood_descriptor},
@@ -2678,7 +2199,7 @@ Create config files:
 - `deploy/astro.config.mjs`
 - `deploy/tsconfig.json`
 - `deploy/package.json`
-- `deploy/vercel.json`
+- `deploy/wrangler.jsonc`
 - `deploy/.env.example`
 
 ### Step 3: Generate global.css from design.md
@@ -2701,7 +2222,7 @@ Create `deploy/src/layouts/Layout.astro` with fonts from design.md and link to g
 
 Create `deploy/src/pages/index.astro` from landing-page-copy.md. Include:
 - Eyebrow badge, headline, subheadline, description
-- Hero image section (from Glif-generated hero.jpg)
+- Hero image section (from the generated hero.jpg)
 - How It Works section (3 steps)
 - Benefits section
 - Social proof
@@ -2752,29 +2273,33 @@ Create `deploy/public/scripts/reveal.js` with:
 - Download button: blob fetch + `a.download` + `URL.createObjectURL`
 - Share button: Web Share API (mobile) with clipboard fallback (desktop)
 - Analytics: `trackEvent` for reveal-specific events
-- Fallback handling: pre-generated profile image if Glif fails
+- Default path: composite the user's details onto the pre-generated profile base image in-browser (canvas); no API call
+- Fallback handling: show the pre-generated profile base image directly if compositing (or, in live_generation mode, the provider call) fails
 
-### Step 10: Generate API Endpoints
+### Step 10: Generate API Routes
 
-Create all 6 API files:
-1. `deploy/api/visionboard-submit.js` -- lead upsert, selections storage, email scheduling, Day 0 send, webhook
-2. `deploy/api/generate-graphic.js` -- Glif prompt construction, cache check, API call, fallback
-3. `deploy/api/prompt-templates/[vertical].js` -- vertical-specific prompt builder
-4. `deploy/api/email-sender.js` -- hourly cron, template lookup, Resend send
-5. `deploy/api/analytics-event.js` -- event validation, Supabase insert
-6. `deploy/api/analytics-query.js` -- password auth, funnel/profiles/daily/selections/utm/leads queries
+Create the Astro API routes (each `export const prerender = false`, in `deploy/src/pages/api/`):
+1. `visionboard-submit.ts` -- resolve content blocks into Kit custom fields, upsert subscriber, apply profile + temperature tags, subscribe to the temperature sequence, log one D1 `board_generated` row
+2. `analytics-event.ts` -- event validation (builder-specific list), insert to D1 `analytics_events`
+3. `analytics-query.ts` -- password auth via `X-Admin-Password`, funnel/profiles/daily/selections/utm queries against D1
+4. `generate-graphic.ts` -- **OPTIONAL, only when `runtime_mode = live_generation`**: build prompt, check graphic cache, call the client's REST provider, cache result, fallback to the profile base image
 
-All API files must:
-- Use `TABLE_PREFIX` and `table()` helper
-- Handle CORS preflight
+Plus the supporting libs:
+- `deploy/src/lib/kit.ts` -- Kit v4 helpers (`kit`, `kitTag`, `kitSequence`)
+- `deploy/src/lib/kit-ids.ts` -- generated TAG_IDS + sequence-id map (from `/setup-visionboard-kit`)
+- `deploy/src/lib/content-blocks.ts` -- `resolveProfileBlock` / `resolveAnswerCallbacks` reading bundled `src/data/content-blocks.json`
+- `deploy/src/lib/prompt-templates.ts` -- only if shipping `generate-graphic.ts`
+
+There is **no** `email-sender` route (Kit owns email) and **no** Resend. All routes must:
+- Read bindings/secrets via `locals.runtime.env` (Worker), not `process.env`
+- Set CORS response headers as needed
 - Have proper error handling with descriptive messages
-- Use Edge runtime (`export const config = { runtime: 'edge' }`) except email-sender (Node runtime for crypto)
 
-### Step 11: Generate Supabase Schema and Setup Script
+### Step 11: Create the D1 Analytics Table
 
 Create:
-- `deploy/supabase/schema.sql` with all 7 tables, indexes, constraints, trigger, RLS
-- `deploy/scripts/setup-schema.js` with schema execution + CSV email template seeding
+- `deploy/d1/analytics-schema.sql` with the single `analytics_events` table + indexes (plus the optional `graphic_cache` table only when `runtime_mode = live_generation`)
+- No Postgres `setup-schema.js`, no `supabase/` directory — there are no lead/email tables to seed. The D1 table is created at deploy time with `wrangler d1 execute`; Kit-side fields/tags/sequences/emails are seeded by `/setup-visionboard-kit`.
 
 ### Step 12: Generate Admin Dashboard
 
@@ -2784,17 +2309,17 @@ Create:
 - Chart.js loaded from CDN with `is:inline`
 - 6 KPI cards: Visitors, Builder Starts, Email Captures, Boards Generated, Downloads, Shares
 
-### Step 13: Generate Build-Time Images with Glif
+### Step 13: Generate Build-Time Images (generation provider)
 
-Use `run_glif` MCP tool to generate:
+Use the build-time generation provider (default Higgsfield, via first-party MCP; or a provider CLI such as KREA — read `workflow-config.json → generation.build_time_provider`) to generate:
 1. Hero image (1 image, 16:9, landscape)
 2. Style card images (1 per vibe option, 4:5, portrait)
-3. Profile mood boards (1 per profile + fallback, 1:1, square)
+3. Profile base graphics (1 per profile, 1:1, square) — these are the bases the reveal page composites onto at runtime
 
 For each generated image:
-1. Call `run_glif` with the constructed prompt
+1. Submit the constructed prompt to the provider (poll the async job to completion)
 2. Download the returned image URL via `curl` / Bash
-3. Save to `deploy/public/images/` with the correct filename
+3. Save to `deploy/public/images/` (profile bases under `images/profiles/{profile-id}.png`)
 
 ### Step 14: Download Portfolio and Logo Images
 
@@ -2805,7 +2330,7 @@ For each generated image:
 
 ### Step 15: Generate .env.example
 
-Create `deploy/.env.example` with all required variables including `GLIF_API_TOKEN`, `GLIF_MODEL_ID`, `SITE_URL`, `CONSULTATION_URL`.
+Create `deploy/.env.example` documenting all Worker secrets/vars: `KIT_API_KEY` (client's own account), `KIT_SEQUENCE_HOT/WARM/COLD`, `KIT_TAG_PREFIX`, `DATA_RETENTION_ANALYTICS_DAYS`, `SITE_URL`, `CONSULTATION_URL`, `ADMIN_PASSWORD`, and (only for `live_generation`) `GEN_API_KEY`.
 
 ### Step 16: Generate README.md and builder-prompt.md
 
@@ -2817,17 +2342,21 @@ Create `deploy/.env.example` with all required variables including `GLIF_API_TOK
    ```bash
    cd deploy
    npm install
-   npm run setup-db    # Creates Supabase tables + seeds emails
-   npm run build       # Builds Astro project
-   vercel --prod       # Deploys to Vercel
+   wrangler d1 create clientname-vb-analytics      # once; paste id into wrangler.jsonc
+   wrangler d1 execute ANALYTICS_DB --file=./d1/analytics-schema.sql
+   wrangler secret put KIT_API_KEY                 # client's own Kit account
+   wrangler secret put ADMIN_PASSWORD
+   npm run build                                   # Builds Astro project
+   wrangler deploy                                 # Deploys to your hosting
    ```
+   Kit-side setup (custom fields, tags, sequences, seeded emails) runs in `/setup-visionboard-kit` before deploy.
 5. Local development: `npm run dev`
 6. Environment variables reference
 7. Profile definitions summary
-8. Glif configuration notes
+8. Generation + email notes (build-time provider for images; Kit owns email)
 
 **builder-prompt.md** (root level):
-1. Tech stack (Astro 4.x, vanilla JS, Vercel Edge Functions, Glif API)
+1. Tech stack (Astro 4.x, vanilla JS, Astro API routes on the Worker, Kit for leads/email, D1 for analytics)
 2. Complete selection flow configuration from architecture
 3. Profile matching algorithm with trigger tags
 4. Qualification signal logic
@@ -2872,37 +2401,32 @@ Before completing, verify every item:
 - [ ] Reads result data from sessionStorage
 - [ ] Redirects to /builder/ if no result data found
 - [ ] Loading animation shows sequential steps
-- [ ] Calls /api/generate-graphic with correct payload
-- [ ] Displays generated graphic when ready
-- [ ] Falls back to pre-generated profile image on API failure
-- [ ] Shows fallback notice when using pre-generated image
+- [ ] Default: composites user details onto the pre-generated profile base image in-browser (no API call)
+- [ ] Only calls /api/generate-graphic when runtimeMode === 'live_generation'
+- [ ] Displays the board graphic when ready
+- [ ] Falls back to the pre-generated profile base image (/images/profiles/{id}.png) on failure
+- [ ] Shows fallback notice when using the base image directly
 - [ ] Download button fetches image as blob and triggers download
 - [ ] Share button uses Web Share API on mobile, clipboard on desktop
 - [ ] Profile copy populated from per-profile variations
 - [ ] Service recommendations rendered from per-profile mapping
 - [ ] Consultation CTA links to correct URL
 
-### API Endpoints
-- [ ] visionboard-submit.js: upserts lead, stores selections, schedules emails, sends Day 0
-- [ ] generate-graphic.js: builds prompt, checks cache, calls Glif, stores in cache, returns fallback on error
-- [ ] prompt-templates/[vertical].js: exports buildPrompt function with graceful fallbacks
-- [ ] email-sender.js: queries pending emails, fetches templates, interpolates, sends via Resend
-- [ ] analytics-event.js: validates event type (builder-specific list), inserts to Supabase
-- [ ] analytics-query.js: password auth via header, profiles action (not temperature), selection distribution
-- [ ] All endpoints use TABLE_PREFIX and table() helper
-- [ ] All endpoints handle CORS preflight
-- [ ] All endpoints have proper error handling
+### API Routes
+- [ ] visionboard-submit.ts: resolves content blocks, upserts Kit subscriber + custom fields, applies profile + temperature tags, subscribes to temperature sequence, logs one D1 row
+- [ ] analytics-event.ts: validates event type (builder-specific list), inserts to D1 analytics_events
+- [ ] analytics-query.ts: password auth via X-Admin-Password header, profiles action (not temperature), selection distribution; no leads action
+- [ ] generate-graphic.ts: present ONLY when runtime_mode = live_generation; builds prompt, checks graphic cache, calls client's REST provider, caches, returns base-image fallback on error
+- [ ] No email-sender route and no Resend (Kit owns email)
+- [ ] All routes read bindings via locals.runtime.env and have proper error handling
+- [ ] KIT_API_KEY is the client's own Kit account key, never SRC's
 
 ### Database
-- [ ] schema.sql has all 7 tables with {PREFIX} placeholders
-- [ ] All tables: leads, selections, email_templates, email_log, recommended_services, analytics_events, graphic_cache
-- [ ] Indexes on common query columns
-- [ ] Foreign key constraints with ON DELETE CASCADE
-- [ ] analytics_events CHECK constraint includes builder-specific event types
-- [ ] graphic_cache table exists with cache_key UNIQUE
-- [ ] RLS enabled on all tables
-- [ ] Auto-update trigger for leads.updated_at
-- [ ] setup-schema.js reads schema, replaces PREFIX, seeds emails from CSV
+- [ ] d1/analytics-schema.sql has the single analytics_events table + indexes (SQLite/D1 types, no UUID/TIMESTAMPTZ/arrays/RLS)
+- [ ] No leads, selections, email_templates, email_log, or recommended_services tables (leads + email live in Kit)
+- [ ] analytics_events covers the builder-specific event types
+- [ ] graphic_cache table present only when runtime_mode = live_generation (cache_key UNIQUE)
+- [ ] D1 table created via wrangler d1 execute (no Postgres setup-schema.js)
 
 ### Design
 - [ ] All CSS variables populated from design.md
@@ -2913,9 +2437,9 @@ Before completing, verify every item:
 - [ ] Board preview hidden on mobile, visible on desktop
 
 ### Images
-- [ ] Hero image generated via Glif and saved locally
+- [ ] Hero image generated via the build-time provider and saved locally
 - [ ] Style card images generated for each vibe option
-- [ ] Profile mood board images generated for each profile + fallback
+- [ ] Profile base graphics generated for each profile (images/profiles/{id}.png) for runtime compositing + fallback
 - [ ] Logo downloaded and saved
 - [ ] Portfolio images downloaded and saved
 - [ ] All images referenced via /images/ path in HTML
@@ -2929,10 +2453,11 @@ Before completing, verify every item:
 - [ ] Dashboard uses X-Admin-Password header auth
 
 ### Environment
-- [ ] .env.example includes all required variables
-- [ ] GLIF_API_TOKEN and GLIF_MODEL_ID included
+- [ ] .env.example documents all Worker secrets/vars
+- [ ] KIT_API_KEY (client's own account) + KIT_SEQUENCE_HOT/WARM/COLD + KIT_TAG_PREFIX included
 - [ ] SITE_URL and CONSULTATION_URL included
 - [ ] ADMIN_PASSWORD included
+- [ ] GEN_API_KEY documented as live_generation-only
 
 ---
 
@@ -2942,7 +2467,7 @@ All files in the `deploy/` directory structure shown above, plus:
 - `README.md` (root level)
 - `builder-prompt.md` (root level)
 
-Output location: `output/[business-name]/`
+Working build location: `output/[business-name]/` (working directory). FINAL client deliverables are saved to the vault at `clients/<client>/` per the Obsidian home-base rule — not "GitHub only" and not Notion. Any client-preview pages are published to a preview deploy of your hosting, not GitHub Pages.
 
 ---
 
@@ -2953,38 +2478,40 @@ User visits landing page
   → Clicks "Build Your Vision Board"
   → /builder/ page loads
   → builder.js renders selection steps
-  → User makes selections (tracked via analytics-event.js)
+  → User makes selections (tracked via /api/analytics-event → D1)
   → Board preview updates on desktop
   → Email capture screen shows after last step
   → User enters name + email
-  → builder.js POSTs to /api/visionboard-submit
-    → Lead upserted in {PREFIX}leads
-    → Selections stored in {PREFIX}selections
-    → Emails scheduled in {PREFIX}email_log
-    → Day 0 email sent immediately (if Resend configured)
-    → Gumloop webhook fired (if configured)
+  → builder.js POSTs to /api/visionboard-submit (Worker)
+    → Resolve content blocks → final strings
+    → Upsert subscriber + custom fields in the CLIENT'S Kit account
+    → Apply profile + temperature tags
+    → Subscribe to the temperature Kit sequence (Kit schedules + sends all email)
+    → Log one board_generated row to D1 (analytics only; no leads table)
   → Redirect to /reveal/
   → reveal.js reads result from sessionStorage
-  → reveal.js POSTs to /api/generate-graphic
-    → Cache check in {PREFIX}graphic_cache
-    → If miss: Glif API call → cache store → return image URL
-    → If hit: return cached image URL
-    → Fallback: return /images/profile-{id}.jpg
+  → Default (pregenerated_composite): composite user details onto
+      /images/profiles/{id}.png in-browser (canvas) — no API call
+  → Optional (live_generation): reveal.js POSTs to /api/generate-graphic
+      → Cache check in D1 graphic_cache
+      → If miss: client's REST provider call → cache store → return image URL
+      → If hit: return cached image URL
+      → Fallback: return /images/profiles/{id}.png
   → Graphic displayed + download/share buttons
   → Profile info + matched service recommendations shown
   → Consultation CTA at bottom
 
-Email cron (hourly):
-  → /api/email-sender runs
-  → Queries pending emails from {PREFIX}email_log
-  → Fetches template from {PREFIX}email_templates
-  → Interpolates lead data
-  → Sends via Resend API
-  → Updates status in email_log
+Email (Kit-native, no cron):
+  → Kit sequence runs the temperature track on its own schedule
+  → Liquid merges profile_block / answer_callback_N from the subscriber's custom fields
+  → No /api/email-sender, no Resend
+
+Optional nightly analytics cleanup (wrangler cron):
+  → Worker scheduled handler deletes analytics_events older than DATA_RETENTION_ANALYTICS_DAYS
 
 Admin dashboard:
   → /admin page loads
   → Password auth via X-Admin-Password header
-  → Queries analytics data from /api/analytics-query
+  → Queries analytics data from /api/analytics-query (D1)
   → Renders KPIs, charts, tables via Chart.js
 ```

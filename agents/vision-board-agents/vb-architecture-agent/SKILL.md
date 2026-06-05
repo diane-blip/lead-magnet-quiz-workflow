@@ -74,7 +74,7 @@ The template provides default dimensions, options, profiles, and prompt template
       "display_config": {
         "card_size": "small|medium|large (if card_selection)",
         "show_images": "boolean (if card_selection)",
-        "image_source": "glif_generated|scraped|static (if show_images true)",
+        "image_source": "pregenerated|scraped|static (if show_images true)",
         "columns": "number",
         "chip_style": "pill_with_icon|pill_text_only (if chip_multi_select)",
         "show_count": "boolean (if chip_multi_select)",
@@ -86,7 +86,7 @@ The template provides default dimensions, options, profiles, and prompt template
           "label": "string (display text)",
           "icon": "string (icon name from Heroicons or Lucide)",
           "tags": ["string (used for profile matching)"],
-          "glif_prompt_keywords": "string (visual descriptors for Glif prompt construction)",
+          "image_prompt_keywords": "string (visual descriptors for graphic prompt construction)",
           "graphic_elements": {
             "palette": "string (color palette key)",
             "mood": "string (atmosphere descriptor)"
@@ -120,7 +120,7 @@ The template provides default dimensions, options, profiles, and prompt template
         "match_threshold": "number (0.0-1.0, fraction of trigger_tags that must match)",
         "description": "string (2-3 sentence profile narrative)",
         "share_text": "string (social sharing copy with profile name)",
-        "graphic_mood": "string (Glif prompt mood descriptors for this profile's board)"
+        "graphic_mood": "string (image prompt mood descriptors for this profile's board)"
       }
     ],
     "fallback_profile": {
@@ -146,7 +146,7 @@ The template provides default dimensions, options, profiles, and prompt template
     "composite_formula": "string (e.g., 'urgency * 0.6 + budget_fit * 0.4')"
   },
 
-  "graphic_prompt_template": "string (Glif prompt with {variable} placeholders filled at runtime)",
+  "graphic_prompt_template": "string (image prompt with {variable} placeholders filled at build time when pre-generating profile base images)",
 
   "implementation_notes": {
     "tech_requirements": ["string"],
@@ -189,7 +189,7 @@ Each dimension captures one facet of the user's taste, needs, or situation. Dime
 **Style/Vibe Dimension** (required)
 - The primary aesthetic preference
 - 4-6 options representing distinct visual styles relevant to this business
-- Each option needs `glif_prompt_keywords` for graphic generation
+- Each option needs `image_prompt_keywords` for graphic generation
 - Each option needs `graphic_elements` with palette and mood
 - Use `card_selection` type with images
 
@@ -197,7 +197,7 @@ Each dimension captures one facet of the user's taste, needs, or situation. Dime
 - Features, elements, or details the user wants
 - 6-12 options covering the key features from `services.json`
 - Multi-select (users pick 1-5)
-- Each option needs a `visual_description` for Glif prompt construction
+- Each option needs a `visual_description` for image prompt construction
 - Use `chip_multi_select` type
 
 **Budget Dimension** (required)
@@ -227,7 +227,7 @@ Each dimension captures one facet of the user's taste, needs, or situation. Dime
 **When customizing a vertical template:**
 - Keep the template's dimension structure unless research contradicts it
 - Add/remove/rename options to match the specific business's services
-- Update `glif_prompt_keywords` to reflect the business's visual style
+- Update `image_prompt_keywords` to reflect the business's visual style
 - Map budget ranges to the business's actual pricing
 - Adjust timeline options to match the business's booking cycle
 
@@ -268,7 +268,7 @@ Design 4-6 named profiles that users are matched to based on their selections. P
 - `match_threshold` is the minimum fraction of trigger_tags a user must match (default: 0.5)
 - `description` is 2-3 sentences the user reads on their result page
 - `share_text` is pre-written social sharing copy
-- `graphic_mood` feeds into the Glif prompt for that profile's vision board graphic
+- `graphic_mood` feeds into the image prompt for that profile's vision board graphic (pre-generated as a base image at build time)
 
 **Match algorithm:**
 ```
@@ -284,7 +284,7 @@ Ties broken by profile order (first in array wins)
 **Fallback profile:**
 - Define one fallback profile for users who don't exceed any profile's threshold
 - Keep it positive and generic (e.g., "The Visionary" -- you see possibilities everywhere)
-- Must have its own `graphic_mood` for Glif generation
+- Must have its own `graphic_mood` for base-image generation
 
 **Service mapping:**
 - Each profile should naturally map to 1-3 services from `services.json`
@@ -319,12 +319,12 @@ Qualification signals are **backend-only** -- they are never shown to the user. 
 
 ### 7. Create Graphic Prompt Template
 
-The graphic prompt template is a string with `{variable}` placeholders that the Edge Function fills at runtime using the user's selections.
+The graphic prompt template is a string with `{variable}` placeholders. In the default pre-generate + composite approach, the build agent fills these placeholders **at build time** to produce one base image per result profile (via the build-time generation provider, Higgsfield by default). The reveal page then composites the user's name and selected tags onto the matching base image in the browser with canvas/SVG, so no generative API runs per user. If a client opts into the live per-user generation upgrade, their Worker fills the same template at runtime via the client's REST provider. See `shared/generation-providers.md`.
 
-**Follow patterns from `references/glif-prompt-patterns.md`:**
+**Follow patterns from `references/image-prompt-patterns.md`:**
 
 1. **Lead with the format**: "Pinterest-style mood board collage" or "editorial vision board"
-2. **Set the vibe**: Use `{vibe_label}` and `{vibe_glif_keywords}` from the selected style
+2. **Set the vibe**: Use `{vibe_label}` and `{vibe_image_keywords}` from the selected style
 3. **Add context**: Seasonal, locational, or scope-related variables as relevant
 4. **Include must-have elements**: `{must_haves_visual_descriptions}` from selected features
 5. **End with quality boosters**: "Ultra-detailed, professional photography, 8K"
@@ -333,7 +333,7 @@ The graphic prompt template is a string with `{variable}` placeholders that the 
 **Template structure:**
 ```
 Pinterest-style {vertical_context} mood board collage, editorial quality.
-Style: {vibe_label} aesthetic, {vibe_glif_keywords}.
+Style: {vibe_label} aesthetic, {vibe_image_keywords}.
 {context_line (season, location, scope -- varies by vertical)}.
 Key visual elements: {must_haves_visual_descriptions}.
 {atmosphere_descriptor}.
@@ -356,7 +356,7 @@ Ultra-detailed, professional {vertical_photography_style} quality, 8K.
 **When to use:** Style/vibe choices, timeline options, or any single-select where options need visual distinction.
 **Config requirements:**
 - `card_size`: small (icon + label), medium (icon + label + subtitle), large (image + label + description)
-- `show_images`: boolean -- if true, provide `image_source` (glif_generated, scraped, static)
+- `show_images`: boolean -- if true, provide `image_source` (pregenerated, scraped, static)
 - `columns`: 2 (large cards), 3-4 (medium/small cards)
 **Best for:** 3-6 mutually exclusive options with visual identity
 
@@ -386,7 +386,7 @@ Ultra-detailed, professional {vertical_photography_style} quality, 8K.
 **When to use:** Purely visual style preferences where text labels are secondary.
 **Config requirements:**
 - `columns`: 2-3 (grid layout)
-- `image_source`: glif_generated (create at build time), scraped (from portfolio), static (bundled assets)
+- `image_source`: pregenerated (create at build time), scraped (from portfolio), static (bundled assets)
 - `selection_mode`: single or multi
 **Best for:** Aesthetic/style preferences in visual industries (interior design, fashion, food, weddings). Only use if high-quality images are available or can be generated
 
@@ -408,7 +408,7 @@ Ultra-detailed, professional {vertical_photography_style} quality, 8K.
 - [ ] Placeholder inventory is complete with dimension mappings and fallbacks
 - [ ] If vertical template used, customizations are documented in implementation_notes
 - [ ] All options have `id`, `label`, `icon`, `tags` at minimum
-- [ ] Style/vibe options have `glif_prompt_keywords` and `graphic_elements`
+- [ ] Style/vibe options have `image_prompt_keywords` and `graphic_elements`
 - [ ] Must-have options have `visual_description` for prompt construction
 - [ ] Budget and timeline options have `qualification_signal` tags
 - [ ] Architecture is buildable (not aspirational)
@@ -450,7 +450,7 @@ One row per option, with step_id and dimension repeated for each option in that 
       "label": "Modern & Minimal",
       "icon": "layout",
       "tags": ["modern", "minimal", "clean-lines"],
-      "glif_prompt_keywords": "clean modern interior, minimal furniture, white walls, natural light, negative space",
+      "image_prompt_keywords": "clean modern interior, minimal furniture, white walls, natural light, negative space",
       "graphic_elements": {
         "palette": "monochrome-warm",
         "mood": "calm and intentional"
@@ -461,7 +461,7 @@ One row per option, with step_id and dimension repeated for each option in that 
       "label": "Warm & Rustic",
       "icon": "home",
       "tags": ["rustic", "warm", "natural-materials"],
-      "glif_prompt_keywords": "rustic warm interior, reclaimed wood, natural stone, earth tones, warm ambient light",
+      "image_prompt_keywords": "rustic warm interior, reclaimed wood, natural stone, earth tones, warm ambient light",
       "graphic_elements": {
         "palette": "earth-tones",
         "mood": "cozy and grounded"
@@ -491,7 +491,7 @@ One row per option, with step_id and dimension repeated for each option in that 
   ]
 }
 ```
-Why it's bad: Generic labels, no glif_prompt_keywords, no graphic_elements, vague tags, options are not meaningfully different.
+Why it's bad: Generic labels, no image_prompt_keywords, no graphic_elements, vague tags, options are not meaningfully different.
 
 **Good Profile:**
 ```json
@@ -517,7 +517,7 @@ Why it's bad: Generic labels, no glif_prompt_keywords, no graphic_elements, vagu
   "graphic_mood": "nice"
 }
 ```
-Why it's bad: Generic name, trigger_tags overlap with every other profile (too broad), threshold too low (matches everyone), description is meaningless, graphic_mood is not actionable for Glif.
+Why it's bad: Generic name, trigger_tags overlap with every other profile (too broad), threshold too low (matches everyone), description is meaningless, graphic_mood is not actionable for image generation.
 
 **Good Qualification Signals:**
 ```json

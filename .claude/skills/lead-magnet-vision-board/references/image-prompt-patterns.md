@@ -1,19 +1,19 @@
-# Glif Prompt Patterns for Vision Board Graphics
+# Prompt Patterns for Vision Board Graphics
 
-Reference guide for constructing Glif prompts in the vision board workflow. Used at two points:
+Reference guide for constructing image-generation prompts in the vision board workflow. The prompt-craft below is provider-agnostic. Generation runs through the pluggable provider layer documented in `agents/lead-magnet-agents/shared/generation-providers.md` — read it first.
 
-1. **Build-time** (via `run_glif` MCP tool): Style card images, landing page hero, profile mood boards
-2. **Runtime** (via Glif REST API from Edge Function): Personalized vision board graphics per user
+The two generation jobs (don't conflate them):
+
+1. **Build-time** (default provider: **Higgsfield**, via its first-party MCP, on SRC's account): Style card images, landing page hero, profile mood board base images. These are the prompts you run during the build.
+2. **Runtime** (default: **no generative API call**): The reveal page composites the user's name + selected tags onto the matching profile base image with canvas/SVG in the browser. Live per-user generation is an optional upgrade via the client's own REST provider — see the "Optional live generation" note below and `generation-providers.md`.
 
 ---
 
-## Glif Configuration
+## Provider notes
 
-- **Model**: Nano Banana Pro Text 2 Image
-- **Glif ID**: `cmi7ne4p40000kz04yup2nxgh`
-- **MCP Tool**: `run_glif` with inputs `["prompt text"]`
-- **REST API**: `POST https://simple-api.glif.app` with `{ "id": "cmi7ne4p40000kz04yup2nxgh", "inputs": ["prompt text"] }`
-- **API Token Header**: `Authorization: Bearer {GLIF_API_TOKEN}`
+- **Build-time default is Higgsfield** (already connected as a first-party MCP, async polling, billed to SRC's account). KREA's official CLI is an alternative build-time path.
+- Run **official channels only** — the vendor's own CLI, REST API, or first-party MCP. No community/third-party wrappers.
+- The prompts in this file are plain text and portable across providers. Aspect ratio is passed through whatever parameter the chosen provider exposes.
 
 ---
 
@@ -25,7 +25,7 @@ Used for the builder selection step. Each card needs a representative image.
 
 **Template**:
 ```
-{vibe_glif_keywords}, professional wedding photography,
+{vibe_prompt_keywords}, professional wedding photography,
 editorial quality, aspirational, {mood_descriptor},
 soft natural lighting, shallow depth of field,
 magazine quality, 8K resolution
@@ -70,7 +70,7 @@ cinematic quality, 8K resolution
 
 ### Profile Mood Board Backgrounds
 
-One per profile (4-6 images). Used as fallback graphics if runtime Glif generation fails.
+One per profile (4-6 images). These are the base images the reveal page composites the user's details onto at runtime (and the fallback if optional live generation is enabled and fails).
 
 **Template**:
 ```
@@ -95,11 +95,11 @@ warm romantic lighting, ultra-detailed, 8K
 
 ---
 
-## Runtime Prompt Construction
+## Selection-Driven Prompt Construction
 
-The Edge Function `generate-graphic.js` constructs prompts dynamically from user selections.
+This is the prompt-craft for turning a set of vision-board selections into a single image prompt. In the default pattern it runs at **build time** (one prompt per result profile, with representative selections, producing the profile base images above). It is the **same** builder reused at runtime only when a client opts into live per-user generation (see "Optional live generation" below).
 
-### Prompt Template (stored in `deploy/api/prompt-templates/{vertical}.js`)
+### Prompt Template (stored in `deploy/src/lib/prompt-templates/{vertical}.ts`)
 
 Each vertical exports a function that takes selections and returns a prompt string.
 
@@ -111,7 +111,7 @@ export function buildPrompt(selections) {
   const mustHaves = selections.must_haves;
   const guestCount = selections.guest_count;
 
-  const vibeKeywords = vibe.glif_prompt_keywords;
+  const vibeKeywords = vibe.prompt_keywords;
   const seasonColors = season.season_colors;
   const seasonLighting = season.season_lighting;
   const mustHaveVisuals = mustHaves
@@ -163,85 +163,26 @@ Ultra-detailed, professional wedding photography quality, 8K.`;
 
 ---
 
-## Edge Function Implementation Pattern
+## Runtime Implementation Patterns
 
-```javascript
-// deploy/api/generate-graphic.js
+### Default: pre-generate + composite (no runtime generative API call)
 
-export const config = { runtime: 'nodejs' };
+This is the standard pattern. Per `generation-providers.md`:
 
-export default async function handler(req) {
-  const url = new URL(req.url, `https://${req.headers.host}`);
-  const data = JSON.parse(url.searchParams.get('data'));
+1. **Build-time:** generate one base graphic per result profile (4–5 images) with the prompts above, on SRC's Higgsfield account. Store in `public/images/profiles/`.
+2. **Runtime:** the reveal page composites the user's name + selected tags onto the matching profile base image with **canvas/SVG** in the browser. Instant, free, deterministic, reliably on-brand, nothing to poll, no per-user cost.
+3. Download + social-share buttons operate on the composited canvas.
 
-  // Import the vertical-specific prompt builder
-  const { buildPrompt } = await import(`./prompt-templates/${data.vertical}.js`);
+There is no generative API call at runtime in this mode, so no per-user prompt, no polling, and no cache table.
 
-  // Construct the prompt from user selections
-  const prompt = buildPrompt(data.selections);
+### Optional upgrade: live per-user generation
 
-  // Call Glif API
-  const glifResponse = await fetch('https://simple-api.glif.app', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${process.env.GLIF_API_TOKEN}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      id: process.env.GLIF_MODEL_ID || 'cmi7ne4p40000kz04yup2nxgh',
-      inputs: [prompt]
-    })
-  });
+Only for a client who wants fully bespoke imagery and owns a runtime-REST-capable provider (KREA, possibly Magica). The prompt builder above is reused to construct a per-user prompt; the rest of the wiring lives in `generation-providers.md` and `build-agent/references/cloudflare-kit-patterns.md`. Shape:
 
-  const result = await glifResponse.json();
-
-  // Return the generated image URL
-  return new Response(JSON.stringify({
-    imageUrl: result.output,
-    prompt: prompt,
-    cached: false
-  }), {
-    status: 200,
-    headers: {
-      'Content-Type': 'application/json',
-      'Cache-Control': 'public, max-age=86400'
-    }
-  });
-}
-```
-
----
-
-## Caching Strategy
-
-To avoid regenerating identical graphics:
-
-1. Hash the selections into a cache key: `sha256(JSON.stringify(sortedSelections))`
-2. Check `{PREFIX}graphic_cache` table for existing entry
-3. If found, return cached image URL
-4. If not found, generate via Glif, store URL in cache table, return
-
-```sql
-CREATE TABLE IF NOT EXISTS {PREFIX}graphic_cache (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  cache_key TEXT UNIQUE NOT NULL,
-  image_url TEXT NOT NULL,
-  prompt_used TEXT,
-  vertical TEXT,
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
-```
-
----
-
-## Fallback Strategy
-
-If Glif API fails or times out (>30 seconds):
-
-1. Log the error to Supabase
-2. Return the pre-generated profile mood board image from `public/images/profile-{profile_id}.jpg`
-3. Mark the graphic as "fallback" in the response so the reveal page can show "Your personalized board is being created" message
-4. Queue a retry via the email-sender cron (generate and include in follow-up email)
+- The personalized-graphic endpoint is an **Astro API route** at `src/pages/api/generate-graphic.ts` with `export const prerender = false`, running on the deployed Worker.
+- It builds the prompt from the user's selections, submits a job to the **client's own** REST provider (key stored as the `GEN_API_KEY` Worker secret), then polls or awaits the provider's webhook (these APIs are async).
+- Because generation is async, the reveal page shows a "creating your board…" state until the result returns.
+- Cache results keyed by a hash of the selections (`sha256(JSON.stringify(sortedSelections))`) in **Cloudflare KV or the D1 analytics database**, never a Supabase table. On provider failure or timeout, fall back to the pre-generated profile base image from `public/images/profiles/`.
 
 ---
 

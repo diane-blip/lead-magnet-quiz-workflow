@@ -1,6 +1,6 @@
 # Image Generation Prompt Templates
 
-Reference guide for constructing AI image prompts using Glif's Nano Banana Pro. Use this in the Image Generation Agent when creating quiz assets, product imagery, and landing page heroes.
+Reference guide for constructing AI image prompts for the pluggable generation provider (build-time default: Higgsfield; see `generation-providers.md`). Use this in the Image Generation Agent when creating quiz assets, product imagery, and landing page heroes. The prompt-craft below is provider-agnostic.
 
 ---
 

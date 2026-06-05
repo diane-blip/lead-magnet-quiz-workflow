@@ -303,6 +303,8 @@ Write 26 emails across 5 sequences with layered personalization:
 - **Profile** controls content blocks within shared templates (new - `{{profile_block}}`)
 - **Quiz answers** control callback snippets at key moments (new - `{{answer_callback_1}}`, `{{answer_callback_2}}`)
 
+**How personalization resolves (Kit-native):** You write the email bodies and the content blocks. You do NOT build a resolution engine. At quiz submit time, the content blocks are resolved into the subscriber's Kit custom fields (`profile_block`, `answer_callback_1`, `answer_callback_2`), and Kit merges them into the email via Liquid merge tags. So author each email with the `{{...}}` placeholders below; they map to Kit custom fields the email seeds with Liquid. See `shared/kit-integration.md`.
+
 **Sequence 1: Welcome (3 emails, all leads)**
 | Email ID | Day | Purpose | Profile Block | Answer Callback |
 |----------|-----|---------|---------------|-----------------|
@@ -391,14 +393,22 @@ Read the `diagnostic_questions` array from architecture output. For each email m
 
 ### 6. Apply Brand Voice
 
-For ALL copy:
+**Two layers, both required.** Every piece of client-facing copy this agent produces (landing page, quiz questions, result pages, all 26 emails, content blocks, loading/UI copy) must obey `shared/voice-non-negotiables.md` as a hard floor, layered ON TOP of the client's own detected brand voice. The voice-non-negotiables rules are pass/fail. Read that file before writing.
+
+**Layer 1 — the client's voice (per-funnel):**
 - Match tone from brand_voice_analysis
 - Use key_phrases where natural
 - Avoid everything in the avoid list
 - Write like talking to a small business owner, not an agency
-- No em dashes
-- Short sentences, clear thoughts
-- Specific over generic
+
+**Layer 2 — SRC universal non-negotiables (every funnel, full list in `shared/voice-non-negotiables.md`):**
+- No em dashes. Use a period, comma, parentheses, or rewrite.
+- No negative parallelism ("not just X, but Y" / "it's not X, it's Y").
+- No AI-tell vocabulary (leverage, unlock, seamless, elevate, empower, supercharge, robust, cutting-edge, and the rest of the list).
+- No hype rhythm or three-beat triples.
+- Never name the host (Cloudflare, Workers, D1, Astro, or "the hosting provider") in client-facing copy. Say "your site" or "hosting." Kit may be named (the client owns their Kit account).
+- Never "handled." Use "looked after," "running smoothly," "taken care of."
+- Concrete over abstract. Earn every claim. Second person — the reader is the hero, the client's business is the guide.
 
 ### 7. Quality Check
 
@@ -557,7 +567,7 @@ WARM-01,answer_callback,q3,q3-a1,"You mentioned you're spending 10+ hours..."
 - `Block Type`: `profile` or `answer_callback`
 - `Block Key`: profile_id (for profile) or question_id (for answer_callback)
 - `Block Value`: empty (for profile) or answer_id (for answer_callback)
-- `Content`: The actual text to inject (1-3 sentences)
+- `Content`: The actual text (1-3 sentences). At quiz submit time the build resolves the matching row into the subscriber's Kit custom fields (`profile_block`, `answer_callback_1/2`); Kit merges it into the email via Liquid. You author the text here; you do not build the resolution engine. See `shared/kit-integration.md`.
 
 ## Handoff
 

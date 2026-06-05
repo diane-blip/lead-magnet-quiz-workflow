@@ -16,7 +16,7 @@
       "display_config": {
         "card_size": "large",
         "show_images": true,
-        "image_source": "glif_generated",
+        "image_source": "pregenerated_base",
         "columns": 2
       },
       "options": [
@@ -25,7 +25,7 @@
           "label": "Kitchen Remodel",
           "icon": "utensils",
           "tags": ["kitchen", "remodel", "cooking"],
-          "glif_prompt_keywords": "modern kitchen renovation, quartz countertops, custom cabinetry, pendant lighting, stainless appliances",
+          "base_image_keywords": "modern kitchen renovation, quartz countertops, custom cabinetry, pendant lighting, stainless appliances",
           "graphic_elements": {
             "palette": "warm-white",
             "mood": "functional and beautiful"
@@ -36,7 +36,7 @@
           "label": "Bathroom Renovation",
           "icon": "bath",
           "tags": ["bathroom", "renovation", "spa"],
-          "glif_prompt_keywords": "luxury bathroom renovation, walk-in shower, freestanding tub, marble tile, modern vanity",
+          "base_image_keywords": "luxury bathroom renovation, walk-in shower, freestanding tub, marble tile, modern vanity",
           "graphic_elements": {
             "palette": "spa-neutral",
             "mood": "serene and luxurious"
@@ -47,7 +47,7 @@
           "label": "Whole Home Renovation",
           "icon": "home",
           "tags": ["whole-home", "comprehensive", "full-renovation"],
-          "glif_prompt_keywords": "complete home renovation, open floor plan, modern finishes throughout, cohesive design, bright and airy",
+          "base_image_keywords": "complete home renovation, open floor plan, modern finishes throughout, cohesive design, bright and airy",
           "graphic_elements": {
             "palette": "cohesive-neutral",
             "mood": "transformed and cohesive"
@@ -58,7 +58,7 @@
           "label": "Room Addition",
           "icon": "plus-square",
           "tags": ["addition", "expansion", "extra-space"],
-          "glif_prompt_keywords": "home addition, seamless architectural integration, new living space, natural light, matching exterior",
+          "base_image_keywords": "home addition, smooth architectural integration, new living space, natural light, matching exterior",
           "graphic_elements": {
             "palette": "fresh-neutral",
             "mood": "expanded and seamless"
@@ -69,7 +69,7 @@
           "label": "Outdoor Living Space",
           "icon": "sun",
           "tags": ["outdoor", "deck", "patio", "landscape"],
-          "glif_prompt_keywords": "outdoor living renovation, covered patio, outdoor kitchen, fire pit, landscaping, composite decking",
+          "base_image_keywords": "outdoor living renovation, covered patio, outdoor kitchen, fire pit, landscaping, composite decking",
           "graphic_elements": {
             "palette": "earth-green",
             "mood": "relaxing and natural"
@@ -80,7 +80,7 @@
           "label": "Basement Finish",
           "icon": "layers",
           "tags": ["basement", "finish", "recreation"],
-          "glif_prompt_keywords": "finished basement, home theater, bar area, rec room, modern lighting, cozy carpet",
+          "base_image_keywords": "finished basement, home theater, bar area, rec room, modern lighting, cozy carpet",
           "graphic_elements": {
             "palette": "warm-dark",
             "mood": "cozy and entertainment-ready"
@@ -272,7 +272,7 @@
     "composite_formula": "urgency * 0.6 + budget_fit * 0.4"
   },
 
-  "graphic_prompt_template": "Professional renovation mood board, before-and-after editorial quality.\nProject: {project_type_label}, {project_type_glif_keywords}.\nDesign style: {design_style_label}, {design_style_keywords}.\nKey elements: {must_haves_visual_descriptions}.\n{budget_level} quality finishes and materials.\nProfessional contractor portfolio style.\nBright natural lighting showcasing craftsmanship.\nNo text overlays, purely visual mood board.\nUltra-detailed, architectural photography, 8K.",
+  "graphic_prompt_template": "Professional renovation mood board, before-and-after editorial quality.\nProject: {project_type_label}, {project_type_base_image_keywords}.\nDesign style: {design_style_label}, {design_style_keywords}.\nKey elements: {must_haves_visual_descriptions}.\n{budget_level} quality finishes and materials.\nProfessional contractor portfolio style.\nBright natural lighting showcasing craftsmanship.\nNo text overlays, purely visual mood board.\nUltra-detailed, architectural photography, 8K.",
 
   "email_sequence_angle": {
     "welcome": "Deliver renovation vision board + introduce contractor's portfolio matches",

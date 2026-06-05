@@ -498,7 +498,6 @@
                         <li>Scores them automatically</li>
                         <li>Nurtures via email sequences</li>
                         <li>Tracks analytics</li>
-                        <li>Includes video assets</li>
                     </ul>
                     <p>Here's everything included in <code>/lead-magnet-quiz</code>:</p>
                 </div>
@@ -511,12 +510,12 @@
                 </div>
                 <div class="tweet-content">
                     <ul>
-                        <li>✅ Vercel-ready deployment folder</li>
+                        <li>✅ Deploy-ready site</li>
                         <li>✅ Landing page (fully designed HTML/CSS)</li>
                         <li>✅ Quiz app (6-12 questions, scoring logic)</li>
                         <li>✅ Thank you pages (3 variants: hot/warm/cold)</li>
                         <li>✅ Admin analytics dashboard</li>
-                        <li>✅ 4 Vercel Edge Functions (API endpoints)</li>
+                        <li>✅ 3 API routes (endpoints)</li>
                     </ul>
                 </div>
             </div>
@@ -524,15 +523,15 @@
             <div class="tweet-card">
                 <div class="tweet-header">
                     <span class="tweet-number">Tweet 3</span>
-                    <span class="tweet-type">Database & Backend</span>
+                    <span class="tweet-type">Data & Backend</span>
                 </div>
                 <div class="tweet-content">
                     <ul>
-                        <li>✅ Complete Supabase schema (6 tables)</li>
-                        <li>✅ Auto-setup script (one command: <code>npm run setup-db</code>)</li>
-                        <li>✅ Email queue system with hourly cron</li>
+                        <li>✅ Leads and email live in the client's own Kit account</li>
+                        <li>✅ One analytics table, auto-set-up (one command)</li>
+                        <li>✅ Email sequences triggered automatically by score</li>
                         <li>✅ Analytics event tracking (8 event types)</li>
-                        <li>✅ Multi-tenant support with table prefixes</li>
+                        <li>✅ Custom fields for per-lead personalization</li>
                     </ul>
                 </div>
             </div>
@@ -551,7 +550,7 @@
                         <li>Hot Path (2 emails)</li>
                         <li>Win-back (2 emails)</li>
                     </ul>
-                    <p>All stored in database, triggered automatically by score</p>
+                    <p>All in the client's Kit account, triggered automatically by score</p>
                 </div>
             </div>
 
@@ -575,14 +574,13 @@
             <div class="tweet-card">
                 <div class="tweet-header">
                     <span class="tweet-number">Tweet 6</span>
-                    <span class="tweet-type">Video Assets</span>
+                    <span class="tweet-type">Optional Social Ad</span>
                 </div>
                 <div class="tweet-content">
                     <ul>
-                        <li>✅ Quiz intro teaser (TSX component)</li>
-                        <li>✅ 3 result reveal videos (hot/warm/cold)</li>
-                        <li>✅ Social ad template (Instagram/TikTok)</li>
-                        <li>✅ Ready to render: <code>npx remotion render</code></li>
+                        <li>✅ Optional, off by default</li>
+                        <li>✅ Atmospheric promo for Instagram/TikTok</li>
+                        <li>✅ Produced via the AI video provider when you want one</li>
                     </ul>
                 </div>
             </div>
@@ -632,7 +630,7 @@
                         <li>✅ Quiz copy (all questions + progress messages)</li>
                         <li>✅ Email sequences (CSV + HTML preview)</li>
                         <li>✅ Questions & answers (CSV export)</li>
-                        <li>✅ GitHub Pages preview site for client review</li>
+                        <li>✅ Hosted preview site for client review</li>
                     </ul>
                 </div>
             </div>
@@ -662,11 +660,10 @@
                     <p>One-command deployment:</p>
                     <pre><code>cd deploy
 npm install
-npm run setup-db
-vercel --prod</code></pre>
+npm run deploy</code></pre>
                     <p>Done. Your quiz funnel is live with:</p>
                     <ul>
-                        <li>Database ✅</li>
+                        <li>Leads in your Kit account ✅</li>
                         <li>Email automation ✅</li>
                         <li>Analytics ✅</li>
                     </ul>
@@ -723,7 +720,7 @@ vercel --prod</code></pre>
                     <p>3 main directories:<br>
                     📁 deploy/ (production code)<br>
                     📁 client/ (strategy docs)<br>
-                    📁 client-preview/ (GitHub Pages)</p>
+                    📁 client-preview/ (hosted preview)</p>
                     <p>Starting with deploy/ →</p>
                 </div>
             </div>
@@ -736,7 +733,7 @@ vercel --prod</code></pre>
                 <div class="tweet-content">
                     <pre><code>deploy/
 ├── index.html          # Landing page
-├── vercel.json         # Config + cron jobs
+├── wrangler.jsonc      # Config
 ├── package.json        # Dependencies
 └── .env.example        # Environment template</code></pre>
                     <p>Landing page includes:</p>
@@ -753,15 +750,14 @@ vercel --prod</code></pre>
             <div class="tweet-card">
                 <div class="tweet-header">
                     <span class="tweet-number">Tweet 3</span>
-                    <span class="tweet-type">deploy/api/</span>
+                    <span class="tweet-type">src/pages/api/</span>
                 </div>
                 <div class="tweet-content">
-                    <pre><code>api/
-├── quiz-submit.js      # POST - Saves quiz + scores lead
-├── email-sender.js     # CRON - Sends scheduled emails
-├── analytics-event.js  # POST - Tracks funnel events
-└── analytics-query.js  # GET - Dashboard data (auth)</code></pre>
-                    <p>All serverless, auto-scaling</p>
+                    <pre><code>src/pages/api/
+├── quiz-submit.ts      # POST - Scores lead + writes to Kit
+├── analytics-event.ts  # POST - Tracks funnel events
+└── analytics-query.ts  # GET - Dashboard data (auth)</code></pre>
+                    <p>All serverless, auto-scaling. Email sequencing runs in your Kit account, no cron to babysit.</p>
                 </div>
             </div>
 
@@ -811,35 +807,23 @@ vercel --prod</code></pre>
             <div class="tweet-card">
                 <div class="tweet-header">
                     <span class="tweet-number">Tweet 6</span>
-                    <span class="tweet-type">deploy/supabase/</span>
+                    <span class="tweet-type">Data</span>
                 </div>
                 <div class="tweet-content">
-                    <pre><code>supabase/
-└── schema.sql  # Complete schema with:
-    ├── leads table
-    ├── quiz_responses table
-    ├── recommended_products table
-    ├── email_log table
-    ├── email_templates table
-    └── analytics_events table</code></pre>
-                    <p>Multi-tenant support with <code>{PREFIX}_</code> naming</p>
+                    <pre><code>Leads + email      → the client's own Kit account
+                     (subscriber, custom fields, tags, sequences)
+analytics_events   → one lightweight analytics table</code></pre>
+                    <p>Leads and email live in Kit, so the client owns their list. The only database is one small analytics table.</p>
                 </div>
             </div>
 
             <div class="tweet-card">
                 <div class="tweet-header">
                     <span class="tweet-number">Tweet 7</span>
-                    <span class="tweet-type">deploy/videos/</span>
+                    <span class="tweet-type">Optional Social Ad</span>
                 </div>
                 <div class="tweet-content">
-                    <pre><code>videos/
-├── README.md
-├── quiz-intro/QuizIntro.tsx
-├── result-reveal-hot/ResultRevealHot.tsx
-├── result-reveal-warm/ResultRevealWarm.tsx
-├── result-reveal-cold/ResultRevealCold.tsx
-└── social-ad/SocialAd.tsx</code></pre>
-                    <p>All TSX components, ready to render</p>
+                    <p>Off by default. When a client wants one, an atmospheric promo for Instagram/TikTok is produced via the AI video provider.</p>
                 </div>
             </div>
 
@@ -914,10 +898,10 @@ vercel --prod</code></pre>
                     <ul>
                         <li>50+ files</li>
                         <li>3 main directories</li>
-                        <li>4 API endpoints</li>
-                        <li>6 database tables</li>
+                        <li>3 API routes</li>
+                        <li>Leads + email in the client's Kit account</li>
+                        <li>One analytics table</li>
                         <li>14 email templates</li>
-                        <li>5 video components</li>
                         <li>10+ strategy documents</li>
                     </ul>
                     <p>All generated from one command.</p>
@@ -1036,10 +1020,9 @@ vercel --prod</code></pre>
                     <p>Generates:</p>
                     <ul>
                         <li>HTML/CSS/JS for all pages</li>
-                        <li>Vercel Edge Functions</li>
-                        <li>Database schema</li>
+                        <li>API routes</li>
+                        <li>Kit setup + one analytics table</li>
                         <li>Setup scripts</li>
-                        <li>Remotion video components</li>
                         <li>Environment config</li>
                     </ul>
                     <p>Production-ready, not prototypes</p>
@@ -1055,8 +1038,8 @@ vercel --prod</code></pre>
                     <p>Creates:</p>
                     <ul>
                         <li>Private GitHub repo (full codebase)</li>
-                        <li>Public GitHub Pages repo (client preview)</li>
-                        <li>Notion database entry (project tracking)</li>
+                        <li>Client preview deploy</li>
+                        <li>Final deliverables saved to the client folder</li>
                     </ul>
                     <p>Returns URLs for immediate access</p>
                 </div>
@@ -1122,7 +1105,7 @@ vercel --prod</code></pre>
                     <p>This workflow is open-source and runs locally in Claude Code.</p>
                     <p>No subscriptions, no credits, no API costs (except MCP tools).</p>
                     <p>Want to build your own multi-agent workflows?</p>
-                    <p>Check out: github.com/[your-repo]</p>
+                    <p>Check out: github.com/diane-blip/lead-magnet-quiz-workflow</p>
                 </div>
             </div>
         </section>
@@ -1334,9 +1317,8 @@ vercel --prod</code></pre>
                         <li>✅ 3 result pages (hot/warm/cold)</li>
                         <li>✅ 14 email sequences (auto-triggered)</li>
                         <li>✅ Analytics dashboard</li>
-                        <li>✅ 4 API endpoints</li>
-                        <li>✅ Complete database schema</li>
-                        <li>✅ 5 video components (Remotion)</li>
+                        <li>✅ 3 API routes</li>
+                        <li>✅ Leads + email in your Kit account</li>
                         <li>✅ Strategy docs + copy breakdowns</li>
                         <li>✅ One-command deployment</li>
                     </ul>
@@ -1357,7 +1339,6 @@ vercel --prod</code></pre>
                         <li>Brand-matched design system</li>
                         <li>14 pre-written email sequences</li>
                         <li>Analytics dashboard</li>
-                        <li>Video assets</li>
                     </ul>
                     <p>In 7 days. From one command.</p>
                     <p>Built with Claude Code multi-agent workflows.</p>
@@ -1379,15 +1360,14 @@ vercel --prod</code></pre>
                     </ul>
                     <p><strong>Backend:</strong></p>
                     <ul>
-                        <li>4 Vercel Edge Functions</li>
-                        <li>6 Supabase tables</li>
-                        <li>Email queue system</li>
+                        <li>3 serverless API routes</li>
+                        <li>Leads + email in the client's Kit account</li>
+                        <li>One lightweight analytics table</li>
                     </ul>
                     <p><strong>Infra:</strong></p>
                     <ul>
                         <li>One-command deployment</li>
                         <li>Auto-scaling</li>
-                        <li>Cron jobs</li>
                     </ul>
                     <p>All custom, not templates.</p>
                 </div>
@@ -1423,10 +1403,9 @@ vercel --prod</code></pre>
                     <p>Ran <code>/lead-magnet-quiz "Madi's On A Roll"</code></p>
                     <p>7 days later:</p>
                     <ul>
-                        <li>✅ Live quiz at madisonaroll.vercel.app</li>
-                        <li>✅ 14 email sequences in database</li>
+                        <li>✅ Live quiz at madisonaroll.com</li>
+                        <li>✅ 14 email sequences in the client's Kit account</li>
                         <li>✅ Analytics dashboard running</li>
-                        <li>✅ 5 video components ready to render</li>
                         <li>✅ Client preview site published</li>
                     </ul>
                     <p>Zero manual coding. All production-ready.</p>
@@ -1468,7 +1447,7 @@ vercel --prod</code></pre>
                         <li>Screenshot: Quiz interface on mobile + desktop</li>
                         <li>Comparison: Manual build (80 hours) vs. AI workflow (15 min)</li>
                         <li>Before/After: Empty folder → Complete project structure</li>
-                        <li>Screenshot: Vercel deployment success screen</li>
+                        <li>Screenshot: Deployment success screen</li>
                     </ul>
                 </div>
 
@@ -1501,7 +1480,7 @@ vercel --prod</code></pre>
         </section>
 
         <div class="footer">
-            <p>Generated by Vibe Marketing Studio • <a href="../public/index.html">View Customer Pages</a> • <a href="https://github.com/jpiece3/quiz-funnel-marketing">View on GitHub</a></p>
+            <p>Generated by Vibe Marketing Studio • <a href="../public/index.html">View Customer Pages</a> • <a href="https://github.com/diane-blip/lead-magnet-quiz-workflow">View on GitHub</a></p>
         </div>
     </div>
 </body>

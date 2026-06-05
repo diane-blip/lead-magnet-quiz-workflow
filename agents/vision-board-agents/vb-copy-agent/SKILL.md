@@ -151,6 +151,7 @@ Receives output from research-agent, vb-architecture-agent, and services.json:
 - Read architecture output from `output/[business-name]/2-architecture/architecture-output.json`
 - Read services from `output/[business-name]/services.json`
 - Read brand voice guidelines from `shared/my.voice.md`
+- Read the SRC universal voice rules from `shared/voice-non-negotiables.md` (pass/fail, layered on top of the client's detected voice)
 - Review email frameworks in `shared/examples/email-sequences.md`
 
 ### 2. Write Landing Page Copy
@@ -272,6 +273,8 @@ Create one variation per profile defined in the architecture.
 - Each email has a single clear CTA
 - No em dashes anywhere
 - Write like a creative professional sharing inspiration, not a marketer running a funnel
+- All emails are seeded into the client's own Kit sequences. Profile-specific and selection-specific text is resolved at submit time into Kit custom fields (`profile_block`, `answer_callback_1/2`) and merged via Liquid (`{{ subscriber.custom_fields.profile_block }}`). Write each insert point with a generic fallback sentence so the email reads cleanly if a field is empty. Qualification (temperature) routes to one of the Kit sequences plus a tag, never rendered to the subscriber. See `shared/kit-integration.md`.
+- Apply the universal SRC voice rules in `shared/voice-non-negotiables.md` on top of the client's detected voice (no em dashes, no "not just X but Y", no AI-tell words, never name the host, never "handled" → use "looked after"). Pass/fail.
 
 ### 7. Write Strategy Pack
 
@@ -303,7 +306,7 @@ Standalone HTML document with full design system from design.md.
 1. Included Features (Day 1)
 2. Growth Add-Ons (3 Tiers)
 3. Vision Board-Specific Add-Ons:
-   - Custom Glif Model Training ($2,500)
+   - Custom Image Model Training (on the client's portfolio) ($2,500)
    - MLS Integration ($1,800)
    - Viral Referral System ($400/mo)
    - Mobile App Packaging ($3,500)
@@ -330,7 +333,7 @@ Standalone HTML document with full design system from design.md.
 ### Vision Board-Specific Growth Features
 
 **INCLUDE (vision board only):**
-- Custom Glif model training on agent's portfolio ($2,500)
+- Custom image-model training on the client's portfolio (provider-agnostic; never name the generation tool in client-facing copy) ($2,500)
 - MLS integration for live listing matching ($1,800)
 - Viral referral system with share tracking ($400/mo)
 - Mobile app packaging (PWA) ($3,500)
@@ -455,7 +458,7 @@ Run through checklist before saving output.
 
 **Vision Board Features (ways-to-grow.html):**
 - [ ] ways-to-grow.html contains ZERO quiz features (search for "Remotion", "video", "D-ID" → 0 results)
-- [ ] ways-to-grow.html includes vision-board add-ons (search for "Glif training", "MLS", "viral" → found)
+- [ ] ways-to-grow.html includes vision-board add-ons (search for "image-model training", "MLS", "viral" → found)
 - [ ] ALL client-preview/*.html files have NO raw markdown tables (search for "<p>|" → 0 results)
 - [ ] ways-to-grow.html uses card layouts (.pricing-card, .addon-card)
 - [ ] architecture.html uses card layouts (.dimension-card, .option-card, .profile-card)

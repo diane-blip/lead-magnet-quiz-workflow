@@ -91,10 +91,9 @@ The quiz funnel market is fragmented between **DIY tools** ($27-600/mo) and **fu
 | Brand-matched design | ❌ | ❌ | ❌ | ✅ | ✅ |
 | Landing page copy | ❌ | ❌ | ❌ | ✅ | ✅ |
 | Email sequences | ❌ | ❌ | ❌ | Sometimes | ✅ (14 emails) |
-| Email automation | ❌ | ❌ | ❌ | ❌ | ✅ (Supabase + cron) |
+| Email automation | ❌ | ❌ | ❌ | ❌ | ✅ (Kit sequences) |
 | Analytics dashboard | Basic | Basic | Basic | ❌ | ✅ (Full dashboard) |
-| Deployment | ❌ | ❌ | ❌ | ✅ | ✅ (Vercel-ready) |
-| Video assets | ❌ | ❌ | ❌ | ❌ | ✅ (Remotion) |
+| Deployment | ❌ | ❌ | ❌ | ✅ | ✅ (deploy-ready) |
 | **Time to deploy** | Hours | Hours | Hours | 3-6 weeks | **7 days** |
 
 ### Search Volume & Demand
@@ -209,7 +208,7 @@ But here's what they don't tell you:
 
 Total hidden cost: $2,500-7,800 + $80-300/mo ongoing
 
-Or: Get everything in 7 days for $2,497.
+Or: Get everything in 7 days for $2,500.
 ```
 
 #### When to Use
@@ -333,7 +332,7 @@ The only quiz funnel service that delivers a complete, production-ready system i
 ```
 We build complete quiz funnels: landing page, quiz app, 14 email sequences, analytics dashboard, and deployment. Everything custom-researched for your market. Delivered in 7 days.
 
-Tools like Interact only give you the quiz. Agencies charge $5K-15K and take 6 weeks. We give you everything for $2,497 in 7 days.
+Tools like Interact only give you the quiz. Agencies charge $5K-15K and take 6 weeks. We give you everything for $2,500 in 7 days.
 ```
 
 ### One-Line Positioning Statements
@@ -363,7 +362,7 @@ Deliver custom quiz funnels to clients in 7 days instead of 6 weeks
 - **Complete system, not puzzle pieces** — Landing page + quiz + email automation + analytics + deployment
 - **Custom, not templates** — Every quiz is researched for your market and matched to your brand
 - **7 days, not 6 weeks** — Fast timeline, revisions included, no project management
-- **Production-ready code** — Deploy to Vercel immediately, no additional development needed
+- **Production-ready code** — Goes live on your site immediately, no additional development needed
 - **Email automation included** — 14 sequences triggered by quiz temperature (hot/warm/cold)
 - **Analytics dashboard** — Track completion rates, segment distribution, UTM sources
 - **No ongoing fees** — One-time cost, unlimited leads, you own the code
@@ -402,7 +401,7 @@ Interact gives you the quiz interface. You still need to:
 - Build an analytics dashboard ($1,000-3,000)
 - Deploy everything ($500-1,000)
 
-Total hidden cost: $2,880-8,600 + $80-300/mo. We include all of that for $2,497.
+Total hidden cost: $2,880-8,600 + $80-300/mo. We include all of that for $2,500.
 ```
 
 ---
@@ -420,7 +419,7 @@ Every quiz is custom-researched for your market. We analyze your website, compet
 
 **Response:**
 ```
-Yes. All code is yours, fully editable, and deployed to your Vercel account. Want to change copy? Edit the HTML. Want different questions? We can regenerate with new inputs. You own everything.
+Yes. All code is yours, fully editable, and deployed to your own site. Want to change copy? Edit the HTML. Want different questions? We can regenerate with new inputs. You own everything.
 ```
 
 ---
@@ -478,20 +477,17 @@ Fair enough. What questions can I answer to help you decide? [pause] Most people
    - Temperature distribution
    - UTM source tracking
 
-3. **Email sequences in Supabase** — Show automation
-   - 14 pre-written emails
-   - Automatic triggering by temperature
-   - Hourly cron job
+3. **Email sequences in Kit** — Show automation
+   - 26 pre-written emails
+   - Automatic triggering by temperature (Kit sequence + tag)
+   - Personalized via Kit custom fields
 
 4. **GitHub repos** — Show code ownership
    - Private repo with full codebase
-   - Public client preview repo
-   - Vercel-ready deployment
+   - Client preview deploy
+   - Deploy-ready handoff
 
-5. **Video assets (if applicable)** — Remotion components
-   - Quiz intro teaser
-   - Result reveal videos
-   - Social ad template
+5. **Social ad (optional, if applicable)** — produced via the AI video provider when a client wants one
 
 6. **Explain generation process** — 5-stage workflow
    - Stage 1: Research (5-7 min)
@@ -559,7 +555,7 @@ Here's what I suggest: Let's get started this week. In 7 days you'll have a comp
 
 #### Option 1: One-Time Purchase (RECOMMENDED)
 
-- **Price**: $2,497
+- **Price**: $2,500
 - **Positioning**: Middle of agency range, 7-day delivery, complete system
 - **Value prop**: "Get what an agency charges $5K-15K for, delivered in 7 days"
 - **Pros**: Clear value comparison, no recurring objection, feels like a deal
@@ -588,7 +584,7 @@ Here's what I suggest: Let's get started this week. In 7 days you'll have a comp
 
 ### Recommended Pricing Strategy
 
-**Start with Option 1: $2,497 one-time**
+**Start with Option 1: $2,500 one-time**
 
 Why:
 - Clear value comparison to agencies ($5K-15K)
@@ -597,7 +593,7 @@ Why:
 - Simple positioning (complete system, 7-day delivery, one price)
 
 **Test other options if:**
-- $2,497 is too high a barrier (try $1,497 entry point)
+- $2,500 is too high a barrier (try $1,497 entry point)
 - Want recurring revenue (try $147-297/mo SaaS)
 - Targeting agencies (try $997/quiz + white label)
 
