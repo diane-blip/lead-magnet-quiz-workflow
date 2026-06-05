@@ -1454,16 +1454,31 @@ function populateRevealContent(result, graphicData) {
   // Recommendations
   const recommendations = REVEAL_CONFIG.serviceRecommendations[profileId] || [];
   const grid = document.getElementById('recommendations-grid');
+
+  // Escape every interpolated value before it touches innerHTML. Recommendation data
+  // comes from the client's scraped site config, not end-user input, but escape it
+  // anyway (defense in depth) so the reveal page can never execute injected markup.
+  const escapeHtml = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => (
+    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+  ));
+  // Only allow http(s) URLs (blocks javascript:, data:, etc.).
+  const safeUrl = (u) => {
+    try {
+      const url = new URL(String(u ?? ''), window.location.origin);
+      return (url.protocol === 'http:' || url.protocol === 'https:') ? url.href : '#';
+    } catch { return '#'; }
+  };
+
   recommendations.forEach((service, index) => {
     const card = document.createElement('div');
     card.className = 'recommendation-card';
     card.style.animationDelay = `${index * 150}ms`;
     card.innerHTML = `
-      ${service.image ? `<img src="${service.image}" alt="${service.serviceName}" class="rec-image">` : ''}
-      <h3>${service.serviceName}</h3>
-      <p>${service.description}</p>
-      <span class="match-reason">${service.matchReason}</span>
-      <a href="${service.serviceUrl}" class="rec-link" target="_blank" rel="noopener">Learn More</a>
+      ${service.image ? `<img src="${safeUrl(service.image)}" alt="${escapeHtml(service.serviceName)}" class="rec-image">` : ''}
+      <h3>${escapeHtml(service.serviceName)}</h3>
+      <p>${escapeHtml(service.description)}</p>
+      <span class="match-reason">${escapeHtml(service.matchReason)}</span>
+      <a href="${safeUrl(service.serviceUrl)}" class="rec-link" target="_blank" rel="noopener">Learn More</a>
     `;
     grid.appendChild(card);
   });
